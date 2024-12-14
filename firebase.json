@@ -1,0 +1,29 @@
+{
+  "emulators": {
+    "functions": {
+      "port": 5001,
+      "host": "10.0.0.101"
+    }
+  },
+  "functions": [
+    {
+
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix functions run build"
+      ]
+    }
+  ],
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}
