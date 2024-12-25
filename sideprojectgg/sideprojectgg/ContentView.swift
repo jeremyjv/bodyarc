@@ -10,6 +10,13 @@ import Firebase
 import FirebaseFunctions
 import PhotosUI
 
+struct RectangleComponent: View {
+    var body: some View {
+        RoundedRectangle(cornerRadius: 10)
+            .fill(Color.gray.opacity(0.3)) // Adjust color and opacity
+    }
+}
+
 
 struct ContentView: View {
     @StateObject private var viewModel = ContentViewModel()
@@ -21,32 +28,43 @@ struct ContentView: View {
     
 
     var body: some View {
-    
-        VStack {
-
-
-            Text( "Analysis: \(viewModel.text)") // Display the result if it exists
+        
+        VStack(spacing: 16) {
+            // Top Rectangle
+            RectangleComponent()
+                .frame(height: 50) // Adjust height as per your mockup
             
-            Image(uiImage: defaultImage ?? UIImage(named: "defaultAvatar")!)
+            // Middle Rectangle
+            Image(uiImage: UIImage(named: "scanImage")!)
                 .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 100, height: 100)
-                
+                .scaledToFill()
+                .frame(width: 300, height: 300)
             
+            Text( "Analysis: \(viewModel.text)") // Display the result if it exists
             //Select Photo from camera roll
             PhotosPicker(selection: $photosPickerItem, matching: .images) {
                 Text("-Upload Image-")
-
             }
             NavigationLink(destination: CustomCameraView()
                 .ignoresSafeArea()) {
-                Text("Go to Frame View")
+                Text("Take Photo")
                     .padding()
                     .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }
+            Spacer()
+            
+            // Bottom Navigation Bar
+            HStack(spacing: 16) {
+                ForEach(0..<4) { _ in
+                    RectangleComponent()
+                        .frame(width: 50, height: 50) // Adjust size as per your mockup
+                }
+            }
+            .padding(.bottom, 16)
         }
+        .padding()
         .onChange(of: photosPickerItem) {_, _ in
             Task {
                 if let photosPickerItem,
@@ -59,6 +77,9 @@ struct ContentView: View {
                 photosPickerItem = nil
             }
         }
+    
+
+
 
         
 
