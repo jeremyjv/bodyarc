@@ -20,6 +20,7 @@ struct RectangleComponent: View {
 
 struct ContentView: View {
     @StateObject private var viewModel = ContentViewModel()
+    @StateObject private var cameraModel = CameraModel()
     
     @State private var defaultImage: UIImage?
     @State private var photosPickerItem: PhotosPickerItem?
@@ -46,7 +47,7 @@ struct ContentView: View {
             
             //replace these blocks of code with "Scan" and redirect to FrontViewScan
     
-            NavigationLink(destination: FrontScanView()
+            NavigationLink(destination: FrontScanView(cameraModel: cameraModel)
                 .ignoresSafeArea()) {
                 Text("Begin Scan")
                     .padding()

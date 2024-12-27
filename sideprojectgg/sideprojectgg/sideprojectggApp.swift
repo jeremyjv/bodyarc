@@ -26,6 +26,8 @@ struct sideprojectggApp: App {
   // register app delegate for Firebase setup
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
+  @StateObject private var cameraModel = CameraModel() // Create the CameraModel instance
+    
 
 
 
@@ -33,6 +35,7 @@ struct sideprojectggApp: App {
     WindowGroup {
       NavigationView {
         ContentView()
+              .environmentObject(cameraModel)
       }
     }
   }

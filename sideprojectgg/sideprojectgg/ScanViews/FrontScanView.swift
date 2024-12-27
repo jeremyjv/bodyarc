@@ -15,6 +15,7 @@ import PhotosUI
 //when custom picture is loaded into view, it asks to retake or use the image
 struct FrontScanView: View {
     @StateObject private var viewModel = ContentViewModel()
+    @ObservedObject var cameraModel: CameraModel
     
     @State private var defaultImage: UIImage?
     @State private var photosPickerItem: PhotosPickerItem?
@@ -34,6 +35,11 @@ struct FrontScanView: View {
                 .resizable()
                 .scaledToFill()
                 .frame(width: 300, height: 300)
+                .onChange(of: cameraModel.capturedImage) {_, _ in
+                    Task {
+                        defaultImage = cameraModel.capturedImage
+                    }
+                }
             
     
             //Select Photo from camera roll
@@ -43,7 +49,7 @@ struct FrontScanView: View {
             PhotosPicker(selection: $photosPickerItem, matching: .images) {
                 Text("-Upload Image-")
             }
-            NavigationLink(destination: FrontCameraView()
+            NavigationLink(destination: FrontCameraView(cameraModel: cameraModel)
                 .ignoresSafeArea()) {
                 Text("Take Photo")
                     .padding()
@@ -81,6 +87,6 @@ struct FrontScanView: View {
 }
 
 #Preview {
-    FrontScanView()
+    //FrontScanView(cameraModel: _cameraModel)
 }
 

@@ -43,7 +43,7 @@ struct BackScanView: View {
             PhotosPicker(selection: $photosPickerItem, matching: .images) {
                 Text("-Upload Image-")
             }
-            NavigationLink(destination: FrontCameraView()
+            NavigationLink(destination: BackCameraView()
                 .ignoresSafeArea()) {
                 Text("Take Photo")
                     .padding()
