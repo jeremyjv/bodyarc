@@ -16,9 +16,11 @@ import PhotosUI
 struct FrontScanView: View {
     @StateObject private var viewModel = ContentViewModel()
     @ObservedObject var cameraModel: CameraModel
+    @State private var isShowingOptions = false // To toggle the menu
     
     @State private var defaultImage: UIImage?
     @State private var photosPickerItem: PhotosPickerItem?
+    @State private var showPicker: Bool = false // For PhotosPicker
     @State private var analysis: String?
 
     var body: some View {
@@ -46,23 +48,60 @@ struct FrontScanView: View {
             
             
             //if default image = UIImage(named: "scanImage") else "retake photo" / "use photo" -> backscanview
-            
+            //have this open as a pmenu instead
             if defaultImage == nil {
-                PhotosPicker(selection: $photosPickerItem, matching: .images) {
-                    Text("-Upload Image-")
-                }
-                NavigationLink(destination: FrontCameraView(cameraModel: cameraModel)
-                    .ignoresSafeArea()) {
-                    Text("Take Photo")
+                Button(action: {
+                    isShowingOptions = true // Show the menu
+                }) {
+                    Text("Upload or take selfie")
                         .padding()
+                        .frame(maxWidth: .infinity)
                         .background(Color.blue)
                         .foregroundColor(.white)
                         .cornerRadius(10)
                 }
+                .padding()
+                .confirmationDialog("Select an option", isPresented: $isShowingOptions, titleVisibility: .visible) {
+                
+                        NavigationLink(destination: FrontCameraView(cameraModel: cameraModel)
+                            .ignoresSafeArea()) {
+                                Text("Take a selfie")
+                                    .padding()
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                            }
+                        Button(action: {
+                            showPicker.toggle()
+                        }) {
+                            Text("Upload Image")
+                        }
+                           
+                            
+                }
+                .photosPicker(isPresented: $showPicker, selection: $photosPickerItem)
+                
+                
+                
+                ///
+//                PhotosPicker(selection: $photosPickerItem, matching: .images) {
+//                    Text("-Upload Image-")
+//                }
+//                NavigationLink(destination: FrontCameraView(cameraModel: cameraModel)
+//                    .ignoresSafeArea()) {
+//                    Text("Take Photo")
+//                        .padding()
+//                        .background(Color.blue)
+//                        .foregroundColor(.white)
+//                        .cornerRadius(10)
+//                }
                 
             } else {
-                Text("-Redo-")
-                Text("-Use Photo-")
+                Text("-Use Another-") //re
+                NavigationLink(destination: BackScanView()) {
+                    Text("-Continue-")
+                }
+        
                 
             }
 
