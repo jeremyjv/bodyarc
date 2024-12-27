@@ -45,18 +45,27 @@ struct FrontScanView: View {
             //Select Photo from camera roll
             
             
-            //replace these blocks of code with "Scan" and redirect to FrontViewScan
-            PhotosPicker(selection: $photosPickerItem, matching: .images) {
-                Text("-Upload Image-")
+            //if default image = UIImage(named: "scanImage") else "retake photo" / "use photo" -> backscanview
+            
+            if defaultImage == nil {
+                PhotosPicker(selection: $photosPickerItem, matching: .images) {
+                    Text("-Upload Image-")
+                }
+                NavigationLink(destination: FrontCameraView(cameraModel: cameraModel)
+                    .ignoresSafeArea()) {
+                    Text("Take Photo")
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
+                
+            } else {
+                Text("-Redo-")
+                Text("-Use Photo-")
+                
             }
-            NavigationLink(destination: FrontCameraView(cameraModel: cameraModel)
-                .ignoresSafeArea()) {
-                Text("Take Photo")
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
+
             Spacer()
             
             // Bottom Navigation Bar
