@@ -13,7 +13,12 @@ import FirebaseFunctions
 @MainActor
 final class ContentViewModel: ObservableObject {
     @Published var text: String = ""
-    @Published var image: String = ""
+    @Published var frontImage: UIImage?
+    @Published var backImage: UIImage?
+    @Published var frontAnalysis: String = ""
+    @Published var backAnalysis: String = ""
+    
+    //need to create user object that owns scans that owns analysis
     
     init() {
 
@@ -48,11 +53,11 @@ final class ContentViewModel: ObservableObject {
     }
     
     
-    
+    // make separate analysis function for front and back analysis
     func imageToAnalysis(img: UIImage) async {
         let base64 = self.convertImageToBase64(img: img)
         //let data: [String: Any] = ["base64": base64] // Your arguments
-        Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
+        Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
  
         functions.httpsCallable("returnAnalysis").call(base64) { result, error in
             
@@ -64,11 +69,11 @@ final class ContentViewModel: ObservableObject {
                 
                 Task { [weak self] in
                     guard let self else {return}
-                    self.text = data
+                    self.frontAnalysis = data
                 }
             
             
-                print("text:", self.text)
+                print("text:", self.frontAnalysis)
                 print("Function response: \(data)")
             }
         }

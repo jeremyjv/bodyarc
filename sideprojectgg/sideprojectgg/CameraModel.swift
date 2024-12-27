@@ -12,6 +12,7 @@ class CameraModel: NSObject, ObservableObject {
     @Published var session = AVCaptureSession()
     @Published var previewLayer: AVCaptureVideoPreviewLayer?
     private var photoOutput = AVCapturePhotoOutput()
+    @Published var capturedImage: UIImage? // Store the captured image
 
     // Check Camera Authorization
     func checkAuthorization() {
@@ -94,12 +95,16 @@ class CameraModel: NSObject, ObservableObject {
 // Implementing the AVCapturePhotoCaptureDelegate to handle photo capture
 extension CameraModel: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        guard let data = photo.fileDataRepresentation(), let image = UIImage(data: data) else {
+        if let data = photo.fileDataRepresentation(),
+           let image = UIImage(data: data) {
+            DispatchQueue.main.async {
+                self.capturedImage = image // Store the image in the variable
+            }
+            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil) // store in user photo
+        } else {
             print("Error capturing photo: \(String(describing: error))")
-            return
         }
-
-        // Save or process the captured photo
-        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
     }
 }
+
+

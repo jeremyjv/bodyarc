@@ -9,5 +9,4 @@ This is my current physique. For the muscles that you see in the image, if the m
 5) A Rating on a scale of 1-100 for the Arm development. A developed arm should have a bicep that contributes to the width of the arm. If there is a vein on the bicep that signals even better development. And attach a description of why you gave the specific rating.
 6) A Rating on a scale of 1-100 for the Quad development. A developed quad should have a should have the “teardrop” look and have visible separation between the different muscles of the quadricep
 7) A Rating on a scale of 1-100 for the Calve development. A developed calve should have a decent amount of width, but not wider than the quad.
-
 `

@@ -1,12 +1,13 @@
 //
-//  FrameView.swift
+//  BackCameraView.swift
 //  sideprojectgg
 //
-//  Created by Jeremy Villanueva on 12/13/24.
+//  Created by Jeremy Villanueva on 12/26/24.
 //
+
 import SwiftUI
 
-struct CustomCameraView: View {
+struct BackCameraView: View {
     @StateObject private var cameraModel = CameraModel()
     var body: some View {
         ZStack {

@@ -1,38 +1,33 @@
 //
-//  ContentView.swift
+//  FrontViewScan.swift
 //  sideprojectgg
 //
-//  Created by Jeremy Villanueva on 12/2/24.
+//  Created by Jeremy Villanueva on 12/26/24.
 //
+
 import Foundation
 import SwiftUI
 import Firebase
 import FirebaseFunctions
 import PhotosUI
 
-struct RectangleComponent: View {
-    var body: some View {
-        RoundedRectangle(cornerRadius: 10)
-            .fill(Color.gray.opacity(0.3)) // Adjust color and opacity
-    }
-}
-
-
-struct ContentView: View {
+//make it so that when the default front image is showing it asks to upload or take picture
+//when custom picture is loaded into view, it asks to retake or use the image
+struct FrontScanView: View {
     @StateObject private var viewModel = ContentViewModel()
     
     @State private var defaultImage: UIImage?
     @State private var photosPickerItem: PhotosPickerItem?
     @State private var analysis: String?
 
-    
-
     var body: some View {
         
         VStack(spacing: 16) {
             // Top Rectangle
             RectangleComponent()
+
                 .frame(height: 50) // Adjust height as per your mockup
+            Text("Upload Front Selfie")
             
             // Middle Rectangle
             Image(uiImage: defaultImage ?? UIImage(named: "scanImage")!)
@@ -40,15 +35,17 @@ struct ContentView: View {
                 .scaledToFill()
                 .frame(width: 300, height: 300)
             
-            Text( "Analysis: \(viewModel.text)") // Display the result if it exists
+    
             //Select Photo from camera roll
             
             
             //replace these blocks of code with "Scan" and redirect to FrontViewScan
-    
-            NavigationLink(destination: FrontScanView()
+            PhotosPicker(selection: $photosPickerItem, matching: .images) {
+                Text("-Upload Image-")
+            }
+            NavigationLink(destination: FrontCameraView()
                 .ignoresSafeArea()) {
-                Text("Begin Scan")
+                Text("Take Photo")
                     .padding()
                     .background(Color.blue)
                     .foregroundColor(.white)
@@ -82,6 +79,8 @@ struct ContentView: View {
     }
 
 }
+
 #Preview {
-    ContentView()
+    FrontScanView()
 }
+
