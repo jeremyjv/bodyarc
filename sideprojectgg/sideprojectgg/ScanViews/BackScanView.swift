@@ -14,7 +14,7 @@ import PhotosUI
 //make it so that when the default front image is showing it asks to upload or take picture
 //when custom picture is loaded into view, it asks to retake or use the image
 struct BackScanView: View {
-    @StateObject private var viewModel = ContentViewModel()
+    @EnvironmentObject var viewModel: ContentViewModel
     @ObservedObject var cameraModel: CameraModel
     @State private var isShowingOptions = false // To toggle the menu
     
@@ -46,6 +46,7 @@ struct BackScanView: View {
                     .onChange(of: cameraModel.capturedImage) {_, _ in
                         Task {
                             defaultImage = cameraModel.capturedImage
+                            viewModel.backImage = cameraModel.capturedImage
                         }
                     }
                 
@@ -153,6 +154,7 @@ struct BackScanView: View {
                        let data = try? await photosPickerItem.loadTransferable(type: Data.self) {
                         if let image = UIImage(data: data) {
                             defaultImage = image
+                            viewModel.backImage = image
                             await viewModel.imageToAnalysis(img: defaultImage!)
                         }
                     }

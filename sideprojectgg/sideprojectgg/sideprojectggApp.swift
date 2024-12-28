@@ -26,17 +26,15 @@ struct sideprojectggApp: App {
   // register app delegate for Firebase setup
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-  @StateObject private var cameraModel = CameraModel() // Create the CameraModel instance
-    
-
-
+    //now we can access from any view under ContentView and update info in respective pages
+    @StateObject private var viewModel = ContentViewModel()
 
   var body: some Scene {
     WindowGroup {
 
           ContentView()
-              .environmentObject(cameraModel)
-      
+            .environmentObject(viewModel)
+              
     }
   }
 }
