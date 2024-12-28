@@ -56,6 +56,7 @@ struct FrontScanView: View {
                 if defaultImage == nil {
                     Button(action: {
                         isShowingOptions = true // Show the menu
+                        showPicker = false
                     }) {
                         Text("Upload or take selfie")
                             .padding()
@@ -83,37 +84,50 @@ struct FrontScanView: View {
                             Text("Upload Image")
                         }
                         
-                
                     }
                     .photosPicker(isPresented: $showPicker, selection: $photosPickerItem)
-                  
+                    
                     
                     
                     
                     
                     
                 } else {
-                    Text("-Use Another-") //re
-                    NavigationLink(destination: BackScanView()
-                        .navigationBarBackButtonHidden(true) // Hide default back button
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button(action: {
-                                    dismiss() // Custom back button action
-                                }) {
-                                    HStack {
-                                        Image(systemName: "chevron.left") // Custom back button icon
-                                        Text("Home") // Custom back button label
-                                    }
-                                }
-                            }
+                    Button(action: {
+                        isShowingOptions = true
+                        showPicker = false
+
+                    }) {
+                        Text("Use Another")
+                    }
+                    .confirmationDialog("Select an option", isPresented: $isShowingOptions, titleVisibility: .visible) {
+                        Button(action: {
+                            path.append("FrontCameraView")
+                        })
+                        {
+                            Text("Take a selfie")
+                                .padding()
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
                         }
-                                   
-                    ) {
+                        
+                        Button(action: {
+                            showPicker.toggle()
+                        }) {
+                            Text("Upload Image")
+                        }
+                    }
+                    .photosPicker(isPresented: $showPicker, selection: $photosPickerItem)
+                    
+                    
+                    
+                    Button(action: {
+                        path.append("BackScanView")
+         
+                    }) {
                         Text("-Continue-")
                     }
-                    
-                    
                 }
                 
                 

@@ -8,38 +8,30 @@
 import SwiftUI
 
 struct BackCameraView: View {
-    @StateObject private var cameraModel = CameraModel()
+    //currently have two separate camera model instances for front and scan.
+    @ObservedObject var cameraModel: CameraModel
+    @Binding var path: NavigationPath
+    
+    
     var body: some View {
         ZStack {
             // Camera Preview
             CameraPreview(cameraModel: cameraModel)
                 .ignoresSafeArea() // Ensure it fills the screen
-
+            
+            
             VStack {
-                Spacer()
-
-                // Capture Photo Button
-                Button(action: {
-                    
-                    //set timer
-                    //DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-                        //set countdown timer on screen
-                        // Your code to execute after 3 seconds
-                        cameraModel.capturePhoto()
-                    //}
-                    //set timer
-                    
-                    //**Store cameraModel.photoOutput into firebase storage**
-                    
-                    //navigate to next capture view
-                    
-                    
-                }) {
+                
+                NavigationLink(destination: BackScanView(cameraModel: cameraModel, path: $path)){
                     Circle()
                         .stroke(Color.white, lineWidth: 4)
                         .frame(width: 75, height: 75)
-                }
-                .padding(.bottom)
+                }.simultaneousGesture(TapGesture().onEnded {
+                    cameraModel.capturePhoto()
+                    
+                    //need to access taken picture cameraModel.capturedImage and set defaultImage in frontScanView to cameraModel.capturedImage
+                })
+
             }
         }
         .onAppear {
@@ -48,6 +40,19 @@ struct BackCameraView: View {
         }
         .onDisappear {
             cameraModel.session.stopRunning() // Stop the session when the view disappears
+            
+        }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    path.removeLast() // Custom back button action
+                }) {
+                    HStack {
+                        Image(systemName: "chevron.left") // Custom back button icon
+                    }
+                }
+            }
         }
     }
 }
