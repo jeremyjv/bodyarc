@@ -41,5 +41,17 @@ struct FrontCameraView: View {
             cameraModel.session.stopRunning() // Stop the session when the view disappears
             
         }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    path.removeLast() // Custom back button action
+                }) {
+                    HStack {
+                        Image(systemName: "chevron.left") // Custom back button icon
+                    }
+                }
+            }
+        }
     }
 }

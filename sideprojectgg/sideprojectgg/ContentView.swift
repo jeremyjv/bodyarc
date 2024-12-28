@@ -58,32 +58,10 @@ struct ContentView: View {
                     switch destination {
                         case "FrontScanView":
                             FrontScanView(cameraModel: cameraModel, path: $path)
-                            .navigationBarBackButtonHidden(true)
-                            .toolbar {
-                                ToolbarItem(placement: .navigationBarLeading) {
-                                    Button(action: {
-                                        path.removeLast() // Custom back button action
-                                    }) {
-                                        HStack {
-                                            Image(systemName: "chevron.left") // Custom back button icon
-                                        }
-                                    }
-                                }
-                            }
+                            
                         case "FrontCameraView":
                             FrontCameraView(cameraModel: cameraModel, path: $path)
-                            .navigationBarBackButtonHidden(true)
-                            .toolbar {
-                                ToolbarItem(placement: .navigationBarLeading) {
-                                    Button(action: {
-                                        path.removeLast() // Custom back button action
-                                    }) {
-                                        HStack {
-                                            Image(systemName: "chevron.left") // Custom back button icon
-                                        }
-                                    }
-                                }
-                            }
+                
                         default:
                             ContentView()
                         }

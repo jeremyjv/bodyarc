@@ -142,10 +142,24 @@ struct FrontScanView: View {
                     photosPickerItem = nil
                 }
             }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        path.removeLast() // Custom back button action
+                    }) {
+                        HStack {
+                            Image(systemName: "chevron.left") // Custom back button icon
+                        }
+                    }
+                }
+            }
             
         }
+        
     
 }
+
 
 
 
