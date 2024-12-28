@@ -118,22 +118,15 @@ struct BackScanView: View {
                     
                     
                     
-                    NavigationLink(destination: BackCameraView(cameraModel: cameraModel, path: $path)
-                        .navigationBarBackButtonHidden(true) // Hide default back button
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button(action: {
-                                    dismiss() // Custom back button action
-                                }) {
-                                    HStack {
-                                        Image(systemName: "chevron.left") // Custom back button icon
-                                        Text("Home") // Custom back button label
-                                    }
-                                }
-                            }
-                        }
-                                   
-                    ) {
+                    Button(action: {
+                        //return to contentView with empty path
+                        path = NavigationPath()
+                        
+                        
+                        
+                        //run analysis logic here
+         
+                    }) {
                         Text("-Continue-")
                     }
                     
