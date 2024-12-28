@@ -67,7 +67,7 @@ struct FrontScanView: View {
                     .padding()
                     .confirmationDialog("Select an option", isPresented: $isShowingOptions, titleVisibility: .visible) {
                         Button(action: {
-                            showCamera.toggle()
+                            path.append("FrontCameraView")
                         })
                         {
                             Text("Take a selfie")
@@ -83,22 +83,10 @@ struct FrontScanView: View {
                             Text("Upload Image")
                         }
                         
-                        
+                
                     }
                     .photosPicker(isPresented: $showPicker, selection: $photosPickerItem)
-                    .navigationDestination(isPresented: $showCamera) {
-                        FrontCameraView(cameraModel: cameraModel, path: $path)
-                            .navigationBarBackButtonHidden(true)
-                            .toolbar {
-                                ToolbarItem(placement: .topBarLeading) {
-                                    Button(action: {
-                                        dismiss()
-                                    }) {
-                                        Label("Back", systemImage: "arrow.left.circle")
-                                    }
-                                }
-                            }
-                    }
+                  
                     
                     
                     

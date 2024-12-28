@@ -25,10 +25,9 @@ struct ContentView: View {
     @State private var defaultImage: UIImage?
     @State private var photosPickerItem: PhotosPickerItem?
     @State private var analysis: String?
-    @State private var showScan: Bool = false // To begin scan
+
     @State private var path = NavigationPath() // To manage navigation
     
-    @Environment(\.dismiss) var dismiss
 
     
 
@@ -47,78 +46,39 @@ struct ContentView: View {
                     .frame(width: 300, height: 300)
                 
                 Text( "Analysis: \(viewModel.text)") // Display the result if it exists
-                //Select Photo from camera roll
-                
-                
-                //                //replace these blocks of code with "Scan" and redirect to FrontViewScan
-                //                Button(action: {
-                //                    showScan.toggle()
-                //                })
-                //                {
-                //                    Text("Take a selfie")
-                //                        .padding()
-                //                        .background(Color.blue)
-                //                        .foregroundColor(.white)
-                //                        .cornerRadius(10)
-                //                }
-                //                .navigationDestination(isPresented: $showScan) {
-                //                    FrontScanView(cameraModel: cameraModel)
-                //                        .navigationBarBackButtonHidden(true)
-                //                        .toolbar {
-                //                            ToolbarItem(placement: .topBarLeading) {
-                //                                Button(action: {
-                //                                    dismiss()
-                //                                }) {
-                //                                    Label("Back", systemImage: "arrow.left.circle")
-                //                                }
-                //                            }
-                //                        }
-                //                }
-                
+
+ 
+            
                 Button(action: {
                     path.append("FrontScanView")
                 }) {
                     Text("Begin Scan")
                 }
                 .navigationDestination(for: String.self) { destination in
-                                if destination == "FrontScanView" {
-                                    FrontScanView(cameraModel: cameraModel, path: $path)
-                                    .navigationBarBackButtonHidden(true)
-                                    .toolbar {
-                                        ToolbarItem(placement: .navigationBarLeading) {
-                                            Button(action: {
-                                                path.removeLast(path.count) // Custom back button action
-                                            }) {
-                                                HStack {
-                                                    Image(systemName: "chevron.left") // Custom back button icon
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                
-                
-                
-//                NavigationLink(destination: FrontScanView(cameraModel: cameraModel)
-//                               //.navigationBarBackButtonHidden(true)
-//                    .toolbar {
-//                        ToolbarItem(placement: .navigationBarLeading) {
-//                            Button(action: {
-//                                dismiss() // Custom back button action
-//                            }) {
-//                                HStack {
-//                                    Image(systemName: "chevron.left") // Custom back button icon
+                    switch destination {
+                        case "FrontScanView":
+                            FrontScanView(cameraModel: cameraModel, path: $path)
+//                            .navigationBarBackButtonHidden(true)
+//                            .toolbar {
+//                                ToolbarItem(placement: .navigationBarLeading) {
+//                                    Button(action: {
+//                                        path.removeLast(path.count) // Custom back button action
+//                                    }) {
+//                                        HStack {
+//                                            Image(systemName: "chevron.left") // Custom back button icon
+//                                        }
+//                                    }
 //                                }
 //                            }
-//                        }
-//                    }) {
-//                        Text("Begin Scan")
-//                            .padding()
-//                            .background(Color.blue)
-//                            .foregroundColor(.white)
-//                            .cornerRadius(10)
-//                    }
+                        case "FrontCameraView":
+                            FrontCameraView(cameraModel: cameraModel, path: $path)
+                        default:
+                            ContentView()
+                        }
+                    
+                }
+                
+                
                 
                 Spacer()
                 
@@ -148,13 +108,8 @@ struct ContentView: View {
         }
         
     }
-    
-    
- 
 }
     
-
-
 
 #Preview {
     ContentView()
