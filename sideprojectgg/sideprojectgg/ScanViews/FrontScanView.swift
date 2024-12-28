@@ -23,10 +23,14 @@ struct FrontScanView: View {
     @State private var showPicker: Bool = false // For PhotosPicker
     @State private var showCamera: Bool = false // For Selfie
     @State private var analysis: String?
+    
+
+    @Environment(\.dismiss) var dismiss
+    @Binding var path: NavigationPath
 
     var body: some View {
-        NavigationStack {
-            
+        
+      
             VStack(spacing: 16) {
                 // Top Rectangle
                 RectangleComponent()
@@ -48,7 +52,7 @@ struct FrontScanView: View {
                 
                 //Select Photo from camera roll
                 //if default image = UIImage(named: "scanImage") else "retake photo" / "use photo" -> backscanview
-                //have this open as a pmenu instead
+                //have this open as a menu instead
                 if defaultImage == nil {
                     Button(action: {
                         isShowingOptions = true // Show the menu
@@ -62,8 +66,6 @@ struct FrontScanView: View {
                     }
                     .padding()
                     .confirmationDialog("Select an option", isPresented: $isShowingOptions, titleVisibility: .visible) {
-                        
-                        
                         Button(action: {
                             showCamera.toggle()
                         })
@@ -85,16 +87,41 @@ struct FrontScanView: View {
                     }
                     .photosPicker(isPresented: $showPicker, selection: $photosPickerItem)
                     .navigationDestination(isPresented: $showCamera) {
-                            FrontCameraView(cameraModel: cameraModel).navigationBarBackButtonHidden(true)
+                        FrontCameraView(cameraModel: cameraModel, path: $path)
+                            .navigationBarBackButtonHidden(true)
+                            .toolbar {
+                                ToolbarItem(placement: .topBarLeading) {
+                                    Button(action: {
+                                        dismiss()
+                                    }) {
+                                        Label("Back", systemImage: "arrow.left.circle")
+                                    }
+                                }
+                            }
                     }
-            
+                    
                     
                     
                     
                     
                 } else {
                     Text("-Use Another-") //re
-                    NavigationLink(destination: BackScanView()) {
+                    NavigationLink(destination: BackScanView()
+                        .navigationBarBackButtonHidden(true) // Hide default back button
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button(action: {
+                                    dismiss() // Custom back button action
+                                }) {
+                                    HStack {
+                                        Image(systemName: "chevron.left") // Custom back button icon
+                                        Text("Home") // Custom back button label
+                                    }
+                                }
+                            }
+                        }
+                                   
+                    ) {
                         Text("-Continue-")
                     }
                     
@@ -129,9 +156,10 @@ struct FrontScanView: View {
             }
             
         }
-    }
-
+    
 }
+
+
 
 #Preview {
     //FrontScanView(cameraModel: _cameraModel)

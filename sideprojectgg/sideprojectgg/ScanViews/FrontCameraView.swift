@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FrontCameraView: View {
     @ObservedObject var cameraModel: CameraModel
+    @Binding var path: NavigationPath
     
     
     var body: some View {
@@ -20,7 +21,7 @@ struct FrontCameraView: View {
             
             VStack {
                 
-                NavigationLink(destination: FrontScanView(cameraModel: cameraModel)){
+                NavigationLink(destination: FrontScanView(cameraModel: cameraModel, path: $path)){
                     Circle()
                         .stroke(Color.white, lineWidth: 4)
                         .frame(width: 75, height: 75)
