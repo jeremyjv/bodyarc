@@ -62,7 +62,7 @@ struct ContentView: View {
                     .scaledToFill()
                     .frame(width: 300, height: 300)
                 
-                Text( "Analysis: \(viewModel.text)") // Display the result if it exists
+                Text( "Analysis: \(viewModel.frontAnalysis)") // Display the result if it exists
                 
                 
             
@@ -115,6 +115,12 @@ struct ContentView: View {
                 Task {
                     defaultImage = viewModel.frontImage
                 }
+            }
+            TabView {
+                ProgressView().tabItem({
+                    Label("Home", systemImage: "person")
+                })
+                
             }
         
         }

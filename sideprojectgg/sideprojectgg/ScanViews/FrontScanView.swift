@@ -152,7 +152,7 @@ struct FrontScanView: View {
                         if let image = UIImage(data: data) {
                             defaultImage = image
                             viewModel.frontImage = image
-                            await viewModel.imageToAnalysis(img: defaultImage!)
+                           
                         }
                     }
                     photosPickerItem = nil
@@ -171,7 +171,7 @@ struct FrontScanView: View {
                 }
             }
             .onChange(of: viewModel.frontImage) { _, _ in
-                print("Environment value updated to new image")
+                print("Front Image updated to new image")
             }
             
         }

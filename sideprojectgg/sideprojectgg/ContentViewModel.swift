@@ -54,8 +54,9 @@ class ContentViewModel: ObservableObject {
     
     
     // make separate analysis function for front and back analysis
-    func imageToAnalysis(img: UIImage) async {
+    func createFrontAnalysis(img: UIImage) async {
         let base64 = self.convertImageToBase64(img: img)
+        
         //let data: [String: Any] = ["base64": base64] // Your arguments
         Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
  
@@ -71,13 +72,12 @@ class ContentViewModel: ObservableObject {
                     guard let self else {return}
                     self.frontAnalysis = data
                 }
-            
-            
+              
                 print("text:", self.frontAnalysis)
                 print("Function response: \(data)")
             }
         }
-        
+  
     }
     
 }

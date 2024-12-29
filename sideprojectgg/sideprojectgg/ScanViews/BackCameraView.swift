@@ -29,7 +29,7 @@ struct BackCameraView: View {
                 }.simultaneousGesture(TapGesture().onEnded {
                     cameraModel.capturePhoto()
                     
-                    //need to access taken picture cameraModel.capturedImage and set defaultImage in frontScanView to cameraModel.capturedImage
+                    
                 })
 
             }

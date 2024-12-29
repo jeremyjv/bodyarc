@@ -123,9 +123,20 @@ struct BackScanView: View {
                         //return to contentView with empty path
                         path = NavigationPath()
                         
+                        //run paywall business logic
                         
                         
-                        //run analysis logic here
+                        //run analysis logic here  --> create different
+                        Task {
+                            await viewModel.createFrontAnalysis(img: viewModel.frontImage!)
+                            
+                            //--> create different function for back analysis
+                            
+                        }
+                     
+                        
+                        //--> create different function for back analysis
+                        
          
                     }) {
                         Text("-Continue-")
@@ -155,7 +166,9 @@ struct BackScanView: View {
                         if let image = UIImage(data: data) {
                             defaultImage = image
                             viewModel.backImage = image
-                            await viewModel.imageToAnalysis(img: defaultImage!)
+                            
+                            
+                            
                         }
                     }
                     photosPickerItem = nil
@@ -172,6 +185,9 @@ struct BackScanView: View {
                         }
                     }
                 }
+            }
+            .onChange(of: viewModel.backImage) { _, _ in
+                print("Back Image updated to new image")
             }
             
         }
