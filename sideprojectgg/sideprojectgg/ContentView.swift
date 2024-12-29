@@ -19,7 +19,7 @@ struct RectangleComponent: View {
 
 
 struct ContentView: View {
-    @StateObject private var viewModel = ContentViewModel()
+    @EnvironmentObject var viewModel: ContentViewModel
     @StateObject private var cameraModel = CameraModel()
     
     @State private var defaultImage: UIImage?
@@ -34,18 +34,40 @@ struct ContentView: View {
     var body: some View {
         NavigationStack(path: $path) {
             
+  
+            
             VStack(spacing: 16) {
+                
+                
+                HStack {
+                    Image(uiImage: viewModel.frontImage ?? UIImage(named: "scanImage")!)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 50, height: 50)
+                    
+                    Image(uiImage: viewModel.backImage ?? UIImage(named: "scanImage")!)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 50, height: 50)
+                    
+                }
+               
                 // Top Rectangle
                 RectangleComponent()
                     .frame(height: 50) // Adjust height as per your mockup
                 
                 // Middle Rectangle
-                Image(uiImage: defaultImage ?? UIImage(named: "scanImage")!)
+                Image(uiImage: UIImage(named: "scanImage")!)
                     .resizable()
                     .scaledToFill()
                     .frame(width: 300, height: 300)
                 
                 Text( "Analysis: \(viewModel.text)") // Display the result if it exists
+                
+                
+            
+                
+                
 
  
             
@@ -89,16 +111,9 @@ struct ContentView: View {
                 .padding(.bottom, 16)
             }
             .padding()
-            .onChange(of: photosPickerItem) {_, _ in
+            .onChange(of: viewModel.frontImage) {_, _ in
                 Task {
-                    if let photosPickerItem,
-                       let data = try? await photosPickerItem.loadTransferable(type: Data.self) {
-                        if let image = UIImage(data: data) {
-                            defaultImage = image
-                            await viewModel.imageToAnalysis(img: defaultImage!)
-                        }
-                    }
-                    photosPickerItem = nil
+                    defaultImage = viewModel.frontImage
                 }
             }
         

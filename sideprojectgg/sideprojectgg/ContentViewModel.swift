@@ -11,11 +11,11 @@ import Firebase
 import FirebaseFunctions
 
 @MainActor
-final class ContentViewModel: ObservableObject {
+class ContentViewModel: ObservableObject {
     @Published var text: String = ""
     @Published var frontImage: UIImage?
     @Published var backImage: UIImage?
-    @Published var frontAnalysis: String = ""
+    @Published var frontAnalysis: String = "Hello"
     @Published var backAnalysis: String = ""
     
     //need to create user object that owns scans that owns analysis

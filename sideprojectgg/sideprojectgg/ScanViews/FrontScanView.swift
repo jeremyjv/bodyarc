@@ -170,6 +170,9 @@ struct FrontScanView: View {
                     }
                 }
             }
+            .onChange(of: viewModel.frontImage) { _, _ in
+                print("Environment value updated to new image")
+            }
             
         }
 }
