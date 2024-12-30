@@ -21,11 +21,15 @@ struct ContentView: View {
         
         TabView {
             ScanView().tabItem({
-                Label("Home", systemImage: "magnifyingglass")
+                Label("Scan", systemImage: "magnifyingglass")
             })
             
             ProgressView().tabItem({
-                Label("Home", systemImage: "person")
+                Label("Progress", systemImage: "person")
+            })
+            
+            AnalysisView().tabItem({
+                Label("Analysis", systemImage: "magnifyingglass")
             })
         }
     }

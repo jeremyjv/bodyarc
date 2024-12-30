@@ -49,7 +49,7 @@ struct ScanView: View {
             
             VStack(spacing: 16) {
                 
-                Text(" \(users)")
+               
                 
                 
                 HStack {
@@ -73,7 +73,7 @@ struct ScanView: View {
                     .scaledToFill()
                     .frame(width: 300, height: 300)
                 
-                Text( "Analysis: \(viewModel.frontAnalysis)") // Display the result if it exists
+                //Text( "Analysis: \(viewModel.backAnalysis)") // Display the result if it exists
                 
                 
             
