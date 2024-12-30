@@ -11,6 +11,7 @@ import SwiftUI
 import Firebase
 import FirebaseFunctions
 import PhotosUI
+import FirebaseFirestore
 
 struct RectangleComponent: View {
     var body: some View {
@@ -30,6 +31,14 @@ struct ScanView: View {
 
     @State private var path = NavigationPath() // To manage navigation
     
+    struct User: Identifiable, Codable {
+        @DocumentID var id: String?
+        var name: String
+    }
+    
+    @FirestoreQuery(collectionPath: "user")
+    var users: [User]
+    
 
     
 
@@ -39,6 +48,8 @@ struct ScanView: View {
   
             
             VStack(spacing: 16) {
+                
+                Text(" \(users)")
                 
                 
                 HStack {

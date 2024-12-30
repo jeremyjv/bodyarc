@@ -15,6 +15,7 @@
 		D553633D2D04E85E007D6000 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D553633C2D04E85E007D6000 /* FirebaseAuth */; };
 		D553633F2D04E862007D6000 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = D553633E2D04E862007D6000 /* FirebaseCore */; };
 		D55363412D04E866007D6000 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = D55363402D04E866007D6000 /* FirebaseDatabase */; };
+		D5D423992D22474F0062496B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = D5D423982D22474F0062496B /* FirebaseStorage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 			files = (
 				D55363322D03416F007D6000 /* FirebaseAppCheck in Frameworks */,
 				D553633D2D04E85E007D6000 /* FirebaseAuth in Frameworks */,
+				D5D423992D22474F0062496B /* FirebaseStorage in Frameworks */,
 				D55363302D034152007D6000 /* FirebaseFunctions in Frameworks */,
 				D55363282D0338F7007D6000 /* FirebaseAnalytics in Frameworks */,
 				D553633F2D04E862007D6000 /* FirebaseCore in Frameworks */,
@@ -160,6 +162,7 @@
 				D553633C2D04E85E007D6000 /* FirebaseAuth */,
 				D553633E2D04E862007D6000 /* FirebaseCore */,
 				D55363402D04E866007D6000 /* FirebaseDatabase */,
+				D5D423982D22474F0062496B /* FirebaseStorage */,
 			);
 			productName = sideprojectgg;
 			productReference = D55362DE2CFE5630007D6000 /* sideprojectgg.app */;
@@ -708,6 +711,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D55363242D033605007D6000 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseDatabase;
+		};
+		D5D423982D22474F0062496B /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D55363242D033605007D6000 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

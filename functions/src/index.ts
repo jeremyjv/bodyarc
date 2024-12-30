@@ -9,7 +9,7 @@
 
 import {onRequest} from "firebase-functions/v2/https";
 import * as logger from "firebase-functions/logger";
-import  {generateTextFromImage} from "./utils/openaiHandler";
+import  {generateFrontAnalysisFromImage, generateBackAnalysisFromImage} from "./utils/openaiHandler";
 
 
 
@@ -27,13 +27,26 @@ export const returnNumber = onRequest((request, response) => {
     response.send({"data": "hello hello"})
 });
 
-export const returnAnalysis = onRequest(async (request, response) => {
-    logger.info("Running return analysis", {structuredData: true});
+export const returnFrontAnalysis = onRequest(async (request, response) => {
+    logger.info("Running return front analysis", {structuredData: true});
     
-    let data = await generateTextFromImage(request.body.data);
+    let data = await generateFrontAnalysisFromImage(request.body.data);
+
     //let data = "tell me a story";
 
     response.send({"data": data})
 });
+
+
+export const returnBackAnalysis = onRequest(async (request, response) => {
+  logger.info("Running return back analysis", {structuredData: true});
+  
+  let data = await generateBackAnalysisFromImage(request.body.data);
+
+  //let data = "tell me a story";
+
+  response.send({"data": data})
+});
+
 
 

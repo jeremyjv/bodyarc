@@ -13,13 +13,10 @@ import PhotosUI
 
 
 
+
 struct ContentView: View {
     
  
-    
-
-    
-
     var body: some View {
         
         TabView {
@@ -31,9 +28,6 @@ struct ContentView: View {
                 Label("Home", systemImage: "person")
             })
         }
-        
-        
-        
     }
 }
     

@@ -9,20 +9,36 @@ import Foundation
 import SwiftUI
 import Firebase
 import FirebaseFunctions
+import FirebaseFirestore
+
+
 
 @MainActor
 class ContentViewModel: ObservableObject {
+    
     @Published var text: String = ""
     @Published var frontImage: UIImage?
     @Published var backImage: UIImage?
     @Published var frontAnalysis: String = "Hello"
     @Published var backAnalysis: String = ""
     
+    
+    
+    
+    
+  
+    
     //need to create user object that owns scans that owns analysis
     
     init() {
 
     }
+    
+    
+        
+       
+        
+    
     
     
     
@@ -60,7 +76,7 @@ class ContentViewModel: ObservableObject {
         //let data: [String: Any] = ["base64": base64] // Your arguments
         Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
  
-        functions.httpsCallable("returnAnalysis").call(base64) { result, error in
+        functions.httpsCallable("returnFrontAnalysis").call(base64) { result, error in
             
             if let error = error {
                 print("Error calling function: \(error)")
@@ -74,6 +90,32 @@ class ContentViewModel: ObservableObject {
                 }
               
                 print("text:", self.frontAnalysis)
+                print("Function response: \(data)")
+            }
+        }
+  
+    }
+    
+    func createBackAnalysis(img: UIImage) async {
+        let base64 = self.convertImageToBase64(img: img)
+        
+        //let data: [String: Any] = ["base64": base64] // Your arguments
+        Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
+ 
+        functions.httpsCallable("returnBackAnalysis").call(base64) { result, error in
+            
+            if let error = error {
+                print("Error calling function: \(error)")
+                return
+            }
+            if let data = result?.data as? String {
+                
+                Task { [weak self] in
+                    guard let self else {return}
+                    self.backAnalysis = data
+                }
+              
+                print("text:", self.backAnalysis)
                 print("Function response: \(data)")
             }
         }

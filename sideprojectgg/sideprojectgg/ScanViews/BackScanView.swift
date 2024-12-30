@@ -129,6 +129,7 @@ struct BackScanView: View {
                         //run analysis logic here  --> create different
                         Task {
                             await viewModel.createFrontAnalysis(img: viewModel.frontImage!)
+                            await viewModel.createBackAnalysis(img: viewModel.backImage!)
                             
                             //--> create different function for back analysis
                             
