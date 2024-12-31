@@ -9,27 +9,18 @@ import SwiftUI
 
 
 
-struct Analysis: Codable {
+struct FrontAnalysis: Codable {
     let bodyFatPercentage: Int
-    let shoulders, chest, abs, arms, quads, calves: Muscle
-  
+    let shoulders, chest, abs, arms, quads, calves: Muscle?
 }
 
+struct BackAnalysis: Codable {
+    let bodyFatPercentage: Int
+    let traps, lats, glutes, quads, calves: Muscle?
+}
 
 struct Muscle: Codable {
-    let rating: Int
-    let description: String
+    let rating: Int?
+    let description: String?
 }
 
-//use this on front and back analysis, and store in viewModel 
-extension Analysis {
-    static func decode(from jsonData: Data) -> Analysis? {
-        let decoder = JSONDecoder()
-                do {
-                    return try decoder.decode(Analysis.self, from: jsonData)
-                } catch {
-                    print("Decoding error: \(error)")
-                    return nil
-                }
-    }
-}

@@ -26,8 +26,8 @@ class ContentViewModel: ObservableObject {
     @Published var backAnalysisJSON: Data?
     
     // Initial value for frontAnalysis and backAnalysis (will be updated by didSet observers)
-    @Published var frontAnalysis: Analysis?
-    @Published var backAnalysis: Analysis?
+    @Published var frontAnalysis: FrontAnalysis?
+    @Published var backAnalysis: BackAnalysis?
     
     init() {
 
@@ -83,13 +83,13 @@ class ContentViewModel: ObservableObject {
                     do {
                         frontAnalysisJSON = data.data(using: .utf8)
                         let decoder = JSONDecoder()
-                        frontAnalysis = try decoder.decode(Analysis.self, from: frontAnalysisJSON!)
+                        frontAnalysis = try decoder.decode(FrontAnalysis.self, from: frontAnalysisJSON!)
                     } catch {
                         print("Error decoding JSON: \(error)")
                     }
                 }
               
-                print("text:", data)
+               
                 print("Function response: \(data)")
             }
         }
@@ -116,13 +116,13 @@ class ContentViewModel: ObservableObject {
                     do {
                         backAnalysisJSON = data.data(using: .utf8)
                         let decoder = JSONDecoder()
-                        backAnalysis = try decoder.decode(Analysis.self, from: backAnalysisJSON!)
+                        backAnalysis = try decoder.decode(BackAnalysis.self, from: backAnalysisJSON!)
                     } catch {
                         print("Error decoding JSON: \(error)")
                     }
                 }
               
-                print("text:", data)
+            
                 print("Function response: \(data)")
             }
         }

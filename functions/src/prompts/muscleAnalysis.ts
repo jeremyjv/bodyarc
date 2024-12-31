@@ -3,7 +3,7 @@ export const frontAnalysis = `
 This is my current physique. For the muscles that you see in the image, if the muscle is completely not shown in the image leave the rating and description as null. Even if you see a small portion of the muscle in the image, still include a full analysis of it. For example, only a portion of the leg may be showing, but the calf muscle may still be showing. A muscle must be completely covered in clothing to be dismissed from the analysis. 
 In the following JSON Format:
 {
-    "bodyFatPercentage": Int
+    "bodyFatPercentage": Int,
     "shoulders": {
         "rating": Int,
         "description": String
@@ -44,7 +44,7 @@ export const backAnalysis = `
 This is my current physique. For the muscles that you see in the image, if the muscle is completely not shown in the image leave the rating and description as null. Even if you see a small portion of the muscle in the image, still include it in the analysis. A muscle must be completely covered in clothing to be dismissed from the analysis. The glute muscle is the only exception to still give a rating even when it is covered with clothing.  
 In the following JSON Format:
 {
-    "bodyFatPercentage": Int
+    "bodyFatPercentage": Int,
     "traps": {
         "rating": Int,
         "description": String
