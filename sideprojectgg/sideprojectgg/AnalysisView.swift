@@ -23,12 +23,16 @@ struct AnalysisView: View {
                 
                 //Body Fat Percentage and Overall Muscle Development Rating
                 HStack {
-                    Text("Estimated BF%: \(viewModel.frontAnalysis?.bodyFatPercentage ?? 0)")
+                    Text("Estimated Front BF%: \(viewModel.frontAnalysis?.bodyFatPercentage ?? 0)")
+                    Text("Estimated Back BF%: \(viewModel.backAnalysis?.bodyFatPercentage ?? 0)")
                 }
                 
                 //Upper Body Muscle Ratings
                 HStack {
-                    
+                    Text("Shoulders Rating: \(viewModel.frontAnalysis?.shoulders?.rating ?? 0)")
+                    Text("Chest Rating: \(viewModel.frontAnalysis?.chest?.rating ?? 0)")
+                    Text("Arms Rating: \(viewModel.frontAnalysis?.arms?.rating ?? 0)")
+                    Text("Abs Rating: \(viewModel.frontAnalysis?.abs?.rating ?? 0)")
                 }
                 
                 //Lower Body Muscle Ratings
