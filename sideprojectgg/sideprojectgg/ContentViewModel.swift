@@ -19,16 +19,15 @@ class ContentViewModel: ObservableObject {
     @Published var text: String = ""
     @Published var frontImage: UIImage?
     @Published var backImage: UIImage?
-    @Published var frontAnalysis: String = "Hello"
-    @Published var backAnalysis: String = ""
     
+    //these should change when we run the analysis
+    @Published var frontAnalysisJSON: Data?
+        
+    @Published var backAnalysisJSON: Data?
     
-    
-    
-    
-  
-    
-    //need to create user object that owns scans that owns analysis
+    // Initial value for frontAnalysis and backAnalysis (will be updated by didSet observers)
+    @Published var frontAnalysis: Analysis?
+    @Published var backAnalysis: Analysis?
     
     init() {
 
@@ -36,12 +35,6 @@ class ContentViewModel: ObservableObject {
     
     
         
-       
-        
-    
-    
-    
-    
     let functions = Functions.functions()
     
     func convertImageToBase64(img: UIImage) -> String {
@@ -86,10 +79,17 @@ class ContentViewModel: ObservableObject {
                 
                 Task { [weak self] in
                     guard let self else {return}
-                    self.frontAnalysis = data
+                    
+                    do {
+                        frontAnalysisJSON = data.data(using: .utf8)
+                        let decoder = JSONDecoder()
+                        frontAnalysis = try decoder.decode(Analysis.self, from: frontAnalysisJSON!)
+                    } catch {
+                        print("Error decoding JSON: \(error)")
+                    }
                 }
               
-                print("text:", self.frontAnalysis)
+                print("text:", data)
                 print("Function response: \(data)")
             }
         }
@@ -112,10 +112,17 @@ class ContentViewModel: ObservableObject {
                 
                 Task { [weak self] in
                     guard let self else {return}
-                    self.backAnalysis = data
+                    
+                    do {
+                        backAnalysisJSON = data.data(using: .utf8)
+                        let decoder = JSONDecoder()
+                        backAnalysis = try decoder.decode(Analysis.self, from: backAnalysisJSON!)
+                    } catch {
+                        print("Error decoding JSON: \(error)")
+                    }
                 }
               
-                print("text:", self.backAnalysis)
+                print("text:", data)
                 print("Function response: \(data)")
             }
         }
