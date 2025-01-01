@@ -40,12 +40,6 @@ struct ScanView: View {
     var users: [User]
     
 
-    
-    
-    
-
-    
-
     var body: some View {
         NavigationStack(path: $path) {
             
