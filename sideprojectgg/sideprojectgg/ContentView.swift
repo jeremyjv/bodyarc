@@ -16,26 +16,39 @@ import PhotosUI
 
 struct ContentView: View {
     
- 
+    @StateObject private var authViewModel = AuthViewModel()
+    
+
     var body: some View {
         
-        TabView {
-            ScanView().tabItem({
-                Label("Scan", systemImage: "magnifyingglass")
-            })
+        
+        if authViewModel.isLoggedIn {
+            TabView {
+                ScanView().tabItem({
+                    Label("Scan", systemImage: "magnifyingglass")
+                })
+                
+                ProgressView().tabItem({
+                    Label("Progress", systemImage: "person")
+                })
+                
+                AnalysisView().tabItem({
+                    Label("Analysis", systemImage: "magnifyingglass")
+                })
+                
+            }
             
-            ProgressView().tabItem({
-                Label("Progress", systemImage: "person")
-            })
+        } else {
             
-            AnalysisView().tabItem({
-                Label("Analysis", systemImage: "magnifyingglass")
-            })
-            
-            AuthViewModel().tabItem({
+            //redirect to onboarding if not logged in
+            AuthView().tabItem({
                 Label("Auth", systemImage: "person")
             })
         }
+        
+        // if user is not authed, redirect them to onboard flow
+        
+     
     }
 }
     
