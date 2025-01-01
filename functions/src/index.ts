@@ -10,6 +10,8 @@
 import {onRequest} from "firebase-functions/v2/https";
 import * as logger from "firebase-functions/logger";
 import  {generateFrontAnalysisFromImage, generateBackAnalysisFromImage} from "./utils/openaiHandler";
+const admin = require('firebase-admin');
+admin.initializeApp();
 
 
 
@@ -47,6 +49,32 @@ export const returnBackAnalysis = onRequest(async (request, response) => {
 
   response.send({"data": data})
 });
+
+export const createNewUser = onRequest(async (request, response) => {
+
+  let user = request.body.data;
+
+  console.log(user);
+
+  //make sure this points to emulator, not prod
+
+  const userRef = admin.firestore().collection('users').doc(user.uid);
+
+  // You can store basic user information in Firestore, for example:
+  await userRef.set({
+    uid: user.uid,
+    email: user.email,
+    // You can also add additional fields here as needed
+  });
+
+  console.log('User created in Firestore:', user.uid);
+ 
+  
+  
+  //Create new user in Firestore with user's UID
+});
+
+
 
 
 

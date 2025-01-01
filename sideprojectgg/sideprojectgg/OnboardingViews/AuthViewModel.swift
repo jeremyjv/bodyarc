@@ -9,8 +9,14 @@ import SwiftUI
 import FirebaseCore
 import FirebaseAuth
 import GoogleSignIn
+import FirebaseFunctions
+import Firebase
+
 
 struct AuthViewModel: View {
+    
+    let functions = Functions.functions()
+    
     
     func signInWithGoogle() async -> Bool {
         
@@ -39,6 +45,24 @@ struct AuthViewModel: View {
             let result = try await Auth.auth().signIn(with: credential)
             
             let firebaseUser = result.user
+            
+            //maybe add new user to Firestore Here:
+            let userData: [String: Any] = [
+                "uid": firebaseUser.uid,
+                "email": firebaseUser.email as Any,
+            ]
+            
+            Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
+            
+            functions.httpsCallable("createNewUser").call(userData) { result, error in
+                
+                if let error = error {
+                    print("Error calling function: \(error)")
+                    return
+                }
+                print("added user \(firebaseUser.uid) to firestore")
+            }
+            
             print("User \(firebaseUser.uid) signed in with \(firebaseUser.email ?? "unknown")")
             
             return true
