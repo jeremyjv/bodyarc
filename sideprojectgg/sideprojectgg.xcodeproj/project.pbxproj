@@ -15,6 +15,9 @@
 		D553633D2D04E85E007D6000 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D553633C2D04E85E007D6000 /* FirebaseAuth */; };
 		D553633F2D04E862007D6000 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = D553633E2D04E862007D6000 /* FirebaseCore */; };
 		D55363412D04E866007D6000 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = D55363402D04E866007D6000 /* FirebaseDatabase */; };
+		D5BABECB2D2589BA00F2F59F /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = D5BABECA2D2589BA00F2F59F /* GoogleSignIn */; };
+		D5BABECD2D2589CD00F2F59F /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D5BABECC2D2589CD00F2F59F /* GoogleSignInSwift */; };
+		D5BABECF2D258A7000F2F59F /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = D5BABECE2D258A7000F2F59F /* FirebaseAuthCombine-Community */; };
 		D5D423992D22474F0062496B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = D5D423982D22474F0062496B /* FirebaseStorage */; };
 /* End PBXBuildFile section */
 
@@ -82,10 +85,13 @@
 				D5D423992D22474F0062496B /* FirebaseStorage in Frameworks */,
 				D55363302D034152007D6000 /* FirebaseFunctions in Frameworks */,
 				D55363282D0338F7007D6000 /* FirebaseAnalytics in Frameworks */,
+				D5BABECB2D2589BA00F2F59F /* GoogleSignIn in Frameworks */,
 				D553633F2D04E862007D6000 /* FirebaseCore in Frameworks */,
+				D5BABECF2D258A7000F2F59F /* FirebaseAuthCombine-Community in Frameworks */,
 				D553633B2D03FD43007D6000 /* FirebaseFirestore in Frameworks */,
 				D55363412D04E866007D6000 /* FirebaseDatabase in Frameworks */,
 				D553632A2D0338F7007D6000 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				D5BABECD2D2589CD00F2F59F /* GoogleSignInSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,6 +169,9 @@
 				D553633E2D04E862007D6000 /* FirebaseCore */,
 				D55363402D04E866007D6000 /* FirebaseDatabase */,
 				D5D423982D22474F0062496B /* FirebaseStorage */,
+				D5BABECA2D2589BA00F2F59F /* GoogleSignIn */,
+				D5BABECC2D2589CD00F2F59F /* GoogleSignInSwift */,
+				D5BABECE2D258A7000F2F59F /* FirebaseAuthCombine-Community */,
 			);
 			productName = sideprojectgg;
 			productReference = D55362DE2CFE5630007D6000 /* sideprojectgg.app */;
@@ -250,6 +259,7 @@
 				D553631C2D02C985007D6000 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				D55363202D02CAE8007D6000 /* XCRemoteSwiftPackageReference "OpenAISwift" */,
 				D55363242D033605007D6000 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				D5BABEC92D2587B400F2F59F /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D55362DF2CFE5630007D6000 /* Products */;
@@ -452,12 +462,15 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = sideprojectgg/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to capture photos and videos.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This app saves captured photos to your photo library.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=*]" = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -491,12 +504,15 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = sideprojectgg/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to capture photos and videos.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This app saves captured photos to your photo library.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -669,6 +685,14 @@
 				minimumVersion = 11.6.0;
 			};
 		};
+		D5BABEC92D2587B400F2F59F /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -711,6 +735,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D55363242D033605007D6000 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseDatabase;
+		};
+		D5BABECA2D2589BA00F2F59F /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D5BABEC92D2587B400F2F59F /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		D5BABECC2D2589CD00F2F59F /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D5BABEC92D2587B400F2F59F /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+		D5BABECE2D258A7000F2F59F /* FirebaseAuthCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D55363242D033605007D6000 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseAuthCombine-Community";
 		};
 		D5D423982D22474F0062496B /* FirebaseStorage */ = {
 			isa = XCSwiftPackageProductDependency;

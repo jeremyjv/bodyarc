@@ -31,6 +31,10 @@ struct ContentView: View {
             AnalysisView().tabItem({
                 Label("Analysis", systemImage: "magnifyingglass")
             })
+            
+            AuthViewModel().tabItem({
+                Label("Auth", systemImage: "person")
+            })
         }
     }
 }

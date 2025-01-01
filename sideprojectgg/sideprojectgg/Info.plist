@@ -2,18 +2,24 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>NSAppTransportSecurity</key>
-    <dict>
-        <key>NSAllowsArbitraryLoads</key>
-        <true/>
-    </dict>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict/>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.622154662804-46f1u8lvcgpvfbpperadpn23uvf3ds76</string>
+			</array>
+		</dict>
 	</array>
-    <key>NSCameraUsageDescription</key>
-    <string>We need access to your camera to capture photos and videos.</string>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>This app saves captured photos to your photo library.</string>
+	<key>GIDClientID</key>
+	<string>622154662804-46f1u8lvcgpvfbpperadpn23uvf3ds76.apps.googleusercontent.com</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>
