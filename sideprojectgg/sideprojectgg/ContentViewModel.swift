@@ -29,6 +29,8 @@ class ContentViewModel: ObservableObject {
     @Published var frontAnalysis: FrontAnalysis?
     @Published var backAnalysis: BackAnalysis?
     
+ 
+    
     init() {
 
     }

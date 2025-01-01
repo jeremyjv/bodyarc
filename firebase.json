@@ -3,6 +3,11 @@
     "functions": {
       "port": "5001",
       "host": "10.0.0.101"
+    },
+    "firestore": {
+      "port": 8080,
+      "host": "10.0.0.101"
+      
     }
   },
   "functions": [

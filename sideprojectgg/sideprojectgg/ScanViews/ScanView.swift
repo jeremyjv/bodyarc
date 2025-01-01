@@ -41,6 +41,10 @@ struct ScanView: View {
     
 
     
+    
+    
+
+    
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -48,6 +52,9 @@ struct ScanView: View {
   
             
             VStack(spacing: 16) {
+                
+                
+                Text("user: \(users)")
                 
                
                 

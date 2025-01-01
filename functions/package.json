@@ -3,7 +3,7 @@
   "scripts": {
     "build": "npm run tsc",
     "build:watch": "tsc --watch",
-    "serve": "npm run build && firebase emulators:start --only functions",
+    "serve": "npm run build && firebase emulators:start",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
@@ -19,7 +19,7 @@
     "dotenv": "^16.4.7",
     "env": "^0.0.2",
     "firebase-admin": "^12.6.0",
-    "firebase-functions": "^6.1.2",
+    "firebase-functions": "^6.2.0",
     "openai": "^4.76.0"
   },
   "devDependencies": {
