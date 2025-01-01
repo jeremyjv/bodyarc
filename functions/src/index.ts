@@ -68,6 +68,8 @@ export const createNewUser = onRequest(async (request, response) => {
   });
 
   console.log('User created in Firestore:', user.uid);
+
+  response.send({"data": {}})
  
   
   
