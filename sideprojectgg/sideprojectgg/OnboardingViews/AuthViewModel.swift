@@ -14,8 +14,9 @@ import Firebase
 
 //Create Navigation stack here that goes through onboarding views
 
-//use this model to get all info needed about user (UID to access FireStore etc.) 
+//use this model to get all info needed about user (UID to access FireStore etc.)
 
+@MainActor
 class AuthViewModel: ObservableObject {
     @Published var email: String?
     @Published var uid = ""
@@ -28,7 +29,7 @@ class AuthViewModel: ObservableObject {
         self.authStateListenerHandle = Auth.auth().addStateDidChangeListener { [weak self] auth, user in
                         self?.isLoggedIn = user != nil
                     }
-        self.email = Auth.auth().currentUser!.email
+        self.email = Auth.auth().currentUser?.email
     }
     deinit {
         if let handle = authStateListenerHandle {
@@ -38,6 +39,15 @@ class AuthViewModel: ObservableObject {
     
     
     let functions = Functions.functions()
+    
+    func signOut() {
+            do {
+                try Auth.auth().signOut()
+            } catch {
+                print("Error signing out: \(error.localizedDescription)")
+            }
+        }
+    
     func signInWithGoogle() async -> Bool {
         
         guard let clientID = FirebaseApp.app()?.options.clientID else {
@@ -47,9 +57,9 @@ class AuthViewModel: ObservableObject {
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
         
-        guard let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = await windowScene.windows.first,
-              let rootViewController = await window.rootViewController else {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first,
+              let rootViewController = window.rootViewController else {
             print("There is no root view controller")
             return false
         }

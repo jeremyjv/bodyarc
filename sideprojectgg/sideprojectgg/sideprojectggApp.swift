@@ -37,10 +37,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     return true
   }
     
-//    func makeReservation() {
-//            let db = Firestore.firestore()
-//            // Add the necessary Firebase instructions to create the reservation record.
-//        }
+
 }
 
 @main

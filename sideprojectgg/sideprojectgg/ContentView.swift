@@ -23,6 +23,15 @@ struct ContentView: View {
         
         
         if authViewModel.isLoggedIn {
+            
+            
+            Button(action: {
+                authViewModel.signOut()
+            }) {
+                Text("sign out")
+            }
+            
+            
             TabView {
                 ScanView().tabItem({
                     Label("Scan", systemImage: "magnifyingglass")
