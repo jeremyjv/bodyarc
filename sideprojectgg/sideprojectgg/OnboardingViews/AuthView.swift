@@ -14,6 +14,7 @@ struct AuthView: View {
     @Binding var intakeForm: IntakeForm
     @Binding var path: NavigationPath
     
+    
 
     
     var body: some View {
@@ -23,7 +24,8 @@ struct AuthView: View {
             Button(action: {
                 Task {
                     
-                    await authViewModel.signInWithGoogle()
+                    //pass intake form data to this function and if user created add form to their user model
+                    await authViewModel.signInWithGoogle(intakeForm: intakeForm)
                     
                     
                     //dump the navigation path then navigate to ContentView

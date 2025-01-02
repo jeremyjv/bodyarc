@@ -44,12 +44,13 @@ class AuthViewModel: ObservableObject {
     func signOut() {
             do {
                 try Auth.auth().signOut()
+                isLoggedIn = false
             } catch {
                 print("Error signing out: \(error.localizedDescription)")
             }
         }
     
-    func signInWithGoogle() async -> Bool {
+    func signInWithGoogle(intakeForm: IntakeForm) async -> Bool {
         
         guard let clientID = FirebaseApp.app()?.options.clientID else {
             fatalError("")
@@ -81,12 +82,16 @@ class AuthViewModel: ObservableObject {
             let userData: [String: Any] = [
                 "uid": firebaseUser.uid,
                 "email": firebaseUser.email as Any,
+                "gender": intakeForm.gender as Any,
+                "goal": intakeForm.goal as Any,
+                "availability": intakeForm.availability as Any
+                    
             ]
             
             //firestore already disregards duplicate UID so if it already exists, it doesn't add it
             
             
-            //server side update ??would client side be faster??
+            //want to add intake form data aswell when creating user
             Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
             
             functions.httpsCallable("createNewUser").call(userData) { result, error in
@@ -97,6 +102,8 @@ class AuthViewModel: ObservableObject {
                 }
                 print("added user \(firebaseUser.uid) to firestore")
             }
+            
+            
             
             //want to redirect to GoalsView
             isLoggedIn = true

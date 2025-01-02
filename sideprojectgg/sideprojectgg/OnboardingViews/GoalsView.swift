@@ -19,9 +19,31 @@ struct GoalsView: View {
         
         Button(action: {
             path.append("AvailabilityView")
+            intakeForm.goal = "loseFat"
         }){
-            Text("Continue")
+            CustomButton(title: "Lose Fat")
         }
+        Button(action: {
+            path.append("AvailabilityView")
+            intakeForm.goal = "buildMuscle"
+        }){
+         
+            CustomButton(title: "Build Muscle")
+        }
+        Button(action: {
+            path.append("AvailabilityView")
+            intakeForm.goal = "bodyRecomp"
+        }){
+            CustomButton(title: "Body Recomp (Lose Fat and Build Muscle)")
+        }
+        Button(action: {
+            path.append("AvailabilityView")
+            intakeForm.goal = "healthierHabits"
+        }){
+            CustomButton(title: "Build Healthier Habits")
+        }
+        
+    
     }
 }
 

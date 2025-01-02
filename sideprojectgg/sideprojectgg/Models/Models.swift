@@ -21,9 +21,9 @@ struct User: Codable {
 
 //this will be editable in the top right profile section (gear icon)
 struct IntakeForm: Codable {
-    let gender: String?
-    let goal: String?
-    let availability: Int?
+    var gender: String?
+    var goal: String?
+    var availability: String?
     
     init() {
         gender = nil

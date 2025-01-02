@@ -64,6 +64,11 @@ export const createNewUser = onRequest(async (request, response) => {
   await userRef.set({
     uid: user.uid,
     email: user.email,
+    intake: {
+      gender: user.gender,
+      goal: user.goal,
+      availability: user.availability
+    }
     // You can also add additional fields here as needed
   });
 

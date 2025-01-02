@@ -19,10 +19,20 @@ struct GenderView: View {
         NavigationStack(path: $path) {
             Text("Select Gender")
             
-            Button(action: {
-                path.append("GoalsView")
-            }){
-                Text("Continue")
+            VStack {
+                Button(action: {
+                    path.append("GoalsView")
+                    intakeForm.gender = "male"
+                }){
+                    CustomButton(title: "male")
+                }
+                Button(action: {
+                    path.append("GoalsView")
+                    intakeForm.gender = "female"
+                }){
+                    CustomButton(title: "female")
+                }
+
             }
             .navigationDestination(for: String.self) { destination in
                 switch destination {
@@ -41,6 +51,21 @@ struct GenderView: View {
             
         }
         
+    }
+}
+
+struct CustomButton: View {
+    var title: String
+    var body: some View {
+        
+        Text(title)
+            .font(.headline)
+            .frame(maxWidth: .infinity) // Make button fill the width
+            .padding() // Add padding inside the button
+            .background(Color.white) // Set button background
+            .cornerRadius(8) // Rounded corners
+            .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2) // Shadow
+            .foregroundColor(.black) // Text color
     }
 }
 
