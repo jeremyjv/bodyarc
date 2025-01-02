@@ -50,9 +50,7 @@ struct ContentView: View {
         } else {
             
             //redirect to onboarding if not logged in
-            AuthView().tabItem({
-                Label("Auth", systemImage: "person")
-            })
+            GenderView()
         }
         
         // if user is not authed, redirect them to onboard flow

@@ -24,6 +24,12 @@ struct IntakeForm: Codable {
     let gender: String?
     let goal: String?
     let availability: Int?
+    
+    init() {
+        gender = nil
+        goal = nil
+        availability = nil
+    }
 }
 
 //need to eventually serialize to pass to firebase photo.pngData()!

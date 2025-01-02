@@ -11,10 +11,10 @@ import SwiftUI
 struct AuthView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     
+    @Binding var intakeForm: IntakeForm
+    @Binding var path: NavigationPath
     
-    
-    
-    
+
     
     var body: some View {
         VStack {
@@ -27,6 +27,9 @@ struct AuthView: View {
                     
                     
                     //dump the navigation path then navigate to ContentView
+                    
+                    
+                    //pass in intake form to store in created user
                 }
              
             }) {
