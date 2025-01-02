@@ -16,7 +16,7 @@ import PhotosUI
 
 struct ContentView: View {
     
-    @StateObject private var authViewModel = AuthViewModel()
+    @EnvironmentObject var authViewModel: AuthViewModel
     
 
     var body: some View {

@@ -47,12 +47,14 @@ struct sideprojectggApp: App {
     
     //now we can access from any view under ContentView and update info in respective pages
     @StateObject private var viewModel = ContentViewModel()
+    @StateObject private var authViewModel = AuthViewModel()
 
   var body: some Scene {
     WindowGroup {
 
           ContentView()
             .environmentObject(viewModel)
+            .environmentObject(authViewModel)
               
     }
   }
