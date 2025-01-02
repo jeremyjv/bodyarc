@@ -19,7 +19,7 @@ import Firebase
 @MainActor
 class AuthViewModel: ObservableObject {
     @Published var email: String?
-    @Published var uid = ""
+    @Published var uid: String?
     @Published var isLoggedIn = false
     
     private var authStateListenerHandle: AuthStateDidChangeListenerHandle?
@@ -30,6 +30,7 @@ class AuthViewModel: ObservableObject {
                         self?.isLoggedIn = user != nil
                     }
         self.email = Auth.auth().currentUser?.email
+        self.uid = Auth.auth().currentUser?.uid
     }
     deinit {
         if let handle = authStateListenerHandle {
@@ -84,6 +85,8 @@ class AuthViewModel: ObservableObject {
             
             //firestore already disregards duplicate UID so if it already exists, it doesn't add it
             
+            
+            //server side update ??would client side be faster??
             Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
             
             functions.httpsCallable("createNewUser").call(userData) { result, error in

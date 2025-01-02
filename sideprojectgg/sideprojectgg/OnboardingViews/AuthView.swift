@@ -9,7 +9,10 @@ import SwiftUI
 
 
 struct AuthView: View {
-    @StateObject private var authViewModel = AuthViewModel()
+    @EnvironmentObject var authViewModel: AuthViewModel
+    
+    
+    
     
     
     
@@ -19,7 +22,11 @@ struct AuthView: View {
             //Trigger Auth Logic here -> triggers event to create new user in Firestore
             Button(action: {
                 Task {
+                    
                     await authViewModel.signInWithGoogle()
+                    
+                    
+                    //dump the navigation path then navigate to ContentView
                 }
              
             }) {
