@@ -92,7 +92,7 @@ class AuthViewModel: ObservableObject {
             
             
             //want to add intake form data aswell when creating user
-            Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
+            Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
             
             functions.httpsCallable("createNewUser").call(userData) { result, error in
                 

@@ -17,6 +17,8 @@ import FirebaseStorage
 @MainActor
 class ContentViewModel: ObservableObject {
     
+    @EnvironmentObject var authViewModel: AuthViewModel
+    
     @Published var text: String = ""
     @Published var frontImage: UIImage?
     @Published var backImage: UIImage?
@@ -40,6 +42,8 @@ class ContentViewModel: ObservableObject {
         
     let functions = Functions.functions()
     
+    
+    //whole step to 
     func handleScanUploadAction() {
         Task {
             // Ensure images are not nil
@@ -52,10 +56,13 @@ class ContentViewModel: ObservableObject {
             await self.createBackAnalysis(img: backImage)
 
             // Convert and upload images
+            var frontImageURL: String?
             let frontImageData = self.convertImagePNGData(img: frontImage)
             await self.uploadFile(data: frontImageData, path: "images/front_image.png") { result in
                 switch result {
                 case .success(let downloadURL):
+                    //frontImageURL = downloadURL
+                    frontImageURL = downloadURL.absoluteString
                     print("Upload successful! URL: \(downloadURL)")
                 case .failure(let error):
                     print("Upload failed: \(error.localizedDescription)")
@@ -63,16 +70,24 @@ class ContentViewModel: ObservableObject {
             }
             
             //then upload url
-
+            var backImageURL: String?
             let backImageData = self.convertImagePNGData(img: backImage)
             await self.uploadFile(data: backImageData, path: "images/back_image.png") { result in
                 switch result {
                 case .success(let downloadURL):
+                    
+                    backImageURL = downloadURL.absoluteString
                     print("Upload successful! URL: \(downloadURL)")
                 case .failure(let error):
                     print("Upload failed: \(error.localizedDescription)")
                 }
             }
+            
+            //now that we have the images and analysis, store as a scan in scan collection with the user's UID (so we have to reference AuthViewModel asweell)
+            
+            
+            
+            
         }
     }
     

@@ -131,9 +131,7 @@ struct BackScanView: View {
                         Task {
                             viewModel.handleScanUploadAction()
                             
-                            
-        
-                            
+
                         }
                      
                         
