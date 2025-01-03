@@ -166,35 +166,14 @@ class ContentViewModel: ObservableObject {
     
             print("COMPUTATION 2")
             // Convert and upload images
-            
+            // Upload front and back images sequentially
             let frontImageData = self.convertImagePNGData(img: frontImage)
-            var uuid = NSUUID().uuidString
-            try await self.uploadFile(data: frontImageData, path: "images/\(uuid).png") { result in
-                switch result {
-                case .success(let downloadURL):
-                    //frontImageURL = downloadURL
-                    self.frontImageURL = downloadURL.absoluteString
-                    print("Upload successful! URL: \(downloadURL)")
-                case .failure(let error):
-                    print("Upload failed: \(error.localizedDescription)")
-                }
-            }
-            print("COMPUTATION 3")
-            
-            //then upload url
+            let uuid1 = NSUUID().uuidString
+            self.frontImageURL = try await self.uploadFile(data: frontImageData, path: "images/\(uuid1).png").absoluteString
             
             let backImageData = self.convertImagePNGData(img: backImage)
-            uuid = NSUUID().uuidString
-            try await self.uploadFile(data: backImageData, path: "images/\(uuid).png") { result in
-                switch result {
-                case .success(let downloadURL):
-                    
-                    self.backImageURL = downloadURL.absoluteString
-                    print("Upload successful! URL: \(downloadURL)")
-                case .failure(let error):
-                    print("Upload failed: \(error.localizedDescription)")
-                }
-            }
+            let uuid2 = NSUUID().uuidString
+            self.backImageURL = try await self.uploadFile(data: backImageData, path: "images/\(uuid2).png").absoluteString
             print("COMPUTATION 4")
         } catch let error {
             print("Error to Firestore: \(error)")
@@ -240,29 +219,29 @@ class ContentViewModel: ObservableObject {
     //Firebase STORAGE///
     
     //when we save scan, we save the images and pass it to here to receive back a URL that points back to it
-    func uploadFile(data: Data, path: String, completion: @escaping (Result<URL, Error>) -> Void) async throws {
-        let storage = Storage.storage()
-        let storageRef = storage.reference().child(path)
-        
-        storageRef.putData(data, metadata: nil) { metadata, error in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
+    func uploadFile(data: Data, path: String) async throws -> URL {
+        return try await withCheckedThrowingContinuation { continuation in
+            let storage = Storage.storage()
+            let storageRef = storage.reference().child(path)
             
-            storageRef.downloadURL { url, error in
+            storageRef.putData(data, metadata: nil) { metadata, error in
                 if let error = error {
-                    completion(.failure(error))
+                    continuation.resume(throwing: error)
                     return
                 }
                 
-                if let url = url {
-                    completion(.success(url))
+                storageRef.downloadURL { url, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else if let url = url {
+                        continuation.resume(returning: url)
+                    } else {
+                        continuation.resume(throwing: NSError(domain: "UnexpectedError", code: -1, userInfo: nil))
+                    }
                 }
             }
         }
     }
-    
     
     
     //CLOUD FUNCTIONS //
