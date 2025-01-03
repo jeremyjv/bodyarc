@@ -16,7 +16,7 @@ import Firebase
 
 //use this model to get all info needed about user (UID to access FireStore etc.)
 
-@MainActor
+
 class AuthViewModel: ObservableObject {
     @Published var email: String?
     @Published var uid: String?
@@ -59,9 +59,9 @@ class AuthViewModel: ObservableObject {
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
         
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first,
-              let rootViewController = window.rootViewController else {
+        guard let windowScene = await UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = await windowScene.windows.first,
+              let rootViewController = await window.rootViewController else {
             print("There is no root view controller")
             return false
         }
@@ -115,7 +115,6 @@ class AuthViewModel: ObservableObject {
             print(error.localizedDescription)
             return false
         }
-        
         
     }
   

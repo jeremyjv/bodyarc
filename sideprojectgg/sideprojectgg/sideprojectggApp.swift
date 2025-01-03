@@ -10,13 +10,15 @@ import Firebase
 import FirebaseFirestore
 import FirebaseAuth
 import GoogleSignIn
+import FirebaseFirestore
 
 
 class AppDelegate: NSObject, UIApplicationDelegate {
   func application(_ application: UIApplication,
                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     FirebaseApp.configure()
-  
+    
+    
       
     #if DEBUG
     // Connect to Firestore emulator in development
@@ -46,15 +48,22 @@ struct sideprojectggApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     //now we can access from any view under ContentView and update info in respective pages
+    
+    
+    //we can only have one main actor, so combine everything together since we're trying to reference authViewModel from viewModel
+    //LEAD Action refactor authViewModel into viewModel
+    
     @StateObject private var viewModel = ContentViewModel()
-    @StateObject private var authViewModel = AuthViewModel()
+    
+    //find all references to authViewModel then reference to viewModel instead
+  
 
   var body: some Scene {
     WindowGroup {
 
           ContentView()
             .environmentObject(viewModel)
-            .environmentObject(authViewModel)
+            
               
     }
   }

@@ -16,17 +16,17 @@ import PhotosUI
 
 struct ContentView: View {
     
-    @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var viewModel: ContentViewModel
     
 
     var body: some View {
         
         
-        if authViewModel.isLoggedIn {
+        if viewModel.isLoggedIn {
             
             
             Button(action: {
-                authViewModel.signOut()
+                viewModel.signOut()
             }) {
                 Text("sign out")
             }

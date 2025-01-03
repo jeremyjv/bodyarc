@@ -9,7 +9,7 @@ import SwiftUI
 
 
 struct AuthView: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var viewModel: ContentViewModel
     
     @Binding var intakeForm: IntakeForm
     @Binding var path: NavigationPath
@@ -25,7 +25,7 @@ struct AuthView: View {
                 Task {
                     
                     //pass intake form data to this function and if user created add form to their user model
-                    await authViewModel.signInWithGoogle(intakeForm: intakeForm)
+                    await viewModel.signInWithGoogle(intakeForm: intakeForm)
                     
                     
                     //dump the navigation path then navigate to ContentView
