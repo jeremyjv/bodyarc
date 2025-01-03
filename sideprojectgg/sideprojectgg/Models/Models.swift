@@ -15,7 +15,7 @@ import SwiftUI
 struct User: Codable {
     let email: String?
     let uid: String?
-    let scans: [Scan]?
+    let scans: [ScanObject]?
     
 }
 
@@ -33,11 +33,28 @@ struct IntakeForm: Codable {
 }
 
 //need to eventually serialize to pass to firebase photo.pngData()!
-struct Scan: Codable {
-    let frontImage: Data?
-    let backImage: Data?
-    let frontAnalysis: FrontAnalysis?
-    let backAnalysis: BackAnalysis?
+struct ScanObject: Codable {
+    var userUID: String?
+    var frontImage: String?
+    var backImage: String?
+    var frontAnalysis: FrontAnalysis?
+    var backAnalysis: BackAnalysis?
+    
+    init(userUID: String?, frontImage: String?, backImage: String?, frontAnalysis: FrontAnalysis?, backAnalysis: BackAnalysis?) {
+            self.userUID = userUID
+            self.frontImage = frontImage
+            self.backImage = backImage
+            self.frontAnalysis = frontAnalysis
+            self.backAnalysis = backAnalysis
+        }
+    
+    init() {
+        userUID = nil
+        frontImage = nil
+        backImage = nil
+        frontAnalysis = nil
+        backAnalysis = nil
+    }
 }
 
 struct FrontAnalysis: Codable {

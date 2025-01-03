@@ -19,6 +19,7 @@ class ContentViewModel: ObservableObject {
     
     @EnvironmentObject var authViewModel: AuthViewModel
     
+    
     @Published var text: String = ""
     @Published var frontImage: UIImage?
     @Published var backImage: UIImage?
@@ -52,6 +53,7 @@ class ContentViewModel: ObservableObject {
                 return
             }
             
+            //compute front and back analysis
             await self.createFrontAnalysis(img: frontImage)
             await self.createBackAnalysis(img: backImage)
 
@@ -84,6 +86,9 @@ class ContentViewModel: ObservableObject {
             }
             
             //now that we have the images and analysis, store as a scan in scan collection with the user's UID (so we have to reference AuthViewModel asweell)
+            let scan = ScanObject(userUID: authViewModel.uid, frontImage: frontImageURL, backImage: backImageURL, frontAnalysis: self.frontAnalysis,backAnalysis: self.backAnalysis)
+            
+            //store all data in Scan Struct then add to firebase
             
             
             
