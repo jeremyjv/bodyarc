@@ -31,13 +31,7 @@ struct ScanView: View {
 
     @State private var path = NavigationPath() // To manage navigation
     
-    struct User: Identifiable, Codable {
-        @DocumentID var id: String?
-        var name: String
-    }
     
-    @FirestoreQuery(collectionPath: "user")
-    var users: [User]
     
 
     var body: some View {
@@ -48,7 +42,7 @@ struct ScanView: View {
             VStack(spacing: 16) {
                 
                 
-                Text("user: \(users)")
+                
                 
                
                 

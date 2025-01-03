@@ -10,6 +10,7 @@ import SwiftUI
 import Firebase
 import FirebaseFunctions
 import FirebaseFirestore
+import FirebaseStorage
 
 
 
@@ -39,9 +40,78 @@ class ContentViewModel: ObservableObject {
         
     let functions = Functions.functions()
     
+    func handleScanUploadAction() {
+        Task {
+            // Ensure images are not nil
+            guard let frontImage = self.frontImage, let backImage = self.backImage else {
+                print("Images are missing")
+                return
+            }
+            
+            await self.createFrontAnalysis(img: frontImage)
+            await self.createBackAnalysis(img: backImage)
+
+            // Convert and upload images
+            let frontImageData = self.convertImagePNGData(img: frontImage)
+            await self.uploadFile(data: frontImageData, path: "images/front_image.png") { result in
+                switch result {
+                case .success(let downloadURL):
+                    print("Upload successful! URL: \(downloadURL)")
+                case .failure(let error):
+                    print("Upload failed: \(error.localizedDescription)")
+                }
+            }
+            
+            //then upload url
+
+            let backImageData = self.convertImagePNGData(img: backImage)
+            await self.uploadFile(data: backImageData, path: "images/back_image.png") { result in
+                switch result {
+                case .success(let downloadURL):
+                    print("Upload successful! URL: \(downloadURL)")
+                case .failure(let error):
+                    print("Upload failed: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
     func convertImageToBase64(img: UIImage) -> String {
         return img.jpegData(compressionQuality: 1)!.base64EncodedString()
     }
+    func convertImagePNGData(img: UIImage) -> Data {
+        return img.pngData()!
+    }
+    //Firebase STORAGE///
+    
+    //when we save scan, we save the images and pass it to here to receive back a URL that points back to it
+    func uploadFile(data: Data, path: String, completion: @escaping (Result<URL, Error>) -> Void) async {
+        let storage = Storage.storage()
+        let storageRef = storage.reference().child(path)
+        
+        storageRef.putData(data, metadata: nil) { metadata, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            storageRef.downloadURL { url, error in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                
+                if let url = url {
+                    completion(.success(url))
+                }
+            }
+        }
+    }
+    
+    
+    
+    /////CLOUD FUNCTIONS //////
+    
     
     func callHelloWorld() async -> String {
         Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
@@ -69,7 +139,7 @@ class ContentViewModel: ObservableObject {
         let base64 = self.convertImageToBase64(img: img)
         
         //let data: [String: Any] = ["base64": base64] // Your arguments
-        Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
+        Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
  
         functions.httpsCallable("returnFrontAnalysis").call(base64) { result, error in
             
@@ -102,7 +172,7 @@ class ContentViewModel: ObservableObject {
         let base64 = self.convertImageToBase64(img: img)
         
         //let data: [String: Any] = ["base64": base64] // Your arguments
-        Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
+        Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
  
         functions.httpsCallable("returnBackAnalysis").call(base64) { result, error in
             

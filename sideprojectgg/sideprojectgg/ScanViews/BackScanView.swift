@@ -123,20 +123,20 @@ struct BackScanView: View {
                         //return to contentView with empty path
                         path = NavigationPath()
                         
+                        
                         //run paywall business logic
                         
                         
                         //run analysis logic here  --> create different
                         Task {
-                            await viewModel.createFrontAnalysis(img: viewModel.frontImage!)
-                            await viewModel.createBackAnalysis(img: viewModel.backImage!)
+                            viewModel.handleScanUploadAction()
                             
-                            //--> create different function for back analysis
+                            
+        
                             
                         }
                      
                         
-                        //--> create different function for back analysis
                         
          
                     }) {
