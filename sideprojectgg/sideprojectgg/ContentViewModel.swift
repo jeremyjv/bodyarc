@@ -156,7 +156,8 @@ class ContentViewModel: ObservableObject {
             // Convert and upload images
             var frontImageURL: String?
             let frontImageData = self.convertImagePNGData(img: frontImage)
-            await self.uploadFile(data: frontImageData, path: "images/front_image.png") { result in
+            var uuid = NSUUID().uuidString
+            await self.uploadFile(data: frontImageData, path: "images/\(uuid).png") { result in
                 switch result {
                 case .success(let downloadURL):
                     //frontImageURL = downloadURL
@@ -170,7 +171,8 @@ class ContentViewModel: ObservableObject {
             //then upload url
             var backImageURL: String?
             let backImageData = self.convertImagePNGData(img: backImage)
-            await self.uploadFile(data: backImageData, path: "images/back_image.png") { result in
+            uuid = NSUUID().uuidString
+            await self.uploadFile(data: backImageData, path: "images/\(uuid).png") { result in
                 switch result {
                 case .success(let downloadURL):
                     
@@ -185,6 +187,7 @@ class ContentViewModel: ObservableObject {
             let scan = ScanObject(userUID: self.uid, frontImage: frontImageURL, backImage: backImageURL, frontAnalysis: self.frontAnalysis,backAnalysis: self.backAnalysis)
             
             
+            //does NOT WORK because of app check
             do {
               try db.collection("scans").document().setData(from: scan)
             } catch let error {
