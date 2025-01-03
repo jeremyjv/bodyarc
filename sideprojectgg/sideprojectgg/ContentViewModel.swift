@@ -113,7 +113,7 @@ class ContentViewModel: ObservableObject {
             
             
             //want to add intake form data aswell when creating user
-            Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
+            Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
             
             functions.httpsCallable("createNewUser").call(userData) { result, error in
                 
@@ -239,33 +239,12 @@ class ContentViewModel: ObservableObject {
     //CLOUD FUNCTIONS //
     
     
-    func callHelloWorld() async -> String {
-        Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
-        var text = "hello"
-        functions.httpsCallable("helloWorld").call { result, error in
-            
-            if let error = error {
-                print("Error calling function: \(error)")
-                return
-            }
-            if let data = result?.data as? String {
-               
-                text = data
-                print("text:", self.text)
-                print("Function response: \(data)")
-            }
-        }
-        
-        return text
-    }
-    
-    
     // make separate analysis function for front and back analysis
     func createFrontAnalysis(img: UIImage) async {
         let base64 = self.convertImageToBase64(img: img)
         
         //let data: [String: Any] = ["base64": base64] // Your arguments
-        Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
+        Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
  
         functions.httpsCallable("returnFrontAnalysis").call(base64) { result, error in
             
@@ -298,7 +277,7 @@ class ContentViewModel: ObservableObject {
         let base64 = self.convertImageToBase64(img: img)
         
         //let data: [String: Any] = ["base64": base64] // Your arguments
-        Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
+        Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
  
         functions.httpsCallable("returnBackAnalysis").call(base64) { result, error in
             
