@@ -18,12 +18,14 @@ import GoogleSignIn
 @MainActor
 class ContentViewModel: ObservableObject {
     
+    private let serialQueue = DispatchQueue(label: "com.myapp.serialQueue")
     
     //Original data
     @Published var text: String = ""
     @Published var frontImage: UIImage?
     @Published var backImage: UIImage?
-    
+    @Published var frontImageURL: String?
+    @Published var backImageURL: String?
     //these should change when we run the analysis
     @Published var frontAnalysisJSON: Data?
         
@@ -140,66 +142,93 @@ class ContentViewModel: ObservableObject {
     }
     
     
-    //whole step to 
-    func handleScanUploadAction() {
-        Task {
-            // Ensure images are not nil
-            guard let frontImage = self.frontImage, let backImage = self.backImage else {
-                print("Images are missing")
-                return
-            }
+    //we can delegate this server side instead to fix
+    @MainActor
+    func handleScanUploadAction() async {
+        
+        
+        // Ensure images are not nil
+        guard let frontImage = self.frontImage, let backImage = self.backImage else {
+            print("Images are missing")
+            return
+        }
+        
+        //compute front and back analysis
+        print("COMPUTATION 1")
+        
+        
+        do {
             
-            //compute front and back analysis
-            await self.createFrontAnalysis(img: frontImage)
-            await self.createBackAnalysis(img: backImage)
-
+     
+            try await self.createFrontAnalysis(img: frontImage)
+            try await self.createBackAnalysis(img: backImage)
+            
+    
+            print("COMPUTATION 2")
             // Convert and upload images
-            var frontImageURL: String?
+            
             let frontImageData = self.convertImagePNGData(img: frontImage)
             var uuid = NSUUID().uuidString
-            await self.uploadFile(data: frontImageData, path: "images/\(uuid).png") { result in
+            try await self.uploadFile(data: frontImageData, path: "images/\(uuid).png") { result in
                 switch result {
                 case .success(let downloadURL):
                     //frontImageURL = downloadURL
-                    frontImageURL = downloadURL.absoluteString
+                    self.frontImageURL = downloadURL.absoluteString
                     print("Upload successful! URL: \(downloadURL)")
                 case .failure(let error):
                     print("Upload failed: \(error.localizedDescription)")
                 }
             }
+            print("COMPUTATION 3")
             
             //then upload url
-            var backImageURL: String?
+            
             let backImageData = self.convertImagePNGData(img: backImage)
             uuid = NSUUID().uuidString
-            await self.uploadFile(data: backImageData, path: "images/\(uuid).png") { result in
+            try await self.uploadFile(data: backImageData, path: "images/\(uuid).png") { result in
                 switch result {
                 case .success(let downloadURL):
                     
-                    backImageURL = downloadURL.absoluteString
+                    self.backImageURL = downloadURL.absoluteString
                     print("Upload successful! URL: \(downloadURL)")
                 case .failure(let error):
                     print("Upload failed: \(error.localizedDescription)")
                 }
             }
-            
-            //now that we have the images and analysis, store as a scan in scan collection with the user's UID (so we have to reference AuthViewModel asweell)
-            let scan = ScanObject(userUID: self.uid, frontImage: frontImageURL, backImage: backImageURL, frontAnalysis: self.frontAnalysis,backAnalysis: self.backAnalysis)
-            
-            
-            //does NOT WORK because of app check
-            do {
-              try db.collection("scans").document().setData(from: scan)
-            } catch let error {
-              print("Error writing city to Firestore: \(error)")
-            }
-            
-            //store all data in Scan Struct then add to firebase
-            
-            
-            
-            
+            print("COMPUTATION 4")
+        } catch let error {
+            print("Error to Firestore: \(error)")
         }
+        
+        
+            
+        
+    
+
+    
+        print("COMPUTATION 5")
+        guard let frontImageURL = self.frontImageURL, let backImageURL = self.backImageURL, let frontAnalysis = self.frontAnalysis, let backAnalysis = self.backAnalysis else {
+            print("Scan Fields Are Missing")
+            return
+        }
+        
+        
+        //now that we have the images and analysis, store as a scan in scan collection with the user's UID (so we have to reference AuthViewModel asweell)
+        let scan = ScanObject(userUID: self.uid, frontImage: frontImageURL, backImage: backImageURL, frontAnalysis: frontAnalysis, backAnalysis: backAnalysis)
+        
+        
+        //does NOT WORK because of app check
+        do {
+            try db.collection("scans").addDocument(from: scan)
+        } catch let error {
+            print("Error writing city to Firestore: \(error)")
+            }
+    
+    
+        
+        //store all data in Scan Struct then add to firebase
+        
+        
     }
     
     func convertImageToBase64(img: UIImage) -> String {
@@ -211,7 +240,7 @@ class ContentViewModel: ObservableObject {
     //Firebase STORAGE///
     
     //when we save scan, we save the images and pass it to here to receive back a URL that points back to it
-    func uploadFile(data: Data, path: String, completion: @escaping (Result<URL, Error>) -> Void) async {
+    func uploadFile(data: Data, path: String, completion: @escaping (Result<URL, Error>) -> Void) async throws {
         let storage = Storage.storage()
         let storageRef = storage.reference().child(path)
         
@@ -240,69 +269,68 @@ class ContentViewModel: ObservableObject {
     
     
     // make separate analysis function for front and back analysis
-    func createFrontAnalysis(img: UIImage) async {
+
+    func createFrontAnalysis(img: UIImage) async throws {
         let base64 = self.convertImageToBase64(img: img)
         
         //let data: [String: Any] = ["base64": base64] // Your arguments
         Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
  
-        functions.httpsCallable("returnFrontAnalysis").call(base64) { result, error in
-            
-            if let error = error {
-                print("Error calling function: \(error)")
-                return
-            }
-            if let data = result?.data as? String {
-                
-                Task { [weak self] in
-                    guard let self else {return}
-                    
-                    do {
-                        frontAnalysisJSON = data.data(using: .utf8)
-                        let decoder = JSONDecoder()
-                        frontAnalysis = try decoder.decode(FrontAnalysis.self, from: frontAnalysisJSON!)
-                    } catch {
-                        print("Error decoding JSON: \(error)")
+        let response: String = try await withCheckedThrowingContinuation { continuation in
+                functions.httpsCallable("returnFrontAnalysis").call(base64) { result, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else if let data = result?.data as? String {
+                        continuation.resume(returning: data)
+                    } else {
+                        continuation.resume(throwing: NSError(domain: "UnexpectedError", code: -1, userInfo: nil))
                     }
                 }
-              
-               
-                print("Function response: \(data)")
             }
-        }
-  
+            
+            // Decode the JSON response
+            do {
+                self.frontAnalysisJSON = response.data(using: .utf8)
+                let decoder = JSONDecoder()
+                self.frontAnalysis = try decoder.decode(FrontAnalysis.self, from: frontAnalysisJSON!)
+            } catch {
+                print("Error decoding JSON: \(error)")
+                throw error
+            }
+        
+        //Need to wrap cloud function in await or else this will run before we get result
+        print("Called front Analysis")
+
     }
     
-    func createBackAnalysis(img: UIImage) async {
+
+    func createBackAnalysis(img: UIImage) async throws {
         let base64 = self.convertImageToBase64(img: img)
         
         //let data: [String: Any] = ["base64": base64] // Your arguments
         Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
  
-        functions.httpsCallable("returnBackAnalysis").call(base64) { result, error in
-            
-            if let error = error {
-                print("Error calling function: \(error)")
-                return
-            }
-            if let data = result?.data as? String {
-                
-                Task { [weak self] in
-                    guard let self else {return}
-                    
-                    do {
-                        backAnalysisJSON = data.data(using: .utf8)
-                        let decoder = JSONDecoder()
-                        backAnalysis = try decoder.decode(BackAnalysis.self, from: backAnalysisJSON!)
-                    } catch {
-                        print("Error decoding JSON: \(error)")
+        let response: String = try await withCheckedThrowingContinuation { continuation in
+                functions.httpsCallable("returnBackAnalysis").call(base64) { result, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else if let data = result?.data as? String {
+                        continuation.resume(returning: data)
+                    } else {
+                        continuation.resume(throwing: NSError(domain: "UnexpectedError", code: -1, userInfo: nil))
                     }
                 }
-              
-            
-                print("Function response: \(data)")
             }
-        }
+            
+            // Decode the JSON response
+            do {
+                self.backAnalysisJSON = response.data(using: .utf8)
+                let decoder = JSONDecoder()
+                self.backAnalysis = try decoder.decode(BackAnalysis.self, from: backAnalysisJSON!)
+            } catch {
+                print("Error decoding JSON: \(error)")
+                throw error
+            }
   
     }
     
