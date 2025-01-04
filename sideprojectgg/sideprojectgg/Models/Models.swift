@@ -15,7 +15,7 @@ import SwiftUI
 struct User: Codable {
     let email: String?
     let uid: String?
-    let scans: [ScanObject]?
+    let intake: IntakeForm?
     
 }
 

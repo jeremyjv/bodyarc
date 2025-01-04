@@ -101,32 +101,43 @@ class ContentViewModel: ObservableObject {
             
             let firebaseUser = result.user
             
-            //maybe add new user to Firestore Here:
-            let userData: [String: Any] = [
-                "uid": firebaseUser.uid,
-                "email": firebaseUser.email as Any,
-                "gender": intakeForm.gender as Any,
-                "goal": intakeForm.goal as Any,
-                "availability": intakeForm.availability as Any
-                    
-            ]
+            //store data as struct then pass to firebase
             
-            //firestore already disregards duplicate UID so if it already exists, it doesn't add it
+            let userModel = User(email: firebaseUser.email, uid: firebaseUser.uid, intake: intakeForm)
             
-            
-            //want to add intake form data aswell when creating user
-            Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
-            
-            functions.httpsCallable("createNewUser").call(userData) { result, error in
-                
-                if let error = error {
-                    print("Error calling function: \(error)")
-                    return
-                }
+            do {
+                try db.collection("users").addDocument(from: userModel)
                 print("added user \(firebaseUser.uid) to firestore")
-            }
+            } catch let error {
+                print("Error writing user to Firestore: \(error)")
+                }
             
             
+//            
+//            let userData: [String: Any] = [
+//                "uid": firebaseUser.uid,
+//                "email": firebaseUser.email as Any,
+//                "gender": intakeForm.gender as Any,
+//                "goal": intakeForm.goal as Any,
+//                "availability": intakeForm.availability as Any
+//                    
+//            ]
+//            
+//            //firestore already disregards duplicate UID so if it already exists, it doesn't add it
+//            
+//            //call firestore directly instead of using server
+//            Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
+//            
+//            functions.httpsCallable("createNewUser").call(userData) { result, error in
+//                
+//                if let error = error {
+//                    print("Error calling function: \(error)")
+//                    return
+//                }
+//                print("added user \(firebaseUser.uid) to firestore")
+//            }
+//            
+//            
             
             //want to redirect to GoalsView
             isLoggedIn = true
@@ -154,7 +165,7 @@ class ContentViewModel: ObservableObject {
         }
         
         //compute front and back analysis
-        print("COMPUTATION 1")
+
         
         
         do {
@@ -164,7 +175,7 @@ class ContentViewModel: ObservableObject {
             try await self.createBackAnalysis(img: backImage)
             
     
-            print("COMPUTATION 2")
+          
             // Convert and upload images
             // Upload front and back images sequentially
             let frontImageData = self.convertImagePNGData(img: frontImage)
@@ -174,18 +185,11 @@ class ContentViewModel: ObservableObject {
             let backImageData = self.convertImagePNGData(img: backImage)
             let uuid2 = NSUUID().uuidString
             self.backImageURL = try await self.uploadFile(data: backImageData, path: "images/\(uuid2).png").absoluteString
-            print("COMPUTATION 4")
         } catch let error {
             print("Error to Firestore: \(error)")
         }
         
         
-            
-        
-    
-
-    
-        print("COMPUTATION 5")
         guard let frontImageURL = self.frontImageURL, let backImageURL = self.backImageURL, let frontAnalysis = self.frontAnalysis, let backAnalysis = self.backAnalysis else {
             print("Scan Fields Are Missing")
             return

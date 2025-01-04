@@ -24,7 +24,7 @@ struct BackScanView: View {
     @State private var showCamera: Bool = false // For Selfie
     @State private var analysis: String?
     
-    @State private var util = Utils()
+
     
 
     @Environment(\.dismiss) var dismiss
@@ -124,6 +124,8 @@ struct BackScanView: View {
                     Button(action: {
                         //return to contentView with empty path
                         path = NavigationPath()
+                        
+                        
                         //run paywall business logic
                         
                         

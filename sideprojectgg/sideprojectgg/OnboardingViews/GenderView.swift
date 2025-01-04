@@ -62,10 +62,10 @@ struct CustomButton: View {
             .font(.headline)
             .frame(maxWidth: .infinity) // Make button fill the width
             .padding() // Add padding inside the button
-            .background(Color.white) // Set button background
+            .background(Color.blue) // Set button background
             .cornerRadius(8) // Rounded corners
             .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2) // Shadow
-            .foregroundColor(.black) // Text color
+            .foregroundColor(.white) // Text color
     }
 }
 

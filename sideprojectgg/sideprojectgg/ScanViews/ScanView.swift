@@ -124,5 +124,5 @@ struct ScanView: View {
     
 
 #Preview {
-    ContentView()
+    ScanView()
 }
