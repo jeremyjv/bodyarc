@@ -23,13 +23,7 @@ struct ContentView: View {
         
         
         if viewModel.isLoggedIn {
-            
-            
-            Button(action: {
-                viewModel.signOut()
-            }) {
-                Text("sign out")
-            }
+        
             
             
             TabView {

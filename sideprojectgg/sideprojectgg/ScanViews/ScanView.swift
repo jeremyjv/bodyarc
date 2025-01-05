@@ -40,12 +40,13 @@ struct ScanView: View {
   
             
             VStack(spacing: 16) {
+                Button(action: {
+                    viewModel.signOut()
+                }) {
+                    Text("sign out")
+                }
                 
-                
-                
-                
-               
-                
+
                 
                 HStack {
                     Image(uiImage: viewModel.frontImage ?? UIImage(named: "scanImage")!)
