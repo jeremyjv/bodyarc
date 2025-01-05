@@ -18,15 +18,13 @@ class CameraModel: NSObject, ObservableObject {
     func checkAuthorization() {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
         case .authorized:
-            DispatchQueue.main.async {
-                self.setupCamera()
-            }
+            setupCamera() // No need for DispatchQueue.main here
         case .notDetermined:
             AVCaptureDevice.requestAccess(for: .video) { granted in
                 if granted {
-                    DispatchQueue.main.async {
-                        self.setupCamera()
-                    }
+                    self.setupCamera()
+                } else {
+                    print("Camera access denied")
                 }
             }
         default:
@@ -38,49 +36,57 @@ class CameraModel: NSObject, ObservableObject {
     func setupCamera() {
         session.beginConfiguration()
 
-        // Find the front camera (position: front)
+        // Remove existing inputs
+        session.inputs.forEach { session.removeInput($0) }
+
         guard let frontCamera = AVCaptureDevice.DiscoverySession(
-                deviceTypes: [.builtInWideAngleCamera],
-                mediaType: .video,
-                position: .front).devices.first else {
+            deviceTypes: [.builtInWideAngleCamera],
+            mediaType: .video,
+            position: .front
+        ).devices.first else {
             print("Front camera not available")
+            session.commitConfiguration()
             return
         }
 
         do {
-            // Create input from the front camera
             let input = try AVCaptureDeviceInput(device: frontCamera)
             if session.canAddInput(input) {
                 session.addInput(input)
             } else {
                 print("Unable to add front camera input")
-                return
             }
 
-            // Configure the photo output
             if session.canAddOutput(photoOutput) {
                 session.addOutput(photoOutput)
             }
 
             session.commitConfiguration()
 
-            // Start the session in the background
             DispatchQueue.global(qos: .userInitiated).async {
                 self.session.startRunning()
-                DispatchQueue.main.async {
-                    print("Session started: \(self.session.isRunning)") // Debugging line
-                }
             }
 
-            // Initialize the preview layer here
-            let layer = AVCaptureVideoPreviewLayer(session: self.session)
-            layer.videoGravity = .resizeAspectFill
             DispatchQueue.main.async {
+                let layer = AVCaptureVideoPreviewLayer(session: self.session)
+                layer.videoGravity = .resizeAspectFill
                 self.previewLayer = layer
             }
-
         } catch {
             print("Error setting up front camera: \(error)")
+            session.commitConfiguration()
+        }
+    }
+    
+    func stopSession() {
+        if session.isRunning {
+            DispatchQueue.global(qos: .background).async {
+                self.session.stopRunning()
+                DispatchQueue.main.async {
+                    self.previewLayer?.removeFromSuperlayer() // Remove the preview layer to avoid reattachment issues
+                    self.previewLayer = nil // Reset preview layer
+                }
+            }
         }
     }
 

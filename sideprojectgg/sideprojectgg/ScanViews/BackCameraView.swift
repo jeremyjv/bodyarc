@@ -36,10 +36,13 @@ struct BackCameraView: View {
         }
         .onAppear {
             // Check camera authorization and setup
-            cameraModel.checkAuthorization()
+            print("Camera view appearing...")
+                if !cameraModel.session.isRunning {
+                    cameraModel.checkAuthorization() // Restart the session if necessary
+                }
         }
         .onDisappear {
-            cameraModel.session.stopRunning() // Stop the session when the view disappears
+            cameraModel.stopSession() // Stop the session when the view disappears
             
         }
         .navigationBarBackButtonHidden(true)

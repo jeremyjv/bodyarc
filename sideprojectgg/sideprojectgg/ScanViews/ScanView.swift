@@ -96,7 +96,8 @@ struct ScanView: View {
                         
                         case "BackCameraView":
                             BackCameraView(cameraModel: cameraModel, path: $path)
-                        
+                        case "CustomCameraView":
+                            CustomCameraView(cameraModel: cameraModel, path: $path)
                 
                         default:
                             ContentView()

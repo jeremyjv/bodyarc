@@ -27,6 +27,7 @@ struct FrontCameraView: View {
                         .frame(width: 75, height: 75)
                 }.simultaneousGesture(TapGesture().onEnded {
                     cameraModel.capturePhoto()
+        
                     
                     //need to access taken picture cameraModel.capturedImage and set defaultImage in frontScanView to cameraModel.capturedImage
                 })
@@ -35,10 +36,13 @@ struct FrontCameraView: View {
         }
         .onAppear {
             // Check camera authorization and setup
-            cameraModel.checkAuthorization()
+            print("Camera view appearing...")
+                if !cameraModel.session.isRunning {
+                    cameraModel.checkAuthorization() // Restart the session if necessary
+                }
         }
         .onDisappear {
-            cameraModel.session.stopRunning() // Stop the session when the view disappears
+            cameraModel.stopSession() // Stop the session when the view disappears
             
         }
         .navigationBarBackButtonHidden(true)

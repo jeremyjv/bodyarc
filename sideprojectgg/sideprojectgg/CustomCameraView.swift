@@ -7,7 +7,8 @@
 import SwiftUI
 
 struct CustomCameraView: View {
-    @StateObject private var cameraModel = CameraModel()
+    @ObservedObject var cameraModel: CameraModel
+    @Binding var path: NavigationPath
     var body: some View {
         ZStack {
             // Camera Preview
@@ -41,12 +42,24 @@ struct CustomCameraView: View {
                 .padding(.bottom)
             }
         }
-        .onAppear {
-            // Check camera authorization and setup
-            cameraModel.checkAuthorization()
-        }
-        .onDisappear {
-            cameraModel.session.stopRunning() // Stop the session when the view disappears
-        }
+//        .onAppear {
+//            // Check camera authorization and setup
+//            cameraModel.checkAuthorization()
+//        }
+//        .onDisappear {
+//            cameraModel.session.stopRunning() // Stop the session when the view disappears
+//        }
+//        .toolbar {
+//            ToolbarItem(placement: .navigationBarLeading) {
+//                Button(action: {
+//                    path.removeLast() // Custom back button action
+//                }) {
+//                    HStack {
+//                        Image(systemName: "chevron.left") // Custom back button icon
+//                    }
+//                }
+//            }
+//        }
     }
+    
 }
