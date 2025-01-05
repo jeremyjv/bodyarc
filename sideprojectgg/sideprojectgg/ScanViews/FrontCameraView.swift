@@ -18,10 +18,15 @@ struct FrontCameraView: View {
             CameraPreview(cameraModel: cameraModel)
                 .ignoresSafeArea() // Ensure it fills the screen
             
-            
+            // add a processing screen while front image is updating
             VStack {
+                //instead of navigating just remove
+                Button(action: {
+                    cameraModel.capturePhoto()
+                    path.removeLast()
+                    
                 
-                NavigationLink(destination: FrontScanView(cameraModel: cameraModel, path: $path)){
+                }){
                     Circle()
                         .stroke(Color.white, lineWidth: 4)
                         .frame(width: 75, height: 75)
@@ -43,7 +48,7 @@ struct FrontCameraView: View {
         }
         .onDisappear {
             cameraModel.stopSession() // Stop the session when the view disappears
-            
+      
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {

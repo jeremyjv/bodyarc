@@ -21,15 +21,22 @@ struct BackCameraView: View {
             
             
             VStack {
+                // add a processing screen while back image is updating
+                //instead of navigating just remove
+                Button(action: {
+                    cameraModel.capturePhoto()
+                    path.removeLast()
+                    
                 
-                NavigationLink(destination: BackScanView(cameraModel: cameraModel, path: $path)){
+                }){
                     Circle()
                         .stroke(Color.white, lineWidth: 4)
                         .frame(width: 75, height: 75)
                 }.simultaneousGesture(TapGesture().onEnded {
                     cameraModel.capturePhoto()
+        
                     
-                    
+                    //need to access taken picture cameraModel.capturedImage and set defaultImage in frontScanView to cameraModel.capturedImage
                 })
 
             }
