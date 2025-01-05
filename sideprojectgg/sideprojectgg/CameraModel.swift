@@ -15,7 +15,7 @@ class CameraModel: NSObject, ObservableObject {
     @Published var capturedImage: UIImage?
     
     // Track the current camera position (default to front if you want)
-    private var currentCameraPosition: AVCaptureDevice.Position = .back
+    private var currentCameraPosition: AVCaptureDevice.Position = .front
 
     // Check Camera Authorization
     func checkAuthorization() {
