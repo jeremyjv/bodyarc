@@ -18,24 +18,13 @@ struct CameraPreview: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UIView, context: Context) {
-        print("updateUIView called")
-        
-        // Check if the preview layer is ready
-        guard let previewLayer = cameraModel.previewLayer else {
-            print("Preview layer not ready in updateUIView")
-            return
-        }
-        
+        guard let previewLayer = cameraModel.previewLayer else { return }
+
         // Ensure the preview layer is added only once
         if previewLayer.superlayer != uiView.layer {
-            print("Adding preview layer in updateUIView")
-            previewLayer.frame = uiView.bounds
-            uiView.layer.sublayers?.removeAll() // Clear any previous layers to avoid duplicates
+            uiView.layer.sublayers?.removeAll() // <— This removes any sublayer
             uiView.layer.addSublayer(previewLayer)
-        } else {
-            print("Preview layer already added")
-            // Update frame to handle rotation or resizing
-            previewLayer.frame = uiView.bounds
         }
+        previewLayer.frame = uiView.bounds
     }
 }

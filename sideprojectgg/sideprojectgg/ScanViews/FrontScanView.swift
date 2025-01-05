@@ -58,6 +58,7 @@ struct FrontScanView: View {
                     Button(action: {
                         isShowingOptions = true // Show the menu
                         showPicker = false
+                        
                     }) {
                         Text("Upload or take selfie")
                             .padding()
@@ -70,6 +71,10 @@ struct FrontScanView: View {
                     .confirmationDialog("Select an option", isPresented: $isShowingOptions, titleVisibility: .visible) {
                         Button(action: {
                             path.append("FrontCameraView")
+                            print("Camera view appearing...")
+                            if !cameraModel.session.isRunning {
+                                cameraModel.checkAuthorization() // Restart the session if necessary
+                            }
                         })
                         {
                             Text("Take a selfie")
