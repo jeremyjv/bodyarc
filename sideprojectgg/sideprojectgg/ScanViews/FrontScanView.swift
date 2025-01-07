@@ -72,9 +72,9 @@ struct FrontScanView: View {
                         Button(action: {
                             path.append("FrontCameraView")
                             print("Camera view appearing...")
-                            if !cameraModel.session.isRunning {
-                                cameraModel.checkAuthorization() // Restart the session if necessary
-                            }
+                                if !cameraModel.session.isRunning {
+                                    cameraModel.checkAuthorization() // Restart the session if necessary
+                                }
                         })
                         {
                             Text("Take a selfie")

@@ -32,6 +32,8 @@ struct IntakeForm: Codable {
     }
 }
 
+
+
 //need to eventually serialize to pass to firebase photo.pngData()!
 struct ScanObject: Codable {
     var userUID: String?
@@ -39,6 +41,8 @@ struct ScanObject: Codable {
     var backImage: String?
     var frontAnalysis: FrontAnalysis?
     var backAnalysis: BackAnalysis?
+
+
     
     init(userUID: String?, frontImage: String?, backImage: String?, frontAnalysis: FrontAnalysis?, backAnalysis: BackAnalysis?) {
             self.userUID = userUID
@@ -55,6 +59,53 @@ struct ScanObject: Codable {
         frontAnalysis = nil
         backAnalysis = nil
     }
+}
+
+struct Rating: Codable {
+    
+    //slide 1
+    var vTaper: Int
+    var leanness: Int
+    var overall: Int
+    var potential: Int
+    
+    //slide 2
+    
+    var shoulders: Int
+    var chest: Int
+    var arms: Int
+    var abs: Int
+    
+    //slide 3
+    var clavicalWidth: Int
+    var waistSize: Int
+    
+    //Back analysis now so optional
+    //slide 4
+    var traps: Int?
+    var lats: Int?
+    var thickness: Int?
+    var width: Int?
+    
+    //slide 5 highlights -> if none recognize potential
+    
+    
+    //slide 6 Potential Overall comparison
+    
+    //slide 7 leaness
+    
+    //slide 8 Masculinity
+    
+    //slide 9 Potential
+    
+    //slide 10
+                
+    
+    
+    
+    //your highlights
+    var muscleHighlights: [String]
+    
 }
 
 struct FrontAnalysis: Codable {

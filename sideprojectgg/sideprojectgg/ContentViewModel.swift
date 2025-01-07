@@ -18,8 +18,6 @@ import GoogleSignIn
 @MainActor
 class ContentViewModel: ObservableObject {
     
-    private let serialQueue = DispatchQueue(label: "com.myapp.serialQueue")
-    
     //Original data
     @Published var text: String = ""
     @Published var frontImage: UIImage?

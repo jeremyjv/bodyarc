@@ -13,6 +13,8 @@ import FirebaseFunctions
 import PhotosUI
 import FirebaseFirestore
 
+
+
 struct RectangleComponent: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 10)
@@ -23,23 +25,24 @@ struct RectangleComponent: View {
 
 struct ScanView: View {
     @EnvironmentObject var viewModel: ContentViewModel
-    @StateObject private var cameraModel = CameraModel()
+    @Binding var path: NavigationPath
     
     @State private var defaultImage: UIImage?
     @State private var photosPickerItem: PhotosPickerItem?
     @State private var analysis: String?
 
-    @State private var path = NavigationPath() // To manage navigation
+    
+    @State private var scans: [ScanObject]?
     
     
     
 
     var body: some View {
-        NavigationStack(path: $path) {
+
             
   
             
-            VStack(spacing: 16) {
+            VStack(spacing: 10) {
                 Button(action: {
                     viewModel.signOut()
                 }) {
@@ -47,64 +50,41 @@ struct ScanView: View {
                 }
                 
 
-                
-                HStack {
-                    Image(uiImage: viewModel.frontImage ?? UIImage(named: "scanImage")!)
+                TabView {
+                    
+                    ZStack {
+                        Image(uiImage: UIImage(named: "scanImage")!)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 320, height: 500)
+                            .cornerRadius(30)
+                        
+                        CustomScanButton(title: "Begin Scan", path: $path)
+                        
+                    }
+                    
+                    
+                    Image(uiImage: UIImage(named: "scanImage")!)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 50, height: 50)
+                        .frame(width: 320, height: 500)
+                        .cornerRadius(30)
                     
-                    Image(uiImage: viewModel.backImage ?? UIImage(named: "scanImage")!)
+                    Image(uiImage: UIImage(named: "scanImage")!)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 50, height: 50)
+                        .frame(width: 320, height: 500)
+                        .cornerRadius(30)
                     
+                    Image(uiImage: UIImage(named: "scanImage")!)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 320, height: 500)
+                        .cornerRadius(30)
                 }
-               
+                .tabViewStyle(.page(indexDisplayMode: .always))
+           
         
-                
-                
-                Image(uiImage: UIImage(named: "scanImage")!)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 300, height: 300)
-                
-                //Text( "Analysis: \(viewModel.backAnalysis)") // Display the result if it exists
-                
-                
-            
-                
-                
-
- 
-            
-                Button(action: {
-                    path.append("FrontScanView")
-                }) {
-                    Text("Begin Scan")
-                }
-                .navigationDestination(for: String.self) { destination in
-                    switch destination {
-                        case "FrontScanView":
-                            FrontScanView(cameraModel: cameraModel, path: $path)
-                            
-                        case "FrontCameraView":
-                            FrontCameraView(cameraModel: cameraModel, path: $path)
-                        
-                        case "BackScanView":
-                            BackScanView(cameraModel: cameraModel, path: $path)
-                        
-                        case "BackCameraView":
-                            BackCameraView(cameraModel: cameraModel, path: $path)
-        
-                        default:
-                            ContentView()
-                        }
-                    
-                }
-                
-                
-                
                 Spacer()
                 
             
@@ -115,14 +95,52 @@ struct ScanView: View {
                     defaultImage = viewModel.frontImage
                 }
             }
-           
-        
+            
         }
         
-    }
+    
 }
+
+struct CustomScanButton: View {
+    var title: String
+    @Binding var path: NavigationPath
+    @StateObject private var cameraModel = CameraModel()
+
+
+    var body: some View {
+        
+    
+        HStack {
+            Button(action: {
+                path.append("FrontScanView")
+            }) {
+                Text(title) // Button title
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white) // Text color
+            }
+            .frame(maxWidth: 300, minHeight: 40) // Set button dimensions
+            .padding() // Add padding inside the button
+            .background(
+                LinearGradient(
+                    gradient: Gradient(colors: [Color(red: 4/255, green: 96/255, blue: 255/255), Color(red: 4/255, green: 180/255, blue: 255/255)]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .cornerRadius(8) // Rounded corners
+            .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2) // Shadow
+        }
+        
+    
+    }
+
+    
+}
+
+
     
 
 #Preview {
-    ScanView()
+ 
 }

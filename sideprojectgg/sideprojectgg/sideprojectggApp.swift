@@ -61,8 +61,8 @@ struct sideprojectggApp: App {
   var body: some Scene {
     WindowGroup {
         ZStack {
-            Color.black
-                                .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
+            Color(red: 26/255, green: 26/255, blue: 26/255)
+            .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
             
             ContentView()
               .environmentObject(viewModel)
