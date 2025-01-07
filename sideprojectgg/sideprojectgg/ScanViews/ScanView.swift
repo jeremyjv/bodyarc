@@ -30,9 +30,30 @@ struct ScanView: View {
     @State private var defaultImage: UIImage?
     @State private var photosPickerItem: PhotosPickerItem?
     @State private var analysis: String?
-
+    
+    @State private var frontImageTest: UIImage?
     
     @State private var scans: [ScanObject]?
+    
+    //while these are null keep loading screen
+    @State private var retrievedScanImages: [[UIImage?]]?  //represents front and back image for each sublist
+    
+    private func loadData() async {
+        do {
+            // Fetch scan objects
+            scans = try await viewModel.fetchScanObjects()
+            print("Fetched scans: \(scans!.count)")
+
+            // Load the first image
+            if let firstScan = scans!.first, let frontImageURL = firstScan.frontImage {
+                frontImageTest = try await viewModel.loadImage(from: frontImageURL)
+            } else {
+                print("No scans available or front image URL is missing.")
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
     
     
     
@@ -61,10 +82,14 @@ struct ScanView: View {
                         
                         CustomScanButton(title: "Begin Scan", path: $path)
                         
+                
+                        
+                        
+                        
                     }
                     
-                    
-                    Image(uiImage: UIImage(named: "scanImage")!)
+                    //loop through scan objects here
+                    Image(uiImage: frontImageTest ?? UIImage(named: "scanImage")!)
                         .resizable()
                         .scaledToFill()
                         .frame(width: 320, height: 500)
@@ -90,6 +115,16 @@ struct ScanView: View {
             
             }
             .padding()
+            .onAppear {
+                
+                
+                //batch as one function instead 
+                //fetches correctly
+                Task {
+                    await loadData()
+                }
+               
+            }
             .onChange(of: viewModel.frontImage) {_, _ in
                 Task {
                     defaultImage = viewModel.frontImage

@@ -55,9 +55,6 @@ struct GenderView: View {
                     case "GoalsView":
                         GoalsView(intakeForm: $intakeForm, path: $path)
                     
-                    
-                    case "AvailabilityView":
-                        AvailabilityView(intakeForm: $intakeForm, path: $path)
                     case "AuthView":
                         AuthView(intakeForm: $intakeForm, path: $path)
                         

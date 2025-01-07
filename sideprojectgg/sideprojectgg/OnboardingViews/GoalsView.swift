@@ -27,14 +27,14 @@ struct GoalsView: View {
             Spacer().frame(height: 60)
             
             Button(action: {
-                path.append("AvailabilityView")
+                path.append("AuthView")
                 intakeForm.goal = "loseFat"
                 generator.impactOccurred()
             }){
                 CustomButton(title: "Lose Fat", emoji: "🔥")
             }
             Button(action: {
-                path.append("AvailabilityView")
+                path.append("AuthView")
                 intakeForm.goal = "buildMuscle"
                 generator.impactOccurred()
             }){
@@ -42,21 +42,14 @@ struct GoalsView: View {
                 CustomButton(title: "Build Muscle", emoji: "💪")
             }
             Button(action: {
-                path.append("AvailabilityView")
+                path.append("AuthView")
                 intakeForm.goal = "bodyRecomp"
                 generator.impactOccurred()
             }){
                 CustomButton(title: "Lose Fat + Build Muscle", emoji: "😈")
             }
             Button(action: {
-                path.append("AvailabilityView")
-                intakeForm.goal = "bodyRecomp"
-                generator.impactOccurred()
-            }){
-                CustomButton(title: "Build Strength + Muscle", emoji: "😈")
-            }
-            Button(action: {
-                path.append("AvailabilityView")
+                path.append("AuthView")
                 intakeForm.goal = "healthierHabits"
                 generator.impactOccurred()
             }){

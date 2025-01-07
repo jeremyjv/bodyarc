@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
 
 
 //create the structs that will eventually be retrieved, passed to firestore
@@ -41,15 +42,20 @@ struct ScanObject: Codable {
     var backImage: String?
     var frontAnalysis: FrontAnalysis?
     var backAnalysis: BackAnalysis?
+    var createdAt: Date?
+    
+    
 
 
     
-    init(userUID: String?, frontImage: String?, backImage: String?, frontAnalysis: FrontAnalysis?, backAnalysis: BackAnalysis?) {
+    init(createdAt: Date?, userUID: String?, frontImage: String?, backImage: String?, frontAnalysis: FrontAnalysis?, backAnalysis: BackAnalysis?) {
             self.userUID = userUID
             self.frontImage = frontImage
             self.backImage = backImage
             self.frontAnalysis = frontAnalysis
             self.backAnalysis = backAnalysis
+            self.createdAt = createdAt
+        
         }
     
     init() {
@@ -58,7 +64,14 @@ struct ScanObject: Codable {
         backImage = nil
         frontAnalysis = nil
         backAnalysis = nil
+        createdAt = nil
     }
+    
+//    func getScanObject(scanId: String) async -> ScanObject {
+//        
+//    }
+//    
+   
 }
 
 struct Rating: Codable {
@@ -100,9 +113,6 @@ struct Rating: Codable {
     
     //slide 10
                 
-    
-    
-    
     //your highlights
     var muscleHighlights: [String]
     

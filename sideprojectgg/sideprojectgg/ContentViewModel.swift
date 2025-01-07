@@ -150,6 +150,8 @@ class ContentViewModel: ObservableObject {
         
     }
     
+
+    
     
     //we can delegate this server side instead to fix
     @MainActor
@@ -195,7 +197,7 @@ class ContentViewModel: ObservableObject {
         
         
         //now that we have the images and analysis, store as a scan in scan collection with the user's UID (so we have to reference AuthViewModel asweell)
-        let scan = ScanObject(userUID: self.uid, frontImage: frontImageURL, backImage: backImageURL, frontAnalysis: frontAnalysis, backAnalysis: backAnalysis)
+        let scan = ScanObject(createdAt: Date(), userUID: self.uid, frontImage: frontImageURL, backImage: backImageURL, frontAnalysis: frontAnalysis, backAnalysis: backAnalysis)
         
         
         //does NOT WORK because of app check
@@ -255,7 +257,7 @@ class ContentViewModel: ObservableObject {
         let base64 = self.convertImageToBase64(img: img)
         
         //let data: [String: Any] = ["base64": base64] // Your arguments
-        Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
+        Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
  
         let response: String = try await withCheckedThrowingContinuation { continuation in
                 functions.httpsCallable("returnFrontAnalysis").call(base64) { result, error in
@@ -289,7 +291,7 @@ class ContentViewModel: ObservableObject {
         let base64 = self.convertImageToBase64(img: img)
         
         //let data: [String: Any] = ["base64": base64] // Your arguments
-        Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
+        Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
  
         let response: String = try await withCheckedThrowingContinuation { continuation in
                 functions.httpsCallable("returnBackAnalysis").call(base64) { result, error in
@@ -314,5 +316,40 @@ class ContentViewModel: ObservableObject {
             }
   
     }
+
+    
+    func fetchScanObjects() async throws -> [ScanObject] {
+        return try await withCheckedThrowingContinuation { continuation in
+            db.collection("scans")
+                .whereField("userUID", isEqualTo: self.uid as Any)
+                .getDocuments { snapshot, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                    } else if let snapshot = snapshot {
+                        let fetchedScans: [ScanObject] = snapshot.documents.compactMap { doc in
+                            try? doc.data(as: ScanObject.self) // Decode Firestore documents into `ScanObject`
+                        }
+                        continuation.resume(returning: fetchedScans)
+                    } else {
+                        continuation.resume(returning: [])
+                    }
+                }
+        }
+    }
+
+    func loadImage(from urlString: String) async throws -> UIImage {
+        guard let url = URL(string: urlString) else {
+            throw URLError(.badURL)
+        }
+        let (data, _) = try await URLSession.shared.data(from: url)
+        guard let image = UIImage(data: data) else {
+            throw NSError(domain: "ImageErrorDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to decode image"])
+        }
+        return image
+    }
+    
+    
+    
+    
     
 }

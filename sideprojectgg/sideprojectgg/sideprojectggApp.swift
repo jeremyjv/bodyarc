@@ -24,7 +24,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     // Connect to Firestore emulator in development
     let firestore = Firestore.firestore()
     let settings = firestore.settings
-    settings.host = "10.0.0.101:8080" // Change port if you've configured a different one
+    settings.host = "127.0.0.1:8080" // Change port if you've configured a different one
     settings.isSSLEnabled = false // Emulator does not use SSL
               
     // Configure cache settings
