@@ -156,11 +156,11 @@ class ContentViewModel: ObservableObject {
             // Upload front and back images sequentially
             let frontImageData = self.convertImagePNGData(img: frontImage)
             let uuid1 = NSUUID().uuidString
-            self.frontImageURL = try await self.uploadFile(data: frontImageData, path: "images/\(uuid1).png").absoluteString
+            self.frontImageURL = try await self.uploadFile(data: frontImageData, path: "/images/\(uuid1).png").absoluteString
             
             let backImageData = self.convertImagePNGData(img: backImage)
             let uuid2 = NSUUID().uuidString
-            self.backImageURL = try await self.uploadFile(data: backImageData, path: "images/\(uuid2).png").absoluteString
+            self.backImageURL = try await self.uploadFile(data: backImageData, path: "/images/\(uuid2).png").absoluteString
         } catch let error {
             print("Error to Firestore: \(error)")
         }
@@ -194,8 +194,8 @@ class ContentViewModel: ObservableObject {
         return img.jpegData(compressionQuality: 1)!.base64EncodedString()
     }
     func convertImagePNGData(img: UIImage) -> Data {
-        return img.pngData()!
-    }
+            return img.pngData()!
+        }
     //Firebase STORAGE///
     
     //when we save scan, we save the images and pass it to here to receive back a URL that points back to it
@@ -203,6 +203,8 @@ class ContentViewModel: ObservableObject {
         return try await withCheckedThrowingContinuation { continuation in
             let storage = Storage.storage()
             let storageRef = storage.reference().child(path)
+            
+            //puts it in image
             
             storageRef.putData(data, metadata: nil) { metadata, error in
                 if let error = error {
@@ -313,17 +315,27 @@ class ContentViewModel: ObservableObject {
         }
     }
 
-    func loadImage(from urlString: String) async throws -> UIImage {
-        guard let url = URL(string: urlString) else {
-            throw URLError(.badURL)
+
+    func loadImage(from path: String, maxSize: Int64 = 15 * 1024 * 1024) async throws -> UIImage {
+        let storageRef = Storage.storage().reference(forURL: path)
+
+            return try await withCheckedThrowingContinuation { continuation in
+                storageRef.getData(maxSize: maxSize) { data, error in
+                    if let error = error {
+                        continuation.resume(throwing: error)  // Return error
+                    } else if let data = data, let uiImage = UIImage(data: data) {
+                        continuation.resume(returning: uiImage)  // Return UIImage
+                    } else {
+                        let decodeError = NSError(
+                            domain: "ImageErrorDomain",
+                            code: 0,
+                            userInfo: [NSLocalizedDescriptionKey: "Failed to decode image data."]
+                        )
+                        continuation.resume(throwing: decodeError)  // Return decoding error
+                    }
+                }
+            }
         }
-        let (data, _) = try await URLSession.shared.data(from: url)
-        guard let image = UIImage(data: data) else {
-            throw NSError(domain: "ImageErrorDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to decode image"])
-        }
-        print("return image")
-        return image
-    }
     
     
     

@@ -30,6 +30,7 @@ struct ScanView: View {
     @State private var defaultImage: UIImage?
     @State private var photosPickerItem: PhotosPickerItem?
     @State private var analysis: String?
+    let progressView = ProgressView()
     
     
     
@@ -57,8 +58,10 @@ struct ScanView: View {
             }
             
         }
+    
         
     }
+  
 }
 
 struct CustomScanButton: View {
