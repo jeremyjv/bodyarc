@@ -14,8 +14,67 @@ struct ProgressView: View {
     @Binding var retrievedScanImages: [[UIImage?]]
     @Binding var scans: [ScanObject]?
     @Binding var path: NavigationPath
+    @State private var hasLoadedData = false
     
-
+    func loadData() async {
+        do {
+            // Fetch scan objects
+            scans = try await viewModel.fetchScanObjects()
+            print("Fetched scans: \(scans?.count ?? 0)")
+            
+            // Ensure scans is not nil
+            guard let scans = scans else {
+                print("No scans available.")
+                return
+            }
+            
+            // Initialize `retrievedScanImages` with placeholders
+            DispatchQueue.main.async {
+                self.retrievedScanImages = Array(repeating: [nil, nil], count: scans.count)
+            }
+            
+            // Concurrently fetch images for each scan using ThrowingTaskGroup
+            try await withThrowingTaskGroup(of: (Int, [UIImage?]).self) { group in
+                for (index, scan) in scans.enumerated() {
+                    group.addTask {
+                        do {
+                            // Fetch front image
+                            let frontImage: UIImage? = try await {
+                                if let frontImageURL = scan.frontImage {
+                                    return try await viewModel.loadImage(from: frontImageURL)
+                                }
+                                return nil
+                            }()
+                            
+                            // Fetch back image
+                            let backImage: UIImage? = try await {
+                                if let backImageURL = scan.backImage {
+                                    return try await viewModel.loadImage(from: backImageURL)
+                                }
+                                return nil
+                            }()
+                            
+                            // Return the index and fetched images
+                            return (index, [frontImage, backImage])
+                        } catch {
+                            print("Error loading images for scan at index \(index): \(error.localizedDescription)")
+                            return (index, [nil, nil]) // Return nils on error
+                        }
+                    }
+                }
+                
+                // Process the results as they complete
+                for try await (index, images) in group {
+                    DispatchQueue.main.async {
+                        self.retrievedScanImages[index] = images
+                    }
+                }
+                
+            }
+        } catch {
+            print("Error fetching scan objects: \(error.localizedDescription)")
+        }
+    }
     
     var body: some View {
         VStack {
@@ -96,6 +155,14 @@ struct ProgressView: View {
                     }
                 }
                 .padding()
+            }
+        }
+        .onAppear {
+            if !hasLoadedData {
+                hasLoadedData = true
+                Task {
+                    await loadData()
+                }
             }
         }
         

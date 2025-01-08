@@ -24,60 +24,8 @@ struct ContentView: View {
     //load all necessary data
     @State private var retrievedScanImages: [[UIImage?]] = []  // No longer optional
     @State private var scans: [ScanObject]?
-    @State private var hasLoadedData = false
     
-    func loadData() async {
-        do {
-            // Fetch scan objects
-            scans = try await viewModel.fetchScanObjects()
-            print("Fetched scans: \(scans?.count ?? 0)")
-            
-            // Ensure scans is not nil
-            guard let scans = scans else {
-                print("No scans available.")
-                return
-            }
-            
-            // Initialize `retrievedScanImages` with placeholders
-            DispatchQueue.main.async {
-                self.retrievedScanImages = Array(repeating: [nil, nil], count: scans.count)
-            }
-            
-            // Fetch images for each scan
-            for (index, scan) in scans.enumerated() {
-                do {
-                    // Fetch front image
-                    let frontImage: UIImage? = try await {
-                        if let frontImageURL = scan.frontImage {
-                            return try await viewModel.loadImage(from: frontImageURL)
-                        }
-                        return nil
-                    }()
-                    
-                    // Fetch back image
-                    let backImage: UIImage? = try await {
-                        if let backImageURL = scan.backImage {
-                            return try await viewModel.loadImage(from: backImageURL)
-                        }
-                        return nil
-                    }()
-                    
-                    // Update `retrievedScanImages` with the loaded images
-                    DispatchQueue.main.async {
-                        self.retrievedScanImages[index] = [frontImage, backImage]
-                    }
-                } catch {
-                    print("Error loading images for scan at index \(index): \(error.localizedDescription)")
-                    // Update `retrievedScanImages` with nil images in case of an error
-                    DispatchQueue.main.async {
-                        self.retrievedScanImages[index] = [nil, nil]
-                    }
-                }
-            }
-        } catch {
-            print("Error fetching scan objects: \(error.localizedDescription)")
-        }
-    }
+    
     
 
     var body: some View {
@@ -102,14 +50,7 @@ struct ContentView: View {
                         })
                         
                     }
-                    .onAppear {
-                        if !hasLoadedData {
-                            hasLoadedData = true
-                            Task {
-                                await loadData()
-                            }
-                        }
-                    }
+                    
                     .navigationDestination(for: String.self) { destination in
                         switch destination {
                         case "FrontScanView":
@@ -123,6 +64,8 @@ struct ContentView: View {
                             
                         case "BackCameraView":
                             BackCameraView(cameraModel: cameraModel, path: $path)
+                        
+                        
                             
                        
                         

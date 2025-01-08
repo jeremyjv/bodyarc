@@ -45,13 +45,7 @@ struct RatingView: View {
             //every scan will always have a front image
         
         }
-        .onAppear {
-            // need to fetch scanObject from firebase
-            
 
-            
-           
-        }
     }
 }
 
