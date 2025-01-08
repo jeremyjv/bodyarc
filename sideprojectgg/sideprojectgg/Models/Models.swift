@@ -36,7 +36,7 @@ struct IntakeForm: Codable {
 
 
 //need to eventually serialize to pass to firebase photo.pngData()!
-struct ScanObject: Codable {
+struct ScanObject: Codable, Hashable {
     var userUID: String?
     var frontImage: String?
     var backImage: String?
@@ -118,17 +118,17 @@ struct Rating: Codable {
     
 }
 
-struct FrontAnalysis: Codable {
+struct FrontAnalysis: Codable, Hashable {
     let bodyFatPercentage: Int
     let shoulders, chest, abs, arms, quads, calves: Muscle?
 }
 
-struct BackAnalysis: Codable {
+struct BackAnalysis: Codable, Hashable {
     let bodyFatPercentage: Int
     let traps, lats, glutes, quads, calves: Muscle?
 }
 
-struct Muscle: Codable {
+struct Muscle: Codable, Hashable {
     let rating: Int?
     let description: String?
 }

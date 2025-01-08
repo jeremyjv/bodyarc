@@ -13,7 +13,6 @@ import PhotosUI
 
 
 
-
 struct ContentView: View {
     
     @EnvironmentObject var viewModel: ContentViewModel
@@ -25,9 +24,12 @@ struct ContentView: View {
     @State private var retrievedScanImages: [[UIImage?]] = []  // No longer optional
     @State private var scans: [ScanObject]?
     
-    
-    
 
+    
+    enum Destination: Hashable {
+        case string(String)
+        case scanObject(ScanObject)
+    }
     var body: some View {
         
         
@@ -50,34 +52,29 @@ struct ContentView: View {
                         })
                         
                     }
-                    
-                    .navigationDestination(for: String.self) { destination in
+                    .navigationDestination(for: Destination.self) { destination in
                         switch destination {
-                        case "FrontScanView":
-                            FrontScanView(cameraModel: cameraModel, path: $path)
-                            
-                        case "FrontCameraView":
-                            FrontCameraView(cameraModel: cameraModel, path: $path)
-                            
-                        case "BackScanView":
-                            BackScanView(cameraModel: cameraModel, path: $path)
-                            
-                        case "BackCameraView":
-                            BackCameraView(cameraModel: cameraModel, path: $path)
-                        
-                        
-                            
-                       
-                        
-                        //add case for rating view
-                                //but need to pass scan object to rating view to mount
-                            
-                  
-                            
-                        default:
-                            ContentView()
+                        case .string(let destinationString):
+                            switch destinationString {
+                            case "FrontScanView":
+                                FrontScanView(cameraModel: cameraModel, path: $path)
+
+                            case "FrontCameraView":
+                                FrontCameraView(cameraModel: cameraModel, path: $path)
+
+                            case "BackScanView":
+                                BackScanView(cameraModel: cameraModel, path: $path)
+
+                            case "BackCameraView":
+                                BackCameraView(cameraModel: cameraModel, path: $path)
+
+                            default:
+                                EmptyView() // Handle unknown string destinations
+                            }
+
+                        case .scanObject(let scanObject):
+                            RatingView(scanObject: .constant(scanObject), path: $path)
                         }
-                        
                     }
                     
                 
