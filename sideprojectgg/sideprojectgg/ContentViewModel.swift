@@ -111,31 +111,7 @@ class ContentViewModel: ObservableObject {
                 }
             
             
-//            
-//            let userData: [String: Any] = [
-//                "uid": firebaseUser.uid,
-//                "email": firebaseUser.email as Any,
-//                "gender": intakeForm.gender as Any,
-//                "goal": intakeForm.goal as Any,
-//                "availability": intakeForm.availability as Any
-//                    
-//            ]
-//            
-//            //firestore already disregards duplicate UID so if it already exists, it doesn't add it
-//            
-//            //call firestore directly instead of using server
-//            Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
-//            
-//            functions.httpsCallable("createNewUser").call(userData) { result, error in
-//                
-//                if let error = error {
-//                    print("Error calling function: \(error)")
-//                    return
-//                }
-//                print("added user \(firebaseUser.uid) to firestore")
-//            }
-//            
-//            
+    
             
             //want to redirect to GoalsView
             isLoggedIn = true
@@ -257,7 +233,7 @@ class ContentViewModel: ObservableObject {
         let base64 = self.convertImageToBase64(img: img)
         
         //let data: [String: Any] = ["base64": base64] // Your arguments
-        Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
+        Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
  
         let response: String = try await withCheckedThrowingContinuation { continuation in
                 functions.httpsCallable("returnFrontAnalysis").call(base64) { result, error in
@@ -291,7 +267,7 @@ class ContentViewModel: ObservableObject {
         let base64 = self.convertImageToBase64(img: img)
         
         //let data: [String: Any] = ["base64": base64] // Your arguments
-        Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
+        Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
  
         let response: String = try await withCheckedThrowingContinuation { continuation in
                 functions.httpsCallable("returnBackAnalysis").call(base64) { result, error in
@@ -345,6 +321,7 @@ class ContentViewModel: ObservableObject {
         guard let image = UIImage(data: data) else {
             throw NSError(domain: "ImageErrorDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to decode image"])
         }
+        print("return image")
         return image
     }
     

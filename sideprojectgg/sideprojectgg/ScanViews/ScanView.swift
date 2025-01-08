@@ -35,23 +35,63 @@ struct ScanView: View {
     
     @State private var scans: [ScanObject]?
     
+    @State private var selectedTabIndex: Int = 0
+    @State private var hasLoadedData = false
+    
     //while these are null keep loading screen
-    @State private var retrievedScanImages: [[UIImage?]]?  //represents front and back image for each sublist
+    @State private var retrievedScanImages: [[UIImage?]] = []  // No longer optional
+
     
     private func loadData() async {
         do {
             // Fetch scan objects
             scans = try await viewModel.fetchScanObjects()
-            print("Fetched scans: \(scans!.count)")
+            print("Fetched scans: \(scans?.count ?? 0)")
 
-            // Load the first image
-            if let firstScan = scans!.first, let frontImageURL = firstScan.frontImage {
-                frontImageTest = try await viewModel.loadImage(from: frontImageURL)
-            } else {
-                print("No scans available or front image URL is missing.")
+            // Ensure scans is not nil
+            guard let scans = scans else {
+                print("No scans available.")
+                return
+            }
+
+            // Initialize `retrievedScanImages` with placeholders
+            DispatchQueue.main.async {
+                self.retrievedScanImages = Array(repeating: [nil, nil], count: scans.count)
+            }
+
+            // Fetch images for each scan
+            for (index, scan) in scans.enumerated() {
+                do {
+                    // Fetch front image
+                    let frontImage: UIImage? = try await {
+                        if let frontImageURL = scan.frontImage {
+                            return try await viewModel.loadImage(from: frontImageURL)
+                        }
+                        return nil
+                    }()
+
+                    // Fetch back image
+                    let backImage: UIImage? = try await {
+                        if let backImageURL = scan.backImage {
+                            return try await viewModel.loadImage(from: backImageURL)
+                        }
+                        return nil
+                    }()
+
+                    // Update `retrievedScanImages` with the loaded images
+                    DispatchQueue.main.async {
+                        self.retrievedScanImages[index] = [frontImage, backImage]
+                    }
+                } catch {
+                    print("Error loading images for scan at index \(index): \(error.localizedDescription)")
+                    // Update `retrievedScanImages` with nil images in case of an error
+                    DispatchQueue.main.async {
+                        self.retrievedScanImages[index] = [nil, nil]
+                    }
+                }
             }
         } catch {
-            print(error.localizedDescription)
+            print("Error fetching scan objects: \(error.localizedDescription)")
         }
     }
     
@@ -71,43 +111,54 @@ struct ScanView: View {
                 }
                 
 
-                TabView {
-                    
+                TabView(selection: $selectedTabIndex) {
                     ZStack {
-                        Image(uiImage: UIImage(named: "scanImage")!)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 320, height: 500)
-                            .cornerRadius(30)
-                        
+                       Image(uiImage: UIImage(named: "scanImage")!)
+                           .resizable()
+                           .scaledToFill()
+                           .frame(width: 320, height: 500)
+                           .cornerRadius(30)
                         CustomScanButton(title: "Begin Scan", path: $path)
-                        
+         
+                        }.tag(0)
+                    
+                    if retrievedScanImages.isEmpty { // Show loading screen while images are being fetched
+                        VStack {
+                            Text("Please wait while your scans are loading.")
+                                .font(.headline)
+                                .multilineTextAlignment(.center)
+                                .padding()
+                        }
+                    } else {
+                        // Loop through retrievedScanImages to display each pair of images (front and back)
+                        ForEach(retrievedScanImages.indices, id: \.self) { index in
+                            VStack {
+                                if let frontImage = retrievedScanImages[index].first ?? UIImage(named: "scanImage") {
+                                    Image(uiImage: frontImage)
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 320, height: 500)
+                                        .cornerRadius(30)
+                                        .overlay(
+                                            Text("Front Image")
+                                                .font(.caption)
+                                                .padding(6)
+                                                .background(Color.black.opacity(0.6))
+                                                .foregroundColor(.white)
+                                                .cornerRadius(10),
+                                            alignment: .bottom
+                                        )
+                                }
                 
-                        
-                        
-                        
+                            }
+                        }
                     }
-                    
-                    //loop through scan objects here
-                    Image(uiImage: frontImageTest ?? UIImage(named: "scanImage")!)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 320, height: 500)
-                        .cornerRadius(30)
-                    
-                    Image(uiImage: UIImage(named: "scanImage")!)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 320, height: 500)
-                        .cornerRadius(30)
-                    
-                    Image(uiImage: UIImage(named: "scanImage")!)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 320, height: 500)
-                        .cornerRadius(30)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .always))
+                .animation(.default, value: retrievedScanImages) // Animates the TabView as images load
+                .onAppear {
+                    selectedTabIndex = 0  // Ensure the first tab is selected on app launch
+                }
            
         
                 Spacer()
@@ -116,14 +167,13 @@ struct ScanView: View {
             }
             .padding()
             .onAppear {
-                
-                
-                //batch as one function instead 
-                //fetches correctly
-                Task {
-                    await loadData()
+                // Ensure the logic only runs once
+                if !hasLoadedData {
+                    hasLoadedData = true  // Mark as loaded
+                    Task {
+                        await loadData()  // Fetch data
+                    }
                 }
-               
             }
             .onChange(of: viewModel.frontImage) {_, _ in
                 Task {
