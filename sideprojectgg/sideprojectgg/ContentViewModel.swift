@@ -154,13 +154,13 @@ class ContentViewModel: ObservableObject {
           
             // Convert and upload images
             // Upload front and back images sequentially
-            let frontImageData = self.convertImagePNGData(img: frontImage)
+            let frontImageData = self.convertToJPEGData(image: frontImage)
             let uuid1 = NSUUID().uuidString
-            self.frontImageURL = try await self.uploadFile(data: frontImageData, path: "/images/\(uuid1).png").absoluteString
+            self.frontImageURL = try await self.uploadFile(data: frontImageData!, path: "/images/\(uuid1).png").absoluteString
             
-            let backImageData = self.convertImagePNGData(img: backImage)
+            let backImageData = self.convertToJPEGData(image: backImage)
             let uuid2 = NSUUID().uuidString
-            self.backImageURL = try await self.uploadFile(data: backImageData, path: "/images/\(uuid2).png").absoluteString
+            self.backImageURL = try await self.uploadFile(data: backImageData!, path: "/images/\(uuid2).png").absoluteString
         } catch let error {
             print("Error to Firestore: \(error)")
         }
@@ -193,9 +193,37 @@ class ContentViewModel: ObservableObject {
     func convertImageToBase64(img: UIImage) -> String {
         return img.jpegData(compressionQuality: 1)!.base64EncodedString()
     }
-    func convertImagePNGData(img: UIImage) -> Data {
-            return img.pngData()!
+    
+    func convertToJPEGData(image: UIImage) -> Data? {
+        let maxSizeInBytes = 3 * 1024 * 1024
+        var compression: CGFloat = 1.0 // Start with the highest quality
+        let minCompression: CGFloat = 0.1 // Minimum compression quality
+        let step: CGFloat = 0.1 // Compression decrement step
+
+        // Try to generate initial JPEG data
+        guard let initialData = image.jpegData(compressionQuality: compression) else {
+            return nil // Return nil if image conversion fails
         }
+
+        // Check if the initial data size is already below the max size
+        if initialData.count <= maxSizeInBytes {
+            return initialData
+        }
+
+        // Reduce the compression quality iteratively
+        var currentData = initialData
+        while currentData.count > maxSizeInBytes && compression > minCompression {
+            compression -= step
+            if let newData = image.jpegData(compressionQuality: compression) {
+                currentData = newData
+            } else {
+                break
+            }
+        }
+
+        // Ensure the final data size is within limits
+        return currentData.count <= maxSizeInBytes ? currentData : nil
+    }
     //Firebase STORAGE///
     
     //when we save scan, we save the images and pass it to here to receive back a URL that points back to it
