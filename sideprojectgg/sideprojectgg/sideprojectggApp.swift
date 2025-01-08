@@ -20,19 +20,19 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     
       
-    #if DEBUG
-    // Connect to Firestore emulator in development
-    let firestore = Firestore.firestore()
-    let settings = firestore.settings
-    settings.host = "10.0.0.101:8080" // Change port if you've configured a different one
-    settings.isSSLEnabled = false // Emulator does not use SSL
-              
-    // Configure cache settings
-    let cacheSettings = MemoryCacheSettings()
-    settings.cacheSettings = cacheSettings // Disable disk persistence with in-memory cache
-    firestore.settings = settings
-    #endif
-    
+//    #if DEBUG
+//    // Connect to Firestore emulator in development
+//    let firestore = Firestore.firestore()
+//    let settings = firestore.settings
+//    settings.host = "10.0.0.101:8080" // Change port if you've configured a different one
+//    settings.isSSLEnabled = false // Emulator does not use SSL
+//              
+//    // Configure cache settings
+//    let cacheSettings = MemoryCacheSettings()
+//    settings.cacheSettings = cacheSettings // Disable disk persistence with in-memory cache
+//    firestore.settings = settings
+//    #endif
+//    
        
       
 
