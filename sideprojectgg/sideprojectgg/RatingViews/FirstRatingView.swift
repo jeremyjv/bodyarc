@@ -112,9 +112,9 @@ struct FirstRatingView: View {
                         Image(systemName: "square.and.arrow.down")
                         Text("Save")
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(.black)
                     .padding()
-                    .background(Color.gray)
+                    .background(Color.white)
                     .cornerRadius(10)
                 }
 
@@ -125,9 +125,9 @@ struct FirstRatingView: View {
                         Image(systemName: "paperplane")
                         Text("Share")
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(.black)
                     .padding()
-                    .background(Color.gray)
+                    .background(Color.white)
                     .cornerRadius(10)
                 }
             }
