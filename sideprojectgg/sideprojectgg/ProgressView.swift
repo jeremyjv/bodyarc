@@ -102,7 +102,7 @@ struct ProgressView: View {
                                 // Front Image Button
                                 if let frontImage = retrievedScanImages[index][0] {
                                     Button(action: {
-                                        print("Front image button tapped for index \(index)")
+                                        path.append(scans![index])
                                         // Add your action here
                                     }) {
                                         Image(uiImage: frontImage)

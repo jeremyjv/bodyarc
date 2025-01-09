@@ -25,7 +25,7 @@ struct RatingView: View {
     var body: some View {
         
         //set background to front image darkened
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text("Body fat percent: \(scanObject.frontAnalysis?.bodyFatPercentage ?? 0)")
         Group {
             
 //            if let image = frontImage {
@@ -47,6 +47,7 @@ struct RatingView: View {
         }
 
     }
+   
 }
 
 #Preview {
