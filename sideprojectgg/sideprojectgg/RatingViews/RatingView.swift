@@ -25,21 +25,26 @@ struct RatingView: View {
 
     
     var body: some View {
-            ZStack {
-                if let image = frontImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                } else {
-                    // Placeholder loading image or view
-                    VStack {
-                 
-                        Text("Fetching Image...")
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                    }
-                }
-            }
+        ZStack {
+                   if let image = frontImage {
+                       Image(uiImage: image)
+                           .resizable()
+                           .scaledToFill() // Ensures the image fills the screen
+                           .frame(maxWidth: .infinity, maxHeight: .infinity) // Fills the available space
+                           .edgesIgnoringSafeArea(.all) // Ensures it extends under safe areas
+                   } else {
+                       // Placeholder loading image or view
+                       VStack {
+                           Text("Fetching Image...")
+                               .font(.subheadline)
+                               .foregroundColor(.gray)
+                       }
+                       .frame(maxWidth: .infinity, maxHeight: .infinity) // Fills the available space
+                       .background(Color.black) // Optional background color
+                       .edgesIgnoringSafeArea(.all) // Ensures it extends under safe areas
+                   }
+               }
+                
             .onAppear {
                 // Fetch the front image
                 Task {
