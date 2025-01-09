@@ -18,13 +18,15 @@ struct FirstRatingView: View {
     
     
     var body: some View {
+
         VStack(spacing: 20) {
-            // Title
+            
             Text("Ratings")
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
-                .padding(.top, 20)
+                .padding(.top, -50)
+           
             ZStack {
                 
                 
@@ -35,7 +37,7 @@ struct FirstRatingView: View {
                     Rectangle()
                         .fill(Color.black)
                         .cornerRadius(20)
-                        .frame(width: 320, height: 250) // Adjust height as needed
+                        .frame(width: 320, height: 300) // Adjust height as needed
                     
                     
                     // Ratings
@@ -92,7 +94,7 @@ struct FirstRatingView: View {
                         .scaledToFit()
                         .cornerRadius(20)
                         .frame(width: 300, height: 300) // Adjust dimensions as needed
-                        .offset(y: -50)
+                        .offset(y: 0)
                 } else {
                     Rectangle()
                         .fill(Color.gray.opacity(0.3))
