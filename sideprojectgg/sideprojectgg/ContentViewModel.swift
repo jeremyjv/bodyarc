@@ -122,10 +122,7 @@ class ContentViewModel: ObservableObject {
                 
             }
             
-   
-            
-    
-            
+
             //want to redirect to GoalsView
             isLoggedIn = true
             

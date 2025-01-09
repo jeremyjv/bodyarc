@@ -17,38 +17,56 @@ struct RatingView: View {
     @EnvironmentObject var viewModel: ContentViewModel
     var scanObject: ScanObject
     @State private var frontImage: UIImage? = nil
+    @State private var backImage: UIImage? = nil
     @Binding var path: NavigationPath
     
+    @State private var isLoading = true // State to track loading
     
-    let db = Firestore.firestore()
+
     
     var body: some View {
-        
-        //set background to front image darkened
-        Text("Body fat percent: \(scanObject.frontAnalysis?.bodyFatPercentage ?? 0)")
-        
-        //create tab view for ratings
-        Group {
-            
-//            if let image = frontImage {
-//                            Image(uiImage: frontImage!)
-//                                .resizable()
-//                                .scaledToFit()
-//                        } else {
-//                            
-//                            //put a custom progress view
-//                            ProgressView() // A loading indicator
-//                        }
-//            
-            //have list of other rating views in tabviewpage
-            
-            
-            
-            //every scan will always have a front image
-        
+            ZStack {
+                if let image = frontImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                } else {
+                    // Placeholder loading image or view
+                    VStack {
+                 
+                        Text("Fetching Image...")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    }
+                }
+            }
+            .onAppear {
+                // Fetch the front image
+                Task {
+                    if scanObject.frontImage != nil {
+                        do {
+                            frontImage = try await viewModel.loadImage(from: scanObject.frontImage!)
+                            isLoading = false // Set loading to false after fetching
+                        } catch {
+                            print("Failed to fetch front image: \(error)")
+                            isLoading = false
+                        }
+                    }
+                    if scanObject.backImage != nil {
+                        do {
+                            backImage = try await viewModel.loadImage(from: scanObject.backImage!)
+                            isLoading = false // Set loading to false after fetching
+                        } catch {
+                            print("Failed to fetch back image: \(error)")
+                            isLoading = false
+                        }
+                    }
+                 
+                }
+            }
         }
+    
 
-    }
    
 }
 
