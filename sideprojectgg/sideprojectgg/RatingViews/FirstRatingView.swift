@@ -31,60 +31,70 @@ struct FirstRatingView: View {
                         .scaledToFit()
                         .cornerRadius(20)
                         .frame(width: 300, height: 400) // Adjust dimensions as needed
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 20)
-                                .stroke(Color.gray, lineWidth: 2)
-                        )
+                        
                 } else {
                     Rectangle()
                         .fill(Color.gray.opacity(0.3))
                         .cornerRadius(20)
-                        .frame(width: 300, height: 400)
+                        .frame(width: 320, height: 270)
                         .overlay(Text("Loading Image...").foregroundColor(.gray))
                 }
 
                 // Ratings
-                HStack(spacing: 20) {
-                    VStack {
-                        Text("V-Taper")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                        Text("82")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
+                VStack(spacing: 20) {
+                    
+                    HStack {
+                        VStack {
+                            Text("V-Taper")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                            Text("82")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                        }
+                        VStack {
+                            Text("Leanness")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                            Text("85")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                        }
                     }
-                    VStack {
-                        Text("Leanness")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                        Text("85")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
+                    HStack {
+                        VStack {
+                            Text("Overall")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                            Text("70")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                        }
+                        VStack {
+                            Text("Potential")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                            Text("90")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white)
+                        }
+    
                     }
-                    VStack {
-                        Text("Overall")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                        Text("70")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                    }
-                    VStack {
-                        Text("Potential")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                        Text("90")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                    }
+                    
+        
                 }
                 .padding()
-                .background(Color.gray.opacity(0.6))
-                .cornerRadius(15)
+                .frame(maxWidth: .infinity) // Allow flexibility within the rectangle
+                .background(
+                    Rectangle()
+                        .fill(Color.black) // Black background for the rectangle
+                        .frame(width: 320) // Set width to 320
+                        .cornerRadius(20) // Optional: Add rounded corners to the rectangle
+                )
 
                 // Buttons
                 HStack(spacing: 40) {
@@ -119,8 +129,6 @@ struct FirstRatingView: View {
             }
             .padding()
            
-           
-            
     }
 }
 
