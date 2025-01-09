@@ -20,50 +20,55 @@ struct RatingView: View {
     @State private var backImage: UIImage? = nil
     @Binding var path: NavigationPath
     
+    @State private var currentPage = 0 // Track the current page
     @State private var isLoading = true // State to track loading
     
 
     
     var body: some View {
         ZStack {
-               
-            if let image = frontImage {
-                   Image(uiImage: image)
-                       .resizable()
-                       .scaledToFill() // Ensures the image fills the screen
-                       .frame(maxWidth: .infinity, maxHeight: .infinity) // Fills the available space
-                       .overlay(
-                           Color.black.opacity(0.9) // Apply a semi-transparent black overlay
-                               .edgesIgnoringSafeArea(.all)
-                       ) // Darkens the image
-                       .edgesIgnoringSafeArea(.all) // Ensures it extends under safe areas
-                
-                //display rating slides here
-                TabView {
-                    
-                    //First slide
-                    FirstRatingView(frontImage: frontImage, scanObject: scanObject)
-                    
-                    //Second slide
-                    FirstRatingView(frontImage: frontImage, scanObject: scanObject)
-                    
-                    
+                    // Background Image
+                    if let image = frontImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .overlay(Color.black.opacity(0.9)) // Darkens the image
+                            .edgesIgnoringSafeArea(.all)
+                    } else {
+                        // Placeholder for when the front image is not loaded
+                        Color.black
+                            .edgesIgnoringSafeArea(.all)
+                    }
+
+                    // TabView with Custom Dots
+                    VStack {
+                        // TabView Content
+                        TabView(selection: $currentPage) {
+                            // First Slide
+                            FirstRatingView(frontImage: frontImage, scanObject: scanObject)
+                                .tag(0)
+
+                            // Second Slide
+                            FirstRatingView(frontImage: frontImage, scanObject: scanObject)
+                                .tag(1)
+                        }
+                        .tabViewStyle(.page(indexDisplayMode: .never))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity) // Ensures TabView fills the screen
+                        
+
+                        // Custom Dots
+                        HStack(spacing: 8) {
+                            ForEach(0..<2) { index in // Adjust the number of pages
+                                Circle()
+                                    .fill(currentPage == index ? Color.white : Color.gray.opacity(0.5))
+                                    .frame(width: 10, height: 10)
+                            }
+                        }
+                        .padding(.bottom, 40) // Adjust position closer to the bottom
+                    }
+                    .edgesIgnoringSafeArea(.all) // Ensures the TabView fills the screen
                 }
-                .tabViewStyle(.page)
-                .edgesIgnoringSafeArea(.all)
-                
-                
-               } else {
-                   // Placeholder loading image or view
-                   VStack {
-                       Text("Fetching Image...")
-                           .font(.subheadline)
-                           .foregroundColor(.gray)
-                   }
-                   .frame(maxWidth: .infinity, maxHeight: .infinity) // Fills the available space
-                   .background(Color.black.edgesIgnoringSafeArea(.all)) // Background for placeholder
-               }
-            }
                 
             .onAppear {
                 // Fetch the front image
