@@ -25,75 +25,82 @@ struct FirstRatingView: View {
                 .fontWeight(.bold)
                 .foregroundColor(.white)
                 .padding(.top, 20)
-
-            // Image
-            if let image = frontImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
-                    .cornerRadius(20)
-                    .frame(width: 300, height: 300) // Adjust dimensions as needed
-            } else {
-                Rectangle()
-                    .fill(Color.gray.opacity(0.3))
-                    .cornerRadius(20)
-                    .frame(width: 320, height: 270)
-                    .overlay(Text("Loading Image...").foregroundColor(.gray))
-            }
-
-            // Ratings Section with Background
             ZStack {
-                // Black background for ratings
-                Rectangle()
-                    .fill(Color.black)
-                    .cornerRadius(20)
-                    .frame(width: 320, height: 150) // Adjust height as needed
                 
                 
-                // Ratings
-                VStack(spacing: 20) {
-                    HStack(spacing: 50) {
-                        VStack {
-                            Text("V-Taper")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                            Text("82")
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
+                
+                // Ratings Section with Background
+                ZStack {
+                    // Black background for ratings
+                    Rectangle()
+                        .fill(Color.black)
+                        .cornerRadius(20)
+                        .frame(width: 320, height: 250) // Adjust height as needed
+                    
+                    
+                    // Ratings
+                    VStack(spacing: 20) {
+                        HStack(spacing: 50) {
+                            VStack {
+                                Text("V-Taper")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                Text("82")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                            }
+                            VStack {
+                                Text("Leanness")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                Text("85")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                            }
                         }
-                        VStack {
-                            Text("Leanness")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                            Text("85")
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
+                        HStack(spacing: 50) {
+                            VStack {
+                                Text("Overall")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                Text("70")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                            }
+                            VStack {
+                                Text("Potential")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                Text("90")
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                            }
                         }
                     }
-                    HStack(spacing: 50) {
-                        VStack {
-                            Text("Overall")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                            Text("70")
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                        }
-                        VStack {
-                            Text("Potential")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                            Text("90")
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                        }
-                    }
+                    .padding()
                 }
-                .padding()
+                .offset(y: 250)
+                
+                // Image
+                if let image = frontImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                        .cornerRadius(20)
+                        .frame(width: 300, height: 300) // Adjust dimensions as needed
+                        .offset(y: -50)
+                } else {
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.3))
+                        .cornerRadius(20)
+                        .frame(width: 320, height: 270)
+                        .overlay(Text("Loading Image...").foregroundColor(.gray))
+                }
+                
             }
 
             // Buttons
@@ -124,6 +131,7 @@ struct FirstRatingView: View {
                     .cornerRadius(10)
                 }
             }
+            .offset(y: 250)
 
             Spacer()
         }
