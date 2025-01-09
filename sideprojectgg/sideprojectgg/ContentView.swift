@@ -52,29 +52,30 @@ struct ContentView: View {
                         })
                         
                     }
-                    .navigationDestination(for: Destination.self) { destination in
+                    .navigationDestination(for: String.self) { destination in
                         switch destination {
-                        case .string(let destinationString):
-                            switch destinationString {
-                            case "FrontScanView":
-                                FrontScanView(cameraModel: cameraModel, path: $path)
+                        case "FrontScanView":
+                            FrontScanView(cameraModel: cameraModel, path: $path)
+                            
+                        case "FrontCameraView":
+                            FrontCameraView(cameraModel: cameraModel, path: $path)
+                            
+                        case "BackScanView":
+                            BackScanView(cameraModel: cameraModel, path: $path)
+                            
+                        case "BackCameraView":
+                            BackCameraView(cameraModel: cameraModel, path: $path)
+                        
+                        //add case for rating view
+                                //but need to pass scan object to rating view to mount
 
-                            case "FrontCameraView":
-                                FrontCameraView(cameraModel: cameraModel, path: $path)
-
-                            case "BackScanView":
-                                BackScanView(cameraModel: cameraModel, path: $path)
-
-                            case "BackCameraView":
-                                BackCameraView(cameraModel: cameraModel, path: $path)
-
-                            default:
-                                EmptyView() // Handle unknown string destinations
-                            }
-
-                        case .scanObject(let scanObject):
-                            RatingView(scanObject: .constant(scanObject), path: $path)
+                        default:
+                            ContentView()
                         }
+                        
+                    }
+                    .navigationDestination(for: ScanObject.self) { scan in
+                        RatingView(scanObject: scan, path: $path)
                     }
                     
                 

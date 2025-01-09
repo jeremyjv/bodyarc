@@ -15,7 +15,7 @@ import FirebaseFirestore
 struct RatingView: View {
     //attach rating to this view
     @EnvironmentObject var viewModel: ContentViewModel
-    @Binding var scanObject: ScanObject
+    var scanObject: ScanObject
     @State private var frontImage: UIImage? = nil
     @Binding var path: NavigationPath
     

@@ -23,6 +23,8 @@ struct RectangleComponent: View {
 }
 
 
+
+
 struct ScanView: View {
     @EnvironmentObject var viewModel: ContentViewModel
     @Binding var path: NavigationPath
