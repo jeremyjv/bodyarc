@@ -17,32 +17,39 @@ struct FirstRatingView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-                // Title
-                Text("Ratings")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                    .padding(.top, 20)
+            // Title
+            Text("Ratings")
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+                .padding(.top, 20)
 
-                // Image
-                if let image = frontImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .cornerRadius(20)
-                        .frame(width: 300, height: 400) // Adjust dimensions as needed
-                        
-                } else {
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.3))
-                        .cornerRadius(20)
-                        .frame(width: 320, height: 270)
-                        .overlay(Text("Loading Image...").foregroundColor(.gray))
-                }
+            // Image
+            if let image = frontImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .cornerRadius(20)
+                    .frame(width: 300, height: 300) // Adjust dimensions as needed
+            } else {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.3))
+                    .cornerRadius(20)
+                    .frame(width: 320, height: 270)
+                    .overlay(Text("Loading Image...").foregroundColor(.gray))
+            }
 
+            // Ratings Section with Background
+            ZStack {
+                // Black background for ratings
+                Rectangle()
+                    .fill(Color.black)
+                    .cornerRadius(20)
+                    .frame(width: 320, height: 150) // Adjust height as needed
+                    .offset(y: 50) // Move the rectangle lower on the screen
+                
                 // Ratings
                 VStack(spacing: 20) {
-                    
                     HStack {
                         VStack {
                             Text("V-Taper")
@@ -82,52 +89,43 @@ struct FirstRatingView: View {
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
                         }
-    
                     }
-                    
-        
                 }
                 .padding()
-                .frame(maxWidth: .infinity) // Allow flexibility within the rectangle
-                .background(
-                    Rectangle()
-                        .fill(Color.black) // Black background for the rectangle
-                        .frame(width: 320) // Set width to 320
-                        .cornerRadius(20) // Optional: Add rounded corners to the rectangle
-                )
+            }
 
-                // Buttons
-                HStack(spacing: 40) {
-                    Button(action: {
-                        print("Save tapped")
-                    }) {
-                        HStack {
-                            Image(systemName: "square.and.arrow.down")
-                            Text("Save")
-                        }
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.gray)
-                        .cornerRadius(10)
+            // Buttons
+            HStack(spacing: 40) {
+                Button(action: {
+                    print("Save tapped")
+                }) {
+                    HStack {
+                        Image(systemName: "square.and.arrow.down")
+                        Text("Save")
                     }
-
-                    Button(action: {
-                        print("Share tapped")
-                    }) {
-                        HStack {
-                            Image(systemName: "paperplane")
-                            Text("Share")
-                        }
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.gray)
-                        .cornerRadius(10)
-                    }
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.gray)
+                    .cornerRadius(10)
                 }
 
-                Spacer()
+                Button(action: {
+                    print("Share tapped")
+                }) {
+                    HStack {
+                        Image(systemName: "paperplane")
+                        Text("Share")
+                    }
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.gray)
+                    .cornerRadius(10)
+                }
             }
-            .padding()
+
+            Spacer()
+        }
+        .padding()
            
     }
 }
