@@ -26,6 +26,8 @@ struct RatingView: View {
         
         //set background to front image darkened
         Text("Body fat percent: \(scanObject.frontAnalysis?.bodyFatPercentage ?? 0)")
+        
+        //create tab view for ratings
         Group {
             
 //            if let image = frontImage {

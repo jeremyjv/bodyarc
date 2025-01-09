@@ -70,6 +70,13 @@ class ContentViewModel: ObservableObject {
                 print("Error signing out: \(error.localizedDescription)")
             }
         }
+    func checkIfUserExists(uid: String) async throws -> Bool {
+        let db = Firestore.firestore()
+        let docRef = db.collection("users").document(uid)
+        
+        let document = try await docRef.getDocument()
+        return document.exists
+    }
     
     func signInWithGoogle(intakeForm: IntakeForm) async -> Bool {
         
@@ -101,15 +108,21 @@ class ContentViewModel: ObservableObject {
             
             //store data as struct then pass to firebase
             
-            let userModel = User(email: firebaseUser.email, uid: firebaseUser.uid, intake: intakeForm)
+            let userInFireStore = try await checkIfUserExists(uid: firebaseUser.uid)
             
-            do {
-                try db.collection("users").addDocument(from: userModel)
-                print("added user \(firebaseUser.uid) to firestore")
-            } catch let error {
-                print("Error writing user to Firestore: \(error)")
-                }
+            if userInFireStore == false {
+                let userModel = User(email: firebaseUser.email, uid: firebaseUser.uid, intake: intakeForm)
             
+                do {
+                    try db.collection("users").document(firebaseUser.uid).setData(from: userModel)
+                    print("added user \(firebaseUser.uid) to firestore")
+                } catch let error {
+                    print("Error writing user to Firestore: \(error)")
+                    }
+                
+            }
+            
+   
             
     
             
