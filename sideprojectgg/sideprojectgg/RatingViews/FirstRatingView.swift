@@ -51,6 +51,7 @@ struct FirstRatingView: View {
                                     .font(.title)
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
+                                ProgressBar(score: 82)
                             }
                             VStack {
                                 Text("Leanness")
@@ -60,6 +61,7 @@ struct FirstRatingView: View {
                                     .font(.title)
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
+                                ProgressBar(score: 85)
                             }
                         }
                         HStack(spacing: 50) {
@@ -71,6 +73,7 @@ struct FirstRatingView: View {
                                     .font(.title)
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
+                                ProgressBar(score: 70)
                             }
                             VStack {
                                 Text("Potential")
@@ -80,6 +83,7 @@ struct FirstRatingView: View {
                                     .font(.title)
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
+                                ProgressBar(score: 90)
                             }
                         }
                     }

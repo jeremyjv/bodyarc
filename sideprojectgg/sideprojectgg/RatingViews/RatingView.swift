@@ -112,6 +112,34 @@ struct RatingView: View {
    
 }
 
+struct ProgressBar: View {
+    var score: Int
+
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                // Background bar
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(height: 8) // Adjust height here
+
+                // Foreground bar
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(colorForScore(score: score))
+                    .frame(width: CGFloat(score) / 100.0 * geometry.size.width, height: 8) // Adjust height here
+            }
+        }
+        .frame(height: 8) // Set the fixed height of the ProgressBar
+    }
+
+    func colorForScore(score: Int) -> Color {
+        let normalizedScore = Double(score) / 100.0
+        let red = 1.0 - normalizedScore
+        let green = normalizedScore
+        return Color(red: red, green: green, blue: 0.0)
+    }
+}
+
 #Preview {
     
 }
