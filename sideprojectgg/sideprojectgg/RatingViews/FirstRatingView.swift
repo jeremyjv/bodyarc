@@ -32,10 +32,10 @@ struct FirstRatingView: View {
                 // Ratings Section with Background
                 ZStack {
                     // Black background for ratings
-//                    Rectangle()
-//                        .fill(Color.black)
-//                        .cornerRadius(20)
-//                        .frame(width: 320, height: 250) // Adjust height as needed
+                    Rectangle()
+                        .fill(Color.black)
+                        .cornerRadius(20)
+                        .frame(width: 320, height: 250) // Adjust height as needed
                     
                     
                     // Ratings
@@ -87,12 +87,12 @@ struct FirstRatingView: View {
                 
                 // Image
                 if let image = frontImage {
-//                    Image(uiImage: image)
-//                        .resizable()
-//                        .scaledToFit()
-//                        .cornerRadius(20)
-//                        .frame(width: 300, height: 300) // Adjust dimensions as needed
-//                        .offset(y: -50)
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                        .cornerRadius(20)
+                        .frame(width: 300, height: 300) // Adjust dimensions as needed
+                        .offset(y: -50)
                 } else {
                     Rectangle()
                         .fill(Color.gray.opacity(0.3))

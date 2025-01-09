@@ -54,7 +54,7 @@ struct RatingView: View {
                                 .tag(1)
                         }
                         .tabViewStyle(.page(indexDisplayMode: .never))
-                        .frame(maxWidth: .infinity, maxHeight: .infinity) // Ensures TabView fills the screen
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top) // Ensures TabView fills the screen
                         
 
                         // Custom Dots
