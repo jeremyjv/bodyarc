@@ -13,6 +13,8 @@ struct FirstRatingView: View {
     var backImage: UIImage?
     var scanObject: ScanObject
     
+   
+    
     
     
     var body: some View {
@@ -46,11 +48,11 @@ struct FirstRatingView: View {
                     .fill(Color.black)
                     .cornerRadius(20)
                     .frame(width: 320, height: 150) // Adjust height as needed
-                    .offset(y: 50) // Move the rectangle lower on the screen
+                
                 
                 // Ratings
                 VStack(spacing: 20) {
-                    HStack {
+                    HStack(spacing: 50) {
                         VStack {
                             Text("V-Taper")
                                 .font(.headline)
@@ -70,7 +72,7 @@ struct FirstRatingView: View {
                                 .foregroundColor(.white)
                         }
                     }
-                    HStack {
+                    HStack(spacing: 50) {
                         VStack {
                             Text("Overall")
                                 .font(.headline)
@@ -126,6 +128,8 @@ struct FirstRatingView: View {
             Spacer()
         }
         .padding()
+        .navigationBarBackButtonHidden(true)
+        
            
     }
 }

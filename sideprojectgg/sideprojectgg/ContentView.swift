@@ -77,6 +77,7 @@ struct ContentView: View {
                     .navigationDestination(for: ScanObject.self) { scan in
                         RatingView(scanObject: scan, path: $path)
                     }
+                    .gesture(DragGesture().onChanged { _ in })
                     
                 
             }

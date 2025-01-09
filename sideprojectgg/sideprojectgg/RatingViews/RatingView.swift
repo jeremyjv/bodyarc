@@ -41,6 +41,10 @@ struct RatingView: View {
                 //display rating slides here
                 TabView {
                     
+                    //First slide
+                    FirstRatingView(frontImage: frontImage, scanObject: scanObject)
+                    
+                    //Second slide
                     FirstRatingView(frontImage: frontImage, scanObject: scanObject)
                     
                     
@@ -83,6 +87,17 @@ struct RatingView: View {
                         }
                     }
                  
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        path.removeLast() // Custom back button action
+                    }) {
+                        HStack {
+                            Image(systemName: "chevron.left") // Custom back button icon
+                        }
+                    }
                 }
             }
         }
