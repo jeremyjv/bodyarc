@@ -26,24 +26,31 @@ struct RatingView: View {
     
     var body: some View {
         ZStack {
-                   if let image = frontImage {
-                       Image(uiImage: image)
-                           .resizable()
-                           .scaledToFill() // Ensures the image fills the screen
-                           .frame(maxWidth: .infinity, maxHeight: .infinity) // Fills the available space
-                           .edgesIgnoringSafeArea(.all) // Ensures it extends under safe areas
-                   } else {
-                       // Placeholder loading image or view
-                       VStack {
-                           Text("Fetching Image...")
-                               .font(.subheadline)
-                               .foregroundColor(.gray)
-                       }
+               
+            if let image = frontImage {
+                   Image(uiImage: image)
+                       .resizable()
+                       .scaledToFill() // Ensures the image fills the screen
                        .frame(maxWidth: .infinity, maxHeight: .infinity) // Fills the available space
-                       .background(Color.black) // Optional background color
+                       .overlay(
+                           Color.black.opacity(0.9) // Apply a semi-transparent black overlay
+                               .edgesIgnoringSafeArea(.all)
+                       ) // Darkens the image
                        .edgesIgnoringSafeArea(.all) // Ensures it extends under safe areas
+                
+                
+                
+               } else {
+                   // Placeholder loading image or view
+                   VStack {
+                       Text("Fetching Image...")
+                           .font(.subheadline)
+                           .foregroundColor(.gray)
                    }
+                   .frame(maxWidth: .infinity, maxHeight: .infinity) // Fills the available space
+                   .background(Color.black.edgesIgnoringSafeArea(.all)) // Background for placeholder
                }
+            }
                 
             .onAppear {
                 // Fetch the front image
