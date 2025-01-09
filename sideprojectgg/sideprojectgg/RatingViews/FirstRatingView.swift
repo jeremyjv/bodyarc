@@ -9,8 +9,8 @@ import SwiftUI
 
 struct FirstRatingView: View {
     @EnvironmentObject var viewModel: ContentViewModel
-    @Binding private var frontImage: UIImage?
-    @Binding private var backImage: UIImage?
+    var frontImage: UIImage?
+    var backImage: UIImage?
     var scanObject: ScanObject
     
     

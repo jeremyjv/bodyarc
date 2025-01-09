@@ -38,6 +38,15 @@ struct RatingView: View {
                        ) // Darkens the image
                        .edgesIgnoringSafeArea(.all) // Ensures it extends under safe areas
                 
+                //display rating slides here
+                TabView {
+                    
+                    FirstRatingView(frontImage: frontImage, scanObject: scanObject)
+                    
+                    
+                }
+                .tabViewStyle(.page)
+                .edgesIgnoringSafeArea(.all)
                 
                 
                } else {
