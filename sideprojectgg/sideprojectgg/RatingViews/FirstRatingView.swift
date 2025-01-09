@@ -131,7 +131,7 @@ struct FirstRatingView: View {
                     .cornerRadius(10)
                 }
             }
-            .offset(y: 250)
+            .offset(y: 225)
 
             Spacer()
         }
