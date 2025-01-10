@@ -121,22 +121,23 @@ struct ProgressBar: View {
                 // Background bar
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color.gray.opacity(0.2))
-                    .frame(height: 8) // Adjust height here
+                    .frame(height: 12) // Adjust height here
 
                 // Foreground bar
                 RoundedRectangle(cornerRadius: 10)
                     .fill(colorForScore(score: score))
-                    .frame(width: CGFloat(score) / 100.0 * geometry.size.width, height: 8) // Adjust height here
+                    .frame(width: CGFloat(score) / 100.0 * geometry.size.width, height: 12) // Adjust height here
             }
         }
-        .frame(height: 8) // Set the fixed height of the ProgressBar
+        .frame(width: 120, height: 12) // Set the width to a shorter value (e.g., 100) // Set the fixed height of the ProgressBar
     }
 
     func colorForScore(score: Int) -> Color {
         let normalizedScore = Double(score) / 100.0
-        let red = 1.0 - normalizedScore
-        let green = normalizedScore
-        return Color(red: red, green: green, blue: 0.0)
+        let red = (1.0 - normalizedScore) * 0.7 + 0.3 // Scale down red and blend with white
+        let green = normalizedScore * 0.7 + 0.3       // Scale down green and blend with white
+        let blue = 0.2                                // Keep blue constant for pastel look
+        return Color(red: red, green: green, blue: blue)
     }
 }
 
