@@ -47,6 +47,9 @@ struct ContentView: View {
                             Label("Progress", systemImage: "person")
                         })
                         
+                        RoutineView().tabItem({
+                            Label("Routine", systemImage: "person")
+                        })
                        
                         
                     }

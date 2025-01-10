@@ -61,7 +61,7 @@ struct SecondBackRatingView: View {
                                 Text("🐢")
                                     .font(.system(size: 45))
                                     .foregroundColor(.white)
-                                Text("Density")
+                                Text("Back Density")
                                     .font(.system(size: 15))
                                     .foregroundColor(.white.opacity(0.5)) // Faint white text
                                 Text("\(scanObject.backAnalysis!.density)")
@@ -74,7 +74,7 @@ struct SecondBackRatingView: View {
                                     .scaledToFit() // Maintain the aspect ratio
                                     .frame(width: 45, height: 45) // Match the emoji size
                                     .offset(y: 2)
-                                Text("Width")
+                                Text("Back Width")
                                     .font(.system(size: 15))
                                     .foregroundColor(.white.opacity(0.5)) // Faint white text
                                 Text("\(scanObject.backAnalysis!.width)")
