@@ -78,16 +78,11 @@ struct Rating: Codable {
     
     //slide 1
     var vTaper: Int
-    var leanness: Int
+
     var overall: Int
     var potential: Int
     
-    //slide 2
     
-    var shoulders: Int
-    var chest: Int
-    var arms: Int
-    var abs: Int
     
     //slide 3
     var clavicalWidth: Int
@@ -120,12 +115,12 @@ struct Rating: Codable {
 
 struct FrontAnalysis: Codable, Hashable {
     let bodyFatPercentage: Int
-    let shoulders, chest, abs, arms, quads, calves: Muscle?
+    let shoulders, chest, abs, arms: Muscle?
 }
 
 struct BackAnalysis: Codable, Hashable {
     let bodyFatPercentage: Int
-    let traps, lats, glutes, quads, calves: Muscle?
+    let traps, lats: Muscle?
 }
 
 struct Muscle: Codable, Hashable {

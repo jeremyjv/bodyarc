@@ -1,13 +1,13 @@
 //
-//  FirstRatingView.swift
+//  ThirdRatingView.swift
 //  sideprojectgg
 //
-//  Created by Jeremy Villanueva on 1/8/25.
+//  Created by Jeremy Villanueva on 1/9/25.
 //
 
 import SwiftUI
 
-struct FirstRatingView: View {
+struct ThirdRatingView: View {
     @EnvironmentObject var viewModel: ContentViewModel
     var frontImage: UIImage?
     var backImage: UIImage?
@@ -41,45 +41,40 @@ struct FirstRatingView: View {
                     
                     
                     // Ratings
-                    VStack(spacing: 20) {
+                    VStack(spacing: 10) {
                         HStack(spacing: 35) {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("V-Taper")
-                                    .font(.headline)
+                            VStack {
+                                Text("👤")
+                                    .font(.system(size: 45))
                                     .foregroundColor(.white)
-                                Text("82")
-                                    .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
+                                Text("Body Type")
+                                    .font(.system(size: 15))
+                                Text("Endomorph")
+                                    .font(.system(size: 30, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
-                                ProgressBar(score: 82)
                             }
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Leanness")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                Text("85")
-                                    .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
-                                    .foregroundColor(.white)
-                                ProgressBar(score: 85)
-                            }
+                
                         }
                         HStack(spacing: 35) {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Overall")
-                                    .font(.headline)
+                            VStack {
+                                Text("📐")
+                                    .font(.system(size: 45))
                                     .foregroundColor(.white)
-                                Text("70")
-                                    .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
+                                Text("Clavicular Width")
+                                    .font(.system(size: 15))
+                                Text("Medium")
+                                    .font(.system(size: 30, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
-                                ProgressBar(score: 70)
                             }
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Potential")
-                                    .font(.headline)
+                            VStack {
+                                Text("💎")
+                                    .font(.system(size: 45))
                                     .foregroundColor(.white)
-                                Text("20")
-                                    .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
+                                Text("Waist Size")
+                                    .font(.system(size: 15))
+                                Text("Narrow")
+                                    .font(.system(size: 30, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
-                                ProgressBar(score: 20)
                             }
                         }
                         Text("bodyarc")
@@ -87,8 +82,8 @@ struct FirstRatingView: View {
                                     .foregroundColor(.white.opacity(0.3)) // Faint white text
                                     .fontWeight(.bold)
                     }
-                    .padding()
-                    .offset(y: 20)
+        
+                    .offset(y: 16)
                 }
                 .offset(y: 250)
                 
@@ -154,4 +149,5 @@ struct FirstRatingView: View {
            
     }
 }
+
 

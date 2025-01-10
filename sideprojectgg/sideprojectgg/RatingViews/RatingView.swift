@@ -50,8 +50,12 @@ struct RatingView: View {
                                 .tag(0)
 
                             // Second Slide
-                            FirstRatingView(frontImage: frontImage, scanObject: scanObject)
+                            SecondRatingView(frontImage: frontImage, scanObject: scanObject)
                                 .tag(1)
+                            
+                            // Second Slide
+                            ThirdRatingView(frontImage: frontImage, scanObject: scanObject)
+                                .tag(2)
                         }
                         .tabViewStyle(.page(indexDisplayMode: .never))
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top) // Ensures TabView fills the screen

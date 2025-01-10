@@ -1,13 +1,13 @@
 //
-//  FirstRatingView.swift
+//  SecondRatingView.swift
 //  sideprojectgg
 //
-//  Created by Jeremy Villanueva on 1/8/25.
+//  Created by Jeremy Villanueva on 1/9/25.
 //
 
 import SwiftUI
 
-struct FirstRatingView: View {
+struct SecondRatingView: View {
     @EnvironmentObject var viewModel: ContentViewModel
     var frontImage: UIImage?
     var backImage: UIImage?
@@ -44,7 +44,7 @@ struct FirstRatingView: View {
                     VStack(spacing: 20) {
                         HStack(spacing: 35) {
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("V-Taper")
+                                Text("Shoulders")
                                     .font(.headline)
                                     .foregroundColor(.white)
                                 Text("82")
@@ -53,7 +53,7 @@ struct FirstRatingView: View {
                                 ProgressBar(score: 82)
                             }
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Leanness")
+                                Text("Chest")
                                     .font(.headline)
                                     .foregroundColor(.white)
                                 Text("85")
@@ -64,7 +64,7 @@ struct FirstRatingView: View {
                         }
                         HStack(spacing: 35) {
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Overall")
+                                Text("Arms")
                                     .font(.headline)
                                     .foregroundColor(.white)
                                 Text("70")
@@ -73,7 +73,7 @@ struct FirstRatingView: View {
                                 ProgressBar(score: 70)
                             }
                             VStack(alignment: .leading, spacing: 2) {
-                                Text("Potential")
+                                Text("Abs")
                                     .font(.headline)
                                     .foregroundColor(.white)
                                 Text("20")
