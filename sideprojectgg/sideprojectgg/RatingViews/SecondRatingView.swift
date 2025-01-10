@@ -47,19 +47,19 @@ struct SecondRatingView: View {
                                 Text("Shoulders")
                                     .font(.headline)
                                     .foregroundColor(.white)
-                                Text("82")
+                                Text("\(scanObject.frontAnalysis!.shoulders)")
                                     .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
-                                ProgressBar(score: 82)
+                                ProgressBar(score: scanObject.frontAnalysis!.shoulders)
                             }
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Chest")
                                     .font(.headline)
                                     .foregroundColor(.white)
-                                Text("85")
+                                Text("\(scanObject.frontAnalysis!.chest)")
                                     .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
-                                ProgressBar(score: 85)
+                                ProgressBar(score: scanObject.frontAnalysis!.chest)
                             }
                         }
                         HStack(spacing: 35) {
@@ -67,19 +67,19 @@ struct SecondRatingView: View {
                                 Text("Arms")
                                     .font(.headline)
                                     .foregroundColor(.white)
-                                Text("70")
+                                Text("\(scanObject.frontAnalysis!.arms)")
                                     .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
-                                ProgressBar(score: 70)
+                                ProgressBar(score: scanObject.frontAnalysis!.arms)
                             }
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Abs")
                                     .font(.headline)
                                     .foregroundColor(.white)
-                                Text("20")
+                                Text("\(scanObject.frontAnalysis!.abs)")
                                     .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
-                                ProgressBar(score: 20)
+                                ProgressBar(score: scanObject.frontAnalysis!.abs)
                             }
                         }
                         Text("bodyarc")

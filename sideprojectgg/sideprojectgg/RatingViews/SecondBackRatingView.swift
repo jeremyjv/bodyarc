@@ -50,7 +50,7 @@ struct SecondBackRatingView: View {
                                 Text("Lat Insertion")
                                     .font(.system(size: 15))
                                     .foregroundColor(.white.opacity(0.5)) // Faint white text
-                                Text("High")
+                                Text("\(scanObject.backAnalysis!.latInsertion)")
                                     .font(.system(size: 30, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
                             }
@@ -64,7 +64,7 @@ struct SecondBackRatingView: View {
                                 Text("Density")
                                     .font(.system(size: 15))
                                     .foregroundColor(.white.opacity(0.5)) // Faint white text
-                                Text("Thick")
+                                Text("\(scanObject.backAnalysis!.density)")
                                     .font(.system(size: 30, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
                             }
@@ -77,7 +77,7 @@ struct SecondBackRatingView: View {
                                 Text("Width")
                                     .font(.system(size: 15))
                                     .foregroundColor(.white.opacity(0.5)) // Faint white text
-                                Text("Wide")
+                                Text("\(scanObject.backAnalysis!.width)")
                                     .font(.system(size: 30, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
                             }

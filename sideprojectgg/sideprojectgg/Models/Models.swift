@@ -80,14 +80,11 @@ struct FrontAnalysis: Codable, Hashable {
 }
 
 struct BackAnalysis: Codable, Hashable {
-    let bodyFatPercentage: Int
-    let traps, lats: Muscle?
+    let traps, lats, rearDelts, lowerBack: Int
+    let latInsertion, density, width: String
+
 }
 
-struct Muscle: Codable, Hashable {
-    let rating: Int?
-    let description: String?
-}
 
 
 

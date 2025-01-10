@@ -47,19 +47,19 @@ struct FirstBackRatingView: View {
                                 Text("Traps")
                                     .font(.headline)
                                     .foregroundColor(.white)
-                                Text("82")
+                                Text("\(scanObject.backAnalysis!.traps)")
                                     .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
-                                ProgressBar(score: 82)
+                                ProgressBar(score: scanObject.backAnalysis!.traps)
                             }
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Lats")
                                     .font(.headline)
                                     .foregroundColor(.white)
-                                Text("85")
+                                Text("\(scanObject.backAnalysis!.lats)")
                                     .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
-                                ProgressBar(score: 85)
+                                ProgressBar(score: scanObject.backAnalysis!.lats)
                             }
                         }
                         HStack(spacing: 35) {
@@ -67,19 +67,19 @@ struct FirstBackRatingView: View {
                                 Text("Rear Delts")
                                     .font(.headline)
                                     .foregroundColor(.white)
-                                Text("70")
+                                Text("\(scanObject.backAnalysis!.rearDelts)")
                                     .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
-                                ProgressBar(score: 70)
+                                ProgressBar(score: scanObject.backAnalysis!.rearDelts)
                             }
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Lower Back")
                                     .font(.headline)
                                     .foregroundColor(.white)
-                                Text("20")
+                                Text("\(scanObject.backAnalysis!.lowerBack)")
                                     .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
-                                ProgressBar(score: 20)
+                                ProgressBar(score: scanObject.backAnalysis!.lowerBack)
                             }
                         }
                         Text("bodyarc")

@@ -50,7 +50,7 @@ struct ThirdRatingView: View {
                                 Text("Body Type")
                                     .font(.system(size: 15))
                                     .foregroundColor(.white.opacity(0.5)) // Faint white text
-                                Text("Endomorph")
+                                Text("\(scanObject.frontAnalysis!.bodyType!)")
                                     .font(.system(size: 30, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
                             }
@@ -64,7 +64,7 @@ struct ThirdRatingView: View {
                                 Text("Clavicle Width")
                                     .font(.system(size: 15))
                                     .foregroundColor(.white.opacity(0.5)) // Faint white text
-                                Text("Medium")
+                                Text("\(scanObject.frontAnalysis!.clavicleWidth!)")
                                     .font(.system(size: 30, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
                             }
@@ -75,7 +75,7 @@ struct ThirdRatingView: View {
                                 Text("Waist Size")
                                     .font(.system(size: 15))
                                     .foregroundColor(.white.opacity(0.5)) // Faint white text
-                                Text("Narrow")
+                                Text("\(scanObject.frontAnalysis!.waistSize!)")
                                     .font(.system(size: 30, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
                             }
