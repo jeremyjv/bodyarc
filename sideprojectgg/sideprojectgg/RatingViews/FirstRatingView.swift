@@ -82,6 +82,10 @@ struct FirstRatingView: View {
                                 ProgressBar(score: 20)
                             }
                         }
+                        Text("bodyarc")
+                                    .font(.footnote) // Small font size
+                                    .foregroundColor(.white.opacity(0.3)) // Faint white text
+                                    .fontWeight(.bold)
                     }
                     .padding()
                     .offset(y: 20)
@@ -95,7 +99,7 @@ struct FirstRatingView: View {
                         .scaledToFit()
                         .cornerRadius(20)
                         .frame(width: 300, height: 300) // Adjust dimensions as needed
-                        .offset(y: 0)
+                        .offset(y: -20)
                 } else {
                     Rectangle()
                         .fill(Color.gray.opacity(0.3))
@@ -107,34 +111,40 @@ struct FirstRatingView: View {
             }
 
             // Buttons
-            HStack(spacing: 40) {
+            HStack(spacing: 25) {
                 Button(action: {
                     print("Save tapped")
                 }) {
                     HStack {
-                        Image(systemName: "square.and.arrow.down")
                         Text("Save")
+                            .font(.system(size: 20, weight: .bold)) // Larger font size
+                        Image(systemName: "square.and.arrow.down")
+                            .font(.system(size: 24)) // Larger icon size
                     }
                     .foregroundColor(.black)
-                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color.white)
-                    .cornerRadius(10)
+                    .cornerRadius(15) // Corner radius for better aesthetics
                 }
-
+                .frame(width: 160, height: 60) // Explicit frame size for the button
+                
                 Button(action: {
                     print("Share tapped")
                 }) {
                     HStack {
-                        Image(systemName: "paperplane")
                         Text("Share")
+                            .font(.system(size: 20, weight: .bold)) // Larger font size
+                        Image(systemName: "paperplane")
+                            .font(.system(size: 24)) // Larger icon size
                     }
                     .foregroundColor(.black)
-                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Color.white)
-                    .cornerRadius(10)
+                    .cornerRadius(15) // Corner radius for better aesthetics
                 }
+                .frame(width: 160, height: 60) // Explicit frame size for the button
             }
-            .offset(y: 275)
+            .offset(y: 265)
 
             Spacer()
         }

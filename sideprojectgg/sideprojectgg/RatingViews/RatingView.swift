@@ -24,7 +24,7 @@ struct RatingView: View {
     @State private var isLoading = true // State to track loading
     
 
-    
+    // just do a (while) front image == nil -> loading and you're good
     var body: some View {
         ZStack {
                     // Background Image
