@@ -4,39 +4,32 @@ This is my current physique. For the muscles that you see in the image, if the m
 In the following JSON Format:
 {
     "bodyFatPercentage": Int,
-    "shoulders": {
-        "rating": Int,
-        "description": String
-    },
-    "chest": {
-        "rating": Int,
-        "description": String
-    },
-    "abs": {
-        "rating": Int,
-        "description": String
-    },
-    "arms": {
-        "rating": Int,
-        "description": String
-    },
-    "quads": {
-        "rating": Int,
-        "description": String
-    },
-    "calves": {
-        "rating": Int,
-        "description": String
-    },
+    "shoulders": Int,
+    "chest": Int,
+    "abs": Int,
+    "arms": Int,
+    "clavicleWidth": String,
+    "waistSize": String,
+    "vTaper": Int, 
+    "overall": Int,
+    "potential": Int,
+    "bodyType": String,
+    
+  
 }
 give me:
-1) The Overall Body Fat Percentage, and give me an exact number. A softer look in the body indicates a higher body fat percentage and a more defined look where you can see muscle definition indicates a lower body fat percentage:
+1) A Rating on a scale of 1-100 for the Body Fat Percentage where 100 indicates the most lean and a lower rating indicates a fatter body. A softer look in the body indicates a higher body fat percentage and a more defined look where you can see muscle definition indicates a lower body fat percentage:
 2) A Rating on a scale of 1-100 for the shoulder development. Developed shoulders should contribute to the width of the upper body and be well defined. And attach a description of why you gave the specific rating.
 3) A Rating on a scale of 1-100 for the chest development. A developed chest should appear full and round, not flat. Distinguish these features for the upper chest, mid chest, and lower chest. And attach a description of why you gave the specific rating.
 4) A Rating on a scale of 1-100 for the Ab development. Developed abs should have multiple lines and appear to be sticking out. A softer look in the abs indicates a higher body fat percentage and therefore lower score. And attach a description of why you gave the specific rating.
 5) A Rating on a scale of 1-100 for the Arm development. A developed arm should have a bicep that contributes to the width of the arm. If there is a vein on the bicep that signals even better development. And attach a description of why you gave the specific rating.
-6) A Rating on a scale of 1-100 for the Quad development. A developed quad should have a “teardrop” look and have visible separation between the different muscles of the quadricep. And attach a description of why you gave the specific rating.
-7) A Rating on a scale of 1-100 for the Calve development. A developed calve should have a decent amount of width, but not wider than the quad. And attach a description of why you gave the specific rating.
+6) A size of the clavicle width from the list [short, medium, wide]
+7) The size of the waist from the list: [wide, medium narrow]
+8) A Rating on a scale of 1-100 for the V-Taper of the body
+9) The overall average of all the scores
+10) potential is just adding 5 to the overall score and clamp the number to 100 in case it goes over
+11) the body type of the individual from the list: [Endomorph, Ectomorph, Mesomorph]
+
 `
 
 

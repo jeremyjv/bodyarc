@@ -47,19 +47,19 @@ struct FirstRatingView: View {
                                 Text("V-Taper")
                                     .font(.headline)
                                     .foregroundColor(.white)
-                                Text("82")
+                                Text("\(scanObject.frontAnalysis!.vTaper)")
                                     .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
-                                ProgressBar(score: 82)
+                                ProgressBar(score: scanObject.frontAnalysis!.vTaper)
                             }
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Leanness")
                                     .font(.headline)
                                     .foregroundColor(.white)
-                                Text("85")
+                                Text("\(scanObject.frontAnalysis!.bodyFatPercentage)")
                                     .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
-                                ProgressBar(score: 85)
+                                ProgressBar(score: scanObject.frontAnalysis!.bodyFatPercentage)
                             }
                         }
                         HStack(spacing: 35) {
@@ -67,19 +67,19 @@ struct FirstRatingView: View {
                                 Text("Overall")
                                     .font(.headline)
                                     .foregroundColor(.white)
-                                Text("70")
+                                Text("\(scanObject.frontAnalysis!.overall)")
                                     .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
-                                ProgressBar(score: 70)
+                                ProgressBar(score: scanObject.frontAnalysis!.overall)
                             }
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Potential")
                                     .font(.headline)
                                     .foregroundColor(.white)
-                                Text("20")
+                                Text("\(scanObject.frontAnalysis!.potential)")
                                     .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
-                                ProgressBar(score: 20)
+                                ProgressBar(score: scanObject.frontAnalysis!.potential)
                             }
                         }
                         Text("bodyarc")

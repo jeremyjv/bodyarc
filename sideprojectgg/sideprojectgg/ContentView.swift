@@ -47,9 +47,7 @@ struct ContentView: View {
                             Label("Progress", systemImage: "person")
                         })
                         
-                        AnalysisView().tabItem({
-                            Label("Analysis", systemImage: "magnifyingglass")
-                        })
+                       
                         
                     }
                     .navigationDestination(for: String.self) { destination in

@@ -67,55 +67,16 @@ struct ScanObject: Codable, Hashable {
         createdAt = nil
     }
     
-//    func getScanObject(scanId: String) async -> ScanObject {
-//        
-//    }
-//    
+
    
 }
 
-struct Rating: Codable {
-    
-    //slide 1
-    var vTaper: Int
 
-    var overall: Int
-    var potential: Int
-    
-    
-    
-    //slide 3
-    var clavicalWidth: Int
-    var waistSize: Int
-    
-    //Back analysis now so optional
-    //slide 4
-    var traps: Int?
-    var lats: Int?
-    var thickness: Int?
-    var width: Int?
-    
-    //slide 5 highlights -> if none recognize potential
-    
-    
-    //slide 6 Potential Overall comparison
-    
-    //slide 7 leaness
-    
-    //slide 8 Masculinity
-    
-    //slide 9 Potential
-    
-    //slide 10
-                
-    //your highlights
-    var muscleHighlights: [String]
-    
-}
 
 struct FrontAnalysis: Codable, Hashable {
-    let bodyFatPercentage: Int
-    let shoulders, chest, abs, arms: Muscle?
+    let bodyFatPercentage, overall, vTaper, potential, shoulders, chest, abs, arms: Int
+    let clavicleWidth, waistSize, bodyType: String?
+    
 }
 
 struct BackAnalysis: Codable, Hashable {
