@@ -1,5 +1,5 @@
 //
-//  ThirdRatingView.swift
+//  SecondBackRatingView.swift
 //  sideprojectgg
 //
 //  Created by Jeremy Villanueva on 1/9/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ThirdRatingView: View {
+struct SecondBackRatingView: View {
     @EnvironmentObject var viewModel: ContentViewModel
     var frontImage: UIImage?
     var backImage: UIImage?
@@ -21,7 +21,7 @@ struct ThirdRatingView: View {
 
         VStack(spacing: 20) {
             
-            Text("Front Ratings")
+            Text("Back Ratings")
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
@@ -44,41 +44,44 @@ struct ThirdRatingView: View {
                     VStack(spacing: 10) {
                         HStack(spacing: 35) {
                             VStack {
-                                Text("👤")
+                                Text("🌲")
                                     .font(.system(size: 45))
                                     .foregroundColor(.white)
-                                Text("Body Type")
+                                Text("Lat Insertion")
                                     .font(.system(size: 15))
                                     .foregroundColor(.white.opacity(0.5)) // Faint white text
-                                Text("Endomorph")
+                                Text("High")
                                     .font(.system(size: 30, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
                             }
                 
                         }
-                        HStack(spacing: 35) {
+                        HStack(spacing: 45) {
                             VStack {
-                                Text("📐")
+                                Text("🐢")
                                     .font(.system(size: 45))
                                     .foregroundColor(.white)
-                                Text("Clavicle Width")
+                                Text("Density")
                                     .font(.system(size: 15))
                                     .foregroundColor(.white.opacity(0.5)) // Faint white text
-                                Text("Medium")
+                                Text("Thick")
                                     .font(.system(size: 30, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
                             }
                             VStack {
-                                Text("💎")
-                                    .font(.system(size: 45))
-                                    .foregroundColor(.white)
-                                Text("Waist Size")
+                                Image(uiImage: UIImage(named: "barn")!)
+                                    .resizable() // Make the image resizable
+                                    .scaledToFit() // Maintain the aspect ratio
+                                    .frame(width: 45, height: 45) // Match the emoji size
+                                    .offset(y: 2)
+                                Text("Width")
                                     .font(.system(size: 15))
                                     .foregroundColor(.white.opacity(0.5)) // Faint white text
-                                Text("Narrow")
+                                Text("Wide")
                                     .font(.system(size: 30, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
                             }
+                            .offset(y: 1)
                         }
                         Text("bodyarc")
                                     .font(.footnote) // Small font size
@@ -91,7 +94,7 @@ struct ThirdRatingView: View {
                 .offset(y: 250)
                 
                 // Image
-                if let image = frontImage {
+                if let image = backImage {
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFit()

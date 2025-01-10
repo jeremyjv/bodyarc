@@ -56,6 +56,12 @@ struct RatingView: View {
                             // Second Slide
                             ThirdRatingView(frontImage: frontImage, scanObject: scanObject)
                                 .tag(2)
+                            
+                            FirstBackRatingView(backImage: backImage, scanObject: scanObject)
+                                .tag(3)
+                            
+                            SecondBackRatingView(backImage: backImage, scanObject: scanObject)
+                                .tag(4)
                         }
                         .tabViewStyle(.page(indexDisplayMode: .never))
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top) // Ensures TabView fills the screen
@@ -64,7 +70,7 @@ struct RatingView: View {
 
                         // Custom Dots
                         HStack(spacing: 8) {
-                            ForEach(0..<2) { index in // Adjust the number of pages
+                            ForEach(0..<4) { index in // Adjust the number of pages
                                 Circle()
                                     .fill(currentPage == index ? Color.white : Color.gray.opacity(0.5))
                                     .frame(width: 10, height: 10)
