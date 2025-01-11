@@ -41,6 +41,8 @@ class ContentViewModel: ObservableObject {
     @Published var uid: String?
     @Published var isLoggedIn = false
     
+    @Published var muscleRankings: [String]? = []
+    
     private var authStateListenerHandle: AuthStateDidChangeListenerHandle?
     
  

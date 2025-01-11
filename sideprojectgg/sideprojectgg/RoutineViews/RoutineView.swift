@@ -58,6 +58,11 @@ struct RoutineView: View {
 enum MuscleGroup: String, CaseIterable, Identifiable {
     case shoulders = "Shoulders"
     case chest = "Chest"
+    case arms = "Arms"
+    case abs = "Abs"
+    case traps = "Traps"
+    case lats = "Lats"
+    case lowerBack = "Lower Back"
     
     
     var id: String { rawValue } // Conform to Identifiable
@@ -68,6 +73,16 @@ enum MuscleGroup: String, CaseIterable, Identifiable {
         case .shoulders:
             return AnyView(ShoulderRoutineView())
         case .chest:
+            return AnyView(ShoulderRoutineView())
+        case .arms:
+            return AnyView(ShoulderRoutineView())
+        case .abs:
+            return AnyView(ShoulderRoutineView())
+        case .traps:
+            return AnyView(ShoulderRoutineView())
+        case .lats:
+            return AnyView(ShoulderRoutineView())
+        case .lowerBack:
             return AnyView(ShoulderRoutineView())
             
         }
