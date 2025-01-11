@@ -1,5 +1,5 @@
 //
-//  RoutineView.swift
+//  ShoulderRoutineView.swift
 //  sideprojectgg
 //
 //  Created by Jeremy Villanueva on 1/10/25.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct RoutineView: View {
+struct ShoulderRoutineView: View {
     var body: some View {
-        Text("Scan to get your glow up routine")
+        Text("Shoulder Routine Here")
     }
 }
 
 #Preview {
-    RoutineView()
+    ShoulderRoutineView()
 }

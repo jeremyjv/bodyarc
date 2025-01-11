@@ -47,7 +47,7 @@ struct ContentView: View {
                             Label("Progress", systemImage: "person")
                         })
                         
-                        RoutineView().tabItem({
+                        RoutineView(muscleOrder: ["Chest", "Shoulders"]).tabItem({
                             Label("Routine", systemImage: "person")
                         })
                        
