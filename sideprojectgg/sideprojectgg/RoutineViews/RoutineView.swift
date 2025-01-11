@@ -6,12 +6,43 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
 
 struct RoutineView: View {
+    
+    @EnvironmentObject var viewModel: ContentViewModel
+    @State private var hasLoadedData = false
+    
     // Accept a custom order of muscles as a list of strings
     let muscleOrder: [String]
 
     @State private var selectedMuscle: MuscleGroup? = nil // Track selected muscle group
+    
+    func loadData() async {
+        Task {
+            
+            do {
+                let db = Firestore.firestore()
+                let docRef = db.collection("users").document(viewModel.uid!)
+                
+                // Fetch the document using the async alternative
+                let document = try await docRef.getDocument()
+                
+                // Check if the document exists
+                if let documentData = document.data(),
+                   let ranking = documentData["muscleRanking"] as? [String] {
+                    DispatchQueue.main.async {
+                        viewModel.muscleRankings = ranking
+                        print("fetched muscle rankings from user and mounted to routineView")
+                    }
+                } else {
+                    print("muscleRanking field not found or not an array of strings.")
+                }
+            } catch {
+                print("Error fetching muscleRanking: \(error.localizedDescription)")
+            }
+        }
+    }
 
     var body: some View {
         ScrollView {
@@ -46,10 +77,19 @@ struct RoutineView: View {
             }
             .padding(.vertical)
         }
+        .onAppear {
+            if !hasLoadedData {
+                hasLoadedData = true
+                Task {
+                    await loadData()
+                }
+            }
+        }
         .sheet(item: $selectedMuscle) { muscle in
             muscle.view
                 .presentationDetents([.fraction(0.95)]) // Custom detents
                 .presentationDragIndicator(.visible) // Shows drag indicator
+                
         }
     }
 }

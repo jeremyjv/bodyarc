@@ -24,8 +24,7 @@ struct ContentView: View {
     @State private var retrievedScanImages: [[UIImage?]] = []  // No longer optional
     @State private var scans: [ScanObject]?
     
-    //to stop reloading routineview all the time
-    @State private var hasLoadedData = false
+
     
     
     
@@ -84,34 +83,7 @@ struct ContentView: View {
                         RatingView(scanObject: scan, path: $path)
                     }
                     .gesture(DragGesture().onChanged { _ in })
-                    .onAppear {
-                        //only obtain user muscle ranking if uid exists
-                        if (viewModel.uid != nil && !hasLoadedData) {
-                            Task {
-                                hasLoadedData = true
-                                do {
-                                    let db = Firestore.firestore()
-                                    let docRef = db.collection("users").document(viewModel.uid!)
-                                    
-                                    // Fetch the document using the async alternative
-                                    let document = try await docRef.getDocument()
-                                    
-                                    // Check if the document exists
-                                    if let documentData = document.data(),
-                                       let ranking = documentData["muscleRanking"] as? [String] {
-                                        DispatchQueue.main.async {
-                                            viewModel.muscleRankings = ranking
-                                            print("fetched muscle rankings from user and mounted to routineView")
-                                        }
-                                    } else {
-                                        print("muscleRanking field not found or not an array of strings.")
-                                    }
-                                } catch {
-                                    print("Error fetching muscleRanking: \(error.localizedDescription)")
-                                }
-                            }
-                        }
-                    }
+                  
                     
                 
             }
@@ -122,8 +94,7 @@ struct ContentView: View {
             GenderView()
         }
         
-        
-        // if user is not authed, redirect them to onboard flow
+       
         
      
     }
