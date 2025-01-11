@@ -14,9 +14,10 @@ import FirebaseFirestore
 //practice passing one instance to firestore
 
 struct User: Codable {
-    let email: String?
-    let uid: String?
-    let intake: IntakeForm?
+    var email: String?
+    var uid: String?
+    var intake: IntakeForm?
+    var muscleRanking: [String]?
     
 }
 
@@ -45,19 +46,21 @@ struct ScanObject: Codable, Hashable {
     var frontAnalysis: FrontAnalysis?
     var backAnalysis: BackAnalysis?
     var createdAt: Date?
+    var muscleRanking: [String]?
     
     
 
 
     
-    init(createdAt: Date?, userUID: String?, frontImage: String?, backImage: String?, frontAnalysis: FrontAnalysis?, backAnalysis: BackAnalysis?) {
+    init(createdAt: Date?, userUID: String?, frontImage: String?, backImage: String?, frontAnalysis: FrontAnalysis?, backAnalysis: BackAnalysis?, muscleRanking: [String]?) {
             self.userUID = userUID
             self.frontImage = frontImage
             self.backImage = backImage
             self.frontAnalysis = frontAnalysis
             self.backAnalysis = backAnalysis
             self.createdAt = createdAt
-        
+            self.muscleRanking = muscleRanking
+         
         }
     
     init() {

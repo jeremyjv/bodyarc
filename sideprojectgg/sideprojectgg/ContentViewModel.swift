@@ -160,6 +160,7 @@ class ContentViewModel: ObservableObject {
             try await self.createFrontAnalysis(img: frontImage)
             try await self.createBackAnalysis(img: backImage)
             
+        
     
           
             // Convert and upload images
@@ -182,15 +183,21 @@ class ContentViewModel: ObservableObject {
         }
         
         
+        //compute muscle ranking according to front and back analysis -> either a list of 4 (if just front) or 7 (if front and back)
+        var muscleRanking = self.rankMuscles(frontAnalysis: self.frontAnalysis!, backAnalysis: self.backAnalysis)
+        
+        
         //now that we have the images and analysis, store as a scan in scan collection with the user's UID (so we have to reference AuthViewModel asweell)
-        let scan = ScanObject(createdAt: Date(), userUID: self.uid, frontImage: frontImageURL, backImage: backImageURL, frontAnalysis: frontAnalysis, backAnalysis: backAnalysis)
+        let scan = ScanObject(createdAt: Date(), userUID: self.uid, frontImage: frontImageURL, backImage: backImageURL, frontAnalysis: frontAnalysis, backAnalysis: backAnalysis, muscleRanking: muscleRanking)
+        
+        //Write to User Firestore
         
         
-        //does NOT WORK because of app check
+        //Write to ScanObject Firestore
         do {
             try db.collection("scans").addDocument(from: scan)
         } catch let error {
-            print("Error writing city to Firestore: \(error)")
+            print("Error writing scanObject to Firestore: \(error)")
             }
     
     
@@ -199,6 +206,32 @@ class ContentViewModel: ObservableObject {
         
         
     }
+    
+    
+    
+    func rankMuscles(frontAnalysis: FrontAnalysis, backAnalysis: BackAnalysis?) -> [String] {
+        // Create a dictionary to hold the muscle rankings
+        var muscleRankings: [String: Int] = [
+            "Shoulders": frontAnalysis.shoulders,
+            "Chest": frontAnalysis.chest,
+            "Arms": frontAnalysis.arms,
+            "Abs": frontAnalysis.abs
+        ]
+        
+        // If BackAnalysis is provided, add the corresponding muscle groups to the dictionary
+        if let back = backAnalysis {
+            muscleRankings["Traps"] = back.traps
+            muscleRankings["Lats"] = back.lats
+            muscleRankings["Lower Back"] = back.lowerBack
+        }
+        
+        // Sort the muscles by their ranking values
+        let sortedMuscles = muscleRankings.sorted { $0.value < $1.value }.map { $0.key }
+        
+        return sortedMuscles
+    }
+    
+    
     
     func convertImageToBase64(img: UIImage) -> String {
         return img.jpegData(compressionQuality: 1)!.base64EncodedString()
