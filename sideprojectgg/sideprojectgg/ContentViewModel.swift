@@ -184,13 +184,28 @@ class ContentViewModel: ObservableObject {
         
         
         //compute muscle ranking according to front and back analysis -> either a list of 4 (if just front) or 7 (if front and back)
-        var muscleRanking = self.rankMuscles(frontAnalysis: self.frontAnalysis!, backAnalysis: self.backAnalysis)
+        let muscleRanking = self.rankMuscles(frontAnalysis: self.frontAnalysis!, backAnalysis: self.backAnalysis)
         
         
         //now that we have the images and analysis, store as a scan in scan collection with the user's UID (so we have to reference AuthViewModel asweell)
         let scan = ScanObject(createdAt: Date(), userUID: self.uid, frontImage: frontImageURL, backImage: backImageURL, frontAnalysis: frontAnalysis, backAnalysis: backAnalysis, muscleRanking: muscleRanking)
         
-        //Write to User Firestore
+        
+        //Write muscleRanking to User Firestore
+        DispatchQueue.main.async {
+            let db = Firestore.firestore()
+            let data: [String: Any] = ["muscleRanking": muscleRanking]
+
+        db.collection("users").document(self.uid!).updateData(data) { error in
+                if let error = error {
+                    print("Error updating document: \(error.localizedDescription)")
+                } else {
+                    print("Document successfully updated!")
+                }
+            }
+        }
+        
+        
         
         
         //Write to ScanObject Firestore
@@ -306,7 +321,7 @@ class ContentViewModel: ObservableObject {
         let base64 = self.convertImageToBase64(img: img)
         
         //let data: [String: Any] = ["base64": base64] // Your arguments
-        Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
+        Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
  
         let response: String = try await withCheckedThrowingContinuation { continuation in
                 functions.httpsCallable("returnFrontAnalysis").call(base64) { result, error in
@@ -340,7 +355,7 @@ class ContentViewModel: ObservableObject {
         let base64 = self.convertImageToBase64(img: img)
         
         //let data: [String: Any] = ["base64": base64] // Your arguments
-        Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
+        Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
  
         let response: String = try await withCheckedThrowingContinuation { continuation in
                 functions.httpsCallable("returnBackAnalysis").call(base64) { result, error in
