@@ -25,11 +25,13 @@ struct IntakeForm: Codable {
     var gender: String?
     var goal: String?
     var availability: String?
+    var muscleToGrow: String?
     
     init() {
         gender = nil
         goal = nil
         availability = nil
+        muscleToGrow = nil
     }
 }
 
