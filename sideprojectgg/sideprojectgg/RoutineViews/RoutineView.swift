@@ -47,9 +47,25 @@ struct RoutineView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                Text("Your Growth Strategy")
+                // Nutrition Section
+                Text("Your Routine")
                     .font(.largeTitle)
                     .bold()
+                    .padding(.horizontal)
+                
+                Text("Nutrition")
+                    .font(.headline)
+                    .padding(.horizontal)
+                
+                Rectangle()
+                    .fill(Color.gray.opacity(0.3))
+                    .frame(height: 100)
+                    .cornerRadius(10)
+                    .padding(.horizontal)
+
+                // Training Styles Section
+                Text("Training Styles for Growth")
+                    .font(.headline)
                     .padding(.horizontal)
 
                 ForEach(muscleOrder, id: \.self) { muscleName in
@@ -57,13 +73,17 @@ struct RoutineView: View {
                         Button(action: {
                             selectedMuscle = muscle
                         }) {
-                            Text("Show \(muscle.rawValue) Routine")
-                                .font(.headline)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
+                            HStack {
+                                Text(muscle.rawValue)
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.black)
+                            }
+                            .padding()
+                            .background(Color.gray.opacity(0.3))
+                            .cornerRadius(10)
                         }
                         .padding(.horizontal)
                     } else {
@@ -89,9 +109,9 @@ struct RoutineView: View {
             muscle.view
                 .presentationDetents([.fraction(0.95)]) // Custom detents
                 .presentationDragIndicator(.visible) // Shows drag indicator
-                
         }
     }
+
 }
 
 // Enum for muscle groups with associated views
