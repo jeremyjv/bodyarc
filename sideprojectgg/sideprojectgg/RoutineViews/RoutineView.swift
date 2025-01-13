@@ -53,6 +53,8 @@ struct RoutineView: View {
                     .bold()
                     .padding(.horizontal)
                 
+                
+                //this is based on intake form 
                 Text("Nutrition")
                     .font(.headline)
                     .padding(.horizontal)
