@@ -66,7 +66,7 @@ struct RoutineView: View {
                     .padding(.horizontal)
 
                 // Training Styles Section
-                Text("Training Styles for Growth")
+                Text("Training Strategies for Growth")
                     .font(.headline)
                     .padding(.horizontal)
 
