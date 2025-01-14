@@ -8,6 +8,8 @@
 import SwiftUI
 
 
+import SwiftUI
+
 struct ShoulderRoutineView: View {
     var body: some View {
         GeometryReader { geometry in
@@ -48,14 +50,80 @@ struct ShoulderRoutineView: View {
                             .fontWeight(.bold)
                             .frame(maxWidth: .infinity, alignment: .center)
 
-                        // Subsections
+                        // Overview Subsection
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Overview")
                                 .font(.title2)
+                                .fontWeight(.bold) // Bold subsection title
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
                             Text("Growth of the shoulders will primarily come from any compound pressing and pulling movement of the upper body. With compound movements we can overload with heavier weight -- creating the needed stimulus for growth.")
+                                .font(.body)
+                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .padding()
+                        .frame(maxWidth: geometry.size.width * 0.9)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray, lineWidth: 2)
+                        )
+
+                        // Compound Training Styles Subsection
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Compound Training Styles")
+                                .font(.title2)
+                                .fontWeight(.bold) // Bold subsection title
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            Text("5×5 reps (Heavier Weight)\nStrength Focus")
+                                .font(.body)
+                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            Text("3×(8-12) reps (Moderate Weight)\nHypertrophy Focus")
+                                .font(.body)
+                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            Text("*Try different styles when you hit plateaus")
+                                .font(.body)
+                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .padding()
+                        .frame(maxWidth: geometry.size.width * 0.9)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray, lineWidth: 2)
+                        )
+
+                        // Key Shoulder Compounds Subsection
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("Key Compound Movements")
+                                .font(.title2)
+                                .fontWeight(.bold) // Bold subsection title
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            Text("1. Over Head Presses")
+                                .font(.body)
+                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            Text("2. Incline Presses")
+                                .font(.body)
+                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            Text("3. Bench Presses")
+                                .font(.body)
+                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                            Text("*Always control the weight to maximize growth and focus on squeezing the muscle. Never use momentum")
                                 .font(.body)
                                 .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -82,10 +150,11 @@ struct ShoulderRoutineView: View {
                             .fontWeight(.bold)
                             .frame(maxWidth: .infinity, alignment: .center)
 
-                        // Subsections
+                        // Overview Subsection
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Overview")
                                 .font(.title2)
+                                .fontWeight(.bold) // Bold subsection title
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -105,6 +174,7 @@ struct ShoulderRoutineView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Accessory Training Styles")
                                 .font(.title2)
+                                .fontWeight(.bold) // Bold subsection title
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -134,6 +204,7 @@ struct ShoulderRoutineView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Key Accessory Movements")
                                 .font(.title2)
+                                .fontWeight(.bold) // Bold subsection title
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
