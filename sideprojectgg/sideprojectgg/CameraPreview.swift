@@ -20,20 +20,22 @@ struct CameraPreview: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UIView, context: Context) {
-        guard let previewLayer = cameraModel.previewLayer else {
-            print("CameraPreview: previewLayer is nil. Ensure setupCamera has been called.")
-            return
-        }
+        DispatchQueue.main.async {
+            guard let previewLayer = cameraModel.previewLayer else {
+                print("CameraPreview: previewLayer is nil. Ensure setupCamera has been called.")
+                return
+            }
 
-        // Ensure the layer is added only once
-        if previewLayer.superlayer != uiView.layer {
-            uiView.layer.sublayers?
-                .filter { $0 is AVCaptureVideoPreviewLayer }
-                .forEach { $0.removeFromSuperlayer() }
-            uiView.layer.addSublayer(previewLayer)
-            print("Preview layer added to view.")
-        }
+            // Ensure the layer is added only once
+            if previewLayer.superlayer != uiView.layer {
+                uiView.layer.sublayers?
+                    .filter { $0 is AVCaptureVideoPreviewLayer }
+                    .forEach { $0.removeFromSuperlayer() }
+                uiView.layer.addSublayer(previewLayer)
+                print("Preview layer added to view.")
+            }
 
-        previewLayer.frame = uiView.bounds
+            previewLayer.frame = uiView.bounds
+        }
     }
 }
