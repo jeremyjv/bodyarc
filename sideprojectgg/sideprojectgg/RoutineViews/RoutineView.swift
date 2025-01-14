@@ -78,10 +78,10 @@ struct RoutineView: View {
                             HStack {
                                 Text(muscle.rawValue)
                                     .font(.headline)
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.white)
                                 Spacer()
                                 Image(systemName: "chevron.right")
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.white)
                             }
                             .padding()
                             .background(Color.gray.opacity(0.3))

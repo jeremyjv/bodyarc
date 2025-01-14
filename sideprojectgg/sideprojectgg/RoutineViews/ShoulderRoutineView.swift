@@ -8,6 +8,7 @@
 import SwiftUI
 
 
+// MARK: - ShoulderRoutineView
 struct ShoulderRoutineView: View {
     var body: some View {
         GeometryReader { geometry in
@@ -123,6 +124,7 @@ struct SectionView: View {
             Text(title)
                 .font(titleFont)
                 .foregroundColor(titleColor)
+                .fontWeight(.bold) // Make the title bold
                 .frame(maxWidth: .infinity, alignment: .center)
 
             // Content
@@ -172,12 +174,12 @@ struct SubSectionView: View {
                 .foregroundColor(titleColor) // White color for the title
                 .frame(maxWidth: .infinity, alignment: .leading) // Left-aligned title
 
-            // Subsections (bullet points)
+            // Subsections (text only, no bullet points)
             if let subSections = content.subSections {
                 ForEach(subSections, id: \.self) { text in
-                    Text("• \(text)")
-                        .font(bulletTextFont) // Font for bullet points
-                        .foregroundColor(bulletTextColor) // Gray color for bullet points
+                    Text(text) // No bullet points
+                        .font(bulletTextFont) // Font for the text
+                        .foregroundColor(bulletTextColor) // Gray color for the text
                         .padding(.leading, 0) // Match the title's starting point
                 }
             }
@@ -202,6 +204,7 @@ struct SectionContent: Identifiable {
         self.subSections = subSections
     }
 }
+
 #Preview {
 
 }
