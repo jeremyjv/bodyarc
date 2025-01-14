@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct FrontCameraView: View {
     @ObservedObject var cameraModel: CameraModel
     @Binding var path: NavigationPath

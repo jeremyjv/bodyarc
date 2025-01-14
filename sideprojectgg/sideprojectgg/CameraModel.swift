@@ -13,148 +13,169 @@ class CameraModel: NSObject, ObservableObject {
     @Published var previewLayer: AVCaptureVideoPreviewLayer?
     private var photoOutput = AVCapturePhotoOutput()
     @Published var capturedImage: UIImage?
-    
-    // Track the current camera position (default to front if you want)
     private var currentCameraPosition: AVCaptureDevice.Position = .front
+    private var isSessionConfigured = false
+    @Published var isCameraReady = false
 
     // Check Camera Authorization
     func checkAuthorization() {
-        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        print("Authorization status: \(status.rawValue)")
+        switch status {
         case .authorized:
-            // Default to whichever position you prefer
-            setupCamera(for: currentCameraPosition)
+            retrySetupCamera(for: currentCameraPosition)
         case .notDetermined:
             AVCaptureDevice.requestAccess(for: .video) { granted in
                 if granted {
-                    // Must call on the main thread if you’re updating published properties
                     DispatchQueue.main.async {
-                        self.setupCamera(for: self.currentCameraPosition)
+                        self.retrySetupCamera(for: self.currentCameraPosition)
                     }
                 } else {
-                    print("Camera access denied")
+                    print("Camera access denied by user.")
                 }
             }
         default:
-            print("Camera access denied")
+            print("Camera access denied.")
         }
     }
 
-    // Configure Camera (param to specify front or back)
-    func setupCamera(for position: AVCaptureDevice.Position) {
-        session.beginConfiguration()
+    // Configure Camera
+    func setupCamera(for position: AVCaptureDevice.Position, completion: @escaping (Bool) -> Void) {
+        print("Setting up camera for position: \(position.rawValue)")
         
-        // 1) Remove existing inputs
-        for input in session.inputs {
+        session.beginConfiguration()
+        defer {
+            session.commitConfiguration()
+        }
+
+        // Remove existing inputs
+        session.inputs.forEach { input in
             session.removeInput(input)
         }
-        
-        // 2) Discover the requested camera
+
+        // Discover and add camera input
         guard let device = AVCaptureDevice.DiscoverySession(
             deviceTypes: [.builtInWideAngleCamera],
             mediaType: .video,
             position: position
         ).devices.first else {
-            print("\(position) camera not available")
-            session.commitConfiguration()
+            print("No camera available for position: \(position.rawValue)")
+            completion(false)
             return
         }
 
         do {
             let input = try AVCaptureDeviceInput(device: device)
-            
-            // 3) Add the new input
             if session.canAddInput(input) {
                 session.addInput(input)
             } else {
-                print("Unable to add camera input for \(position) camera")
+                print("Unable to add input for position: \(position.rawValue)")
+                completion(false)
+                return
             }
-            
-            // 4) Add photo output if it’s not already added
+
+            // Add photo output
             if session.canAddOutput(photoOutput) {
                 session.addOutput(photoOutput)
             }
-            
-            // 5) Commit and start session
-            session.commitConfiguration()
-            
-            // Start the session on a background thread
-            DispatchQueue.global(qos: .userInitiated).async {
-                self.session.startRunning()
-            }
-            
-            // Update preview layer on the main thread
+
+            // Set preview layer
             DispatchQueue.main.async {
                 let layer = AVCaptureVideoPreviewLayer(session: self.session)
                 layer.videoGravity = .resizeAspectFill
                 self.previewLayer = layer
+                print("Preview layer setup complete.")
+                completion(true)
             }
-            
+
+            isSessionConfigured = true
+
+            // Start session
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.session.startRunning()
+                print("Camera session started: \(self.session.isRunning)")
+            }
         } catch {
-            print("Error setting up \(position) camera: \(error)")
-            session.commitConfiguration()
+            print("Error configuring camera: \(error.localizedDescription)")
+            completion(false)
+        }
+    }
+
+    // Retry Camera Setup
+    func retrySetupCamera(for position: AVCaptureDevice.Position, retries: Int = 3) {
+        setupCamera(for: position) { success in
+            if !success && retries > 0 {
+                print("Retrying camera setup... (\(retries) retries left)")
+                DispatchQueue.global().asyncAfter(deadline: .now() + 0.5) {
+                    self.retrySetupCamera(for: position, retries: retries - 1)
+                }
+            } else if !success {
+                print("Failed to set up camera after retries.")
+            }
         }
     }
 
     // Capture Photo
     func capturePhoto() {
+        guard session.isRunning else {
+            print("Session is not running; cannot capture photo.")
+            return
+        }
         let settings = AVCapturePhotoSettings()
         photoOutput.capturePhoto(with: settings, delegate: self)
     }
-    
+
     // Stop Session
     func stopSession() {
         guard session.isRunning else { return }
         DispatchQueue.global(qos: .background).async {
             self.session.stopRunning()
+            print("Camera session stopped.")
             DispatchQueue.main.async {
                 self.previewLayer?.removeFromSuperlayer()
                 self.previewLayer = nil
+                self.isSessionConfigured = false
             }
         }
     }
-    
-    // Toggle between front and back camera
+
+    // Toggle between front and back camera without restarting session
     func toggleCamera() {
+        print("Toggling camera position.")
+        let newPosition: AVCaptureDevice.Position = (currentCameraPosition == .front) ? .back : .front
+
         session.beginConfiguration()
-        // Remove old input
+        defer {
+            session.commitConfiguration()
+        }
+
+        // Remove existing input
         if let currentInput = session.inputs.first as? AVCaptureDeviceInput {
             session.removeInput(currentInput)
         }
 
-        // Determine new position
-        let newPosition: AVCaptureDevice.Position =
-           (currentCameraPosition == .front) ? .back : .front
-        currentCameraPosition = newPosition
-
-        // Discover new device
+        // Add new input for the other camera position
         guard let newDevice = AVCaptureDevice.DiscoverySession(
             deviceTypes: [.builtInWideAngleCamera],
             mediaType: .video,
             position: newPosition
         ).devices.first else {
-            print("No device for position \(newPosition)")
-            session.commitConfiguration()
+            print("No camera available for position: \(newPosition.rawValue)")
             return
         }
 
-        // Add input
         do {
             let newInput = try AVCaptureDeviceInput(device: newDevice)
             if session.canAddInput(newInput) {
                 session.addInput(newInput)
+                currentCameraPosition = newPosition
+                print("Switched to \(newPosition == .front ? "front" : "back") camera.")
+            } else {
+                print("Unable to add input for new position: \(newPosition.rawValue)")
             }
-            // 4) Add photo output if it’s not already added
-    
         } catch {
-            print("Error switching camera: \(error)")
+            print("Error switching to \(newPosition == .front ? "front" : "back") camera: \(error.localizedDescription)")
         }
-        
-        print("start config")
-        session.commitConfiguration()
-        print("finish config")
-        
-        
-        
     }
 }
 
@@ -163,24 +184,19 @@ extension CameraModel: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput,
                      didFinishProcessingPhoto photo: AVCapturePhoto,
                      error: Error?) {
-        print("run 1")
-        // 1. Check if there's an error from AVCapturePhotoOutput
         if let error = error {
-            print("Error capturing photo delegate call: \(error.localizedDescription)")
+            print("Error capturing photo: \(error.localizedDescription)")
             return
         }
 
-        // 2. No error, so proceed with extracting image data
         guard let data = photo.fileDataRepresentation(),
               let image = UIImage(data: data) else {
-            print("Error: Could not get image data from photo.")
+            print("Failed to get image data from photo.")
             return
         }
-        
-        print("going to capture the image")
 
-        // 3. If we got here, we have a valid UIImage
         DispatchQueue.main.async {
+            print("Photo captured successfully.")
             self.capturedImage = image
         }
     }
