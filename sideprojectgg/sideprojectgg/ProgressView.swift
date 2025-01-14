@@ -19,16 +19,19 @@ struct ProgressView: View {
     func loadData() async {
         do {
             scans = try await viewModel.fetchScanObjects()
-            guard var scans = scans else { return }
-            scans.reverse()
-
+            
+            guard let fetchedScans = scans else { return }
+            
+            // Sort scans by `createdAt` in descending order (most recent first)
+            let sortedScans = fetchedScans.sorted { ($0.createdAt ?? Date.distantPast) > ($1.createdAt ?? Date.distantPast) }
+            
             DispatchQueue.main.async {
-                self.scans = scans
-                self.retrievedScanImages = Array(repeating: [nil, nil], count: scans.count)
+                self.scans = sortedScans
+                self.retrievedScanImages = Array(repeating: [nil, nil], count: sortedScans.count)
             }
 
             try await withThrowingTaskGroup(of: (Int, [UIImage?]).self) { group in
-                for (index, scan) in scans.enumerated() {
+                for (index, scan) in sortedScans.enumerated() {
                     group.addTask {
                         var frontImage: UIImage? = nil
                         var backImage: UIImage? = nil
@@ -48,7 +51,7 @@ struct ProgressView: View {
                 for try await (index, images) in group {
                     DispatchQueue.main.async {
                         self.retrievedScanImages[index] = images
-                        if retrievedScanImages.filter({ $0 != [nil, nil] }).count == scans.count {
+                        if retrievedScanImages.filter({ $0 != [nil, nil] }).count == sortedScans.count {
                             self.loadingScreen = false
                         }
                     }
@@ -100,40 +103,11 @@ struct ProgressCardView: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            // Front Image
-            Rectangle()
-                .fill(images[0] == nil ? Color.gray.opacity(0.3) : Color.white)
-                .frame(width: 80, height: 100)
-                .overlay {
-                    if let frontImage = images[0] {
-                        Image(uiImage: frontImage)
-                            .resizable()
-                            .scaledToFit()
-                            .cornerRadius(5)
-                    }
-                }
-                .cornerRadius(8)
-
-            // Back Image
-            Rectangle()
-                .fill(images[1] == nil ? Color.gray.opacity(0.3) : Color.white)
-                .frame(width: 80, height: 100)
-                .overlay {
-                    if let backImage = images[1] {
-                        Image(uiImage: backImage)
-                            .resizable()
-                            .scaledToFit()
-                            .cornerRadius(5)
-                    }
-                }
-                .cornerRadius(8)
-
-            Spacer()
-
-            // Date and Button
+            // Date and Button (Left Side)
             VStack(alignment: .leading, spacing: 8) {
                 Text(scan.createdAt?.formattedDateString() ?? "Unknown Date")
                     .font(.headline)
+                    .foregroundColor(.white) // Ensure text is visible on dark background
                 Button(action: {
                     path.append(scan)
                 }) {
@@ -142,10 +116,44 @@ struct ProgressCardView: View {
                         .foregroundColor(.blue)
                 }
             }
+
+            Spacer()
+
+            // Front and Back Images (Right Side)
+            HStack(spacing: 10) {
+                // Front Image
+                Rectangle()
+                    .fill(images[0] == nil ? Color.gray.opacity(0.3) : Color.white)
+                    .frame(width: 80, height: 100)
+                    .overlay {
+                        if let frontImage = images[0] {
+                            Image(uiImage: frontImage)
+                                .resizable()
+                                .scaledToFit()
+                                .cornerRadius(5)
+                        }
+                    }
+                    .cornerRadius(8)
+
+                // Back Image
+                Rectangle()
+                    .fill(images[1] == nil ? Color.gray.opacity(0.3) : Color.white)
+                    .frame(width: 80, height: 100)
+                    .overlay {
+                        if let backImage = images[1] {
+                            Image(uiImage: backImage)
+                                .resizable()
+                                .scaledToFit()
+                                .cornerRadius(5)
+                        }
+                    }
+                    .cornerRadius(8)
+            }
         }
         .padding()
-        .background(Color.black.opacity(0.05))
-        .cornerRadius(12)
+        .background(Color.gray.opacity(0.2)) // Dark gray background
+        .cornerRadius(12) // Rounded corners
+        .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2) // Optional: Add subtle shadow for depth
     }
 }
 
