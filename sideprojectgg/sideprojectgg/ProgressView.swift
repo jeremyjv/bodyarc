@@ -94,64 +94,61 @@ struct ProgressView: View {
                     LazyVStack(spacing: 20) {
                         ForEach(retrievedScanImages.indices.reversed(), id: \.self) { index in
                             HStack(spacing: 20) {
-                                // Front Image Button
-                                if let frontImage = retrievedScanImages[index][0] {
-                                    Button(action: {
-                                        path.append(scans![index])
-                                    }) {
-                                        Image(uiImage: frontImage)
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 150, height: 200)
-                                            .cornerRadius(10)
-                                            .overlay(
-                                                Text("Front")
-                                                    .font(.caption)
-                                                    .padding(6)
-                                                    .background(Color.black.opacity(0.6))
-                                                    .foregroundColor(.white)
-                                                    .cornerRadius(5),
-                                                alignment: .bottomTrailing
-                                            )
+                                if scans?[index].frontImage == nil || scans?[index].backImage == nil {
+                                    // Show loading card for scans in progress
+                                    VStack {
+                                        Text("Loading scan...")
+                                            .font(.caption)
+                                            .foregroundColor(.gray)
                                     }
+                                    .frame(width: 300, height: 200)
+                                    .background(Color.gray.opacity(0.3))
+                                    .cornerRadius(10)
                                 } else {
-                                    Button(action: {}) {
-                                        VStack {
-                                            Text("Loading...")
-                                                .font(.caption)
-                                                .foregroundColor(.gray)
+                                    // Show completed scan
+                                    // Front Image Button
+                                    if let frontImage = retrievedScanImages[index][0] {
+                                        Button(action: {
+                                            path.append(scans![index])
+                                        }) {
+                                            Image(uiImage: frontImage)
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 150, height: 200)
+                                                .cornerRadius(10)
+                                                .overlay(
+                                                    Text("Front")
+                                                        .font(.caption)
+                                                        .padding(6)
+                                                        .background(Color.black.opacity(0.6))
+                                                        .foregroundColor(.white)
+                                                        .cornerRadius(5),
+                                                    alignment: .bottomTrailing
+                                                )
                                         }
-                                        .frame(width: 150, height: 200)
-                                        .background(Color.gray.opacity(0.3))
-                                        .cornerRadius(10)
                                     }
-                                }
 
-                                // Back Image Button
-                                if let backImage = retrievedScanImages[index][1] {
-                                    Button(action: {
-                                        print("Back image button tapped for index \(index)")
-                                    }) {
-                                        Image(uiImage: backImage)
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 150, height: 200)
-                                            .cornerRadius(10)
-                                            .overlay(
-                                                Text("Back")
-                                                    .font(.caption)
-                                                    .padding(6)
-                                                    .background(Color.black.opacity(0.6))
-                                                    .foregroundColor(.white)
-                                                    .cornerRadius(5),
-                                                alignment: .bottomTrailing
-                                            )
+                                    // Back Image Button
+                                    if let backImage = retrievedScanImages[index][1] {
+                                        Button(action: {
+                                            print("Back image button tapped for index \(index)")
+                                        }) {
+                                            Image(uiImage: backImage)
+                                                .resizable()
+                                                .scaledToFill()
+                                                .frame(width: 150, height: 200)
+                                                .cornerRadius(10)
+                                                .overlay(
+                                                    Text("Back")
+                                                        .font(.caption)
+                                                        .padding(6)
+                                                        .background(Color.black.opacity(0.6))
+                                                        .foregroundColor(.white)
+                                                        .cornerRadius(5),
+                                                    alignment: .bottomTrailing
+                                                )
+                                        }
                                     }
-                                } else {
-                                    Text("No Back Image")
-                                        .frame(width: 150, height: 200)
-                                        .background(Color.gray.opacity(0.3))
-                                        .cornerRadius(10)
                                 }
                             }
                         }

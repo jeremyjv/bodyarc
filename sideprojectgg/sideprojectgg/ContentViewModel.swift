@@ -45,6 +45,9 @@ class ContentViewModel: ObservableObject {
     
     private var authStateListenerHandle: AuthStateDidChangeListenerHandle?
     
+    @Published var scans: [ScanObject] = []
+    @Published var retrievedScanImages: [[UIImage?]] = []
+    
  
     
     init() {
@@ -144,84 +147,102 @@ class ContentViewModel: ObservableObject {
     //we can delegate this server side instead to fix
     @MainActor
     func handleScanUploadAction() async {
-        
-        
         // Ensure images are not nil
         guard let frontImage = self.frontImage, let backImage = self.backImage else {
             print("Images are missing")
             return
         }
-        
-        //compute front and back analysis
 
-        
-        
+        // Placeholder scan object with empty fields
+        let placeholderScan = ScanObject(
+            createdAt: Date(),
+            userUID: self.uid,
+            frontImage: nil,
+            backImage: nil,
+            frontAnalysis: nil,
+            backAnalysis: nil,
+            muscleRanking: nil
+        )
+
+        // Notify ProgressView of a new scan in progress
+        DispatchQueue.main.async {
+            self.scans.insert(placeholderScan, at: 0) // Insert at the top
+            self.retrievedScanImages.insert([nil, nil], at: 0) // Placeholder images
+        }
+
         do {
-            
-            // this only works on
+            // Compute front and back analysis
             try await self.createFrontAnalysis(img: frontImage)
             try await self.createBackAnalysis(img: backImage)
-            
-        
-    
-          
+
+            guard let frontAnalysis = self.frontAnalysis, let backAnalysis = self.backAnalysis else {
+                print("Analysis fields are missing")
+                return
+            }
+
+            // Compute muscle ranking
+            let muscleRanking = self.rankMuscles(frontAnalysis: frontAnalysis, backAnalysis: backAnalysis)
+
             // Convert and upload images
-            // Upload front and back images sequentially
             let frontImageData = self.convertToJPEGData(image: frontImage)
             let uuid1 = NSUUID().uuidString
             self.frontImageURL = try await self.uploadFile(data: frontImageData!, path: "/images/\(uuid1).png").absoluteString
-            
+
             let backImageData = self.convertToJPEGData(image: backImage)
             let uuid2 = NSUUID().uuidString
             self.backImageURL = try await self.uploadFile(data: backImageData!, path: "/images/\(uuid2).png").absoluteString
-        } catch let error {
-            print("Error to Firestore: \(error)")
-        }
-        
-        
-        guard let frontImageURL = self.frontImageURL, let backImageURL = self.backImageURL, let frontAnalysis = self.frontAnalysis, let backAnalysis = self.backAnalysis else {
-            print("Scan Fields Are Missing")
-            return
-        }
-        
-        
-        //compute muscle ranking according to front and back analysis -> either a list of 4 (if just front) or 7 (if front and back)
-        let muscleRanking = self.rankMuscles(frontAnalysis: self.frontAnalysis!, backAnalysis: self.backAnalysis)
-        
-        
-        //now that we have the images and analysis, store as a scan in scan collection with the user's UID (so we have to reference AuthViewModel asweell)
-        let scan = ScanObject(createdAt: Date(), userUID: self.uid, frontImage: frontImageURL, backImage: backImageURL, frontAnalysis: frontAnalysis, backAnalysis: backAnalysis, muscleRanking: muscleRanking)
-        
-        
-        //Write muscleRanking to User Firestore
-        DispatchQueue.main.async {
-            let db = Firestore.firestore()
-            let data: [String: Any] = ["muscleRanking": muscleRanking]
 
-        db.collection("users").document(self.uid!).updateData(data) { error in
-                if let error = error {
-                    print("Error updating document: \(error.localizedDescription)")
-                } else {
-                    print("Document successfully updated!")
+            guard let frontImageURL = self.frontImageURL, let backImageURL = self.backImageURL else {
+                print("Image URLs are missing")
+                return
+            }
+
+            // Create the actual scan object
+            let scan = ScanObject(
+                createdAt: Date(),
+                userUID: self.uid,
+                frontImage: frontImageURL,
+                backImage: backImageURL,
+                frontAnalysis: frontAnalysis,
+                backAnalysis: backAnalysis,
+                muscleRanking: muscleRanking
+            )
+
+            // Write muscleRanking to User Firestore
+            DispatchQueue.main.async {
+                let db = Firestore.firestore()
+                let data: [String: Any] = ["muscleRanking": muscleRanking]
+
+                db.collection("users").document(self.uid!).updateData(data) { error in
+                    if let error = error {
+                        print("Error updating document: \(error.localizedDescription)")
+                    } else {
+                        print("Document successfully updated!")
+                    }
                 }
             }
-        }
-        
-        
-        
-        
-        //Write to ScanObject Firestore
-        do {
+
+            // Write scan object to Firestore
+            let db = Firestore.firestore()
             try db.collection("scans").addDocument(from: scan)
-        } catch let error {
-            print("Error writing scanObject to Firestore: \(error)")
+
+            // Update the placeholder scan with actual data in ProgressView
+            DispatchQueue.main.async {
+                self.scans[0] = scan // Replace placeholder scan
+                self.retrievedScanImages[0] = [
+                    UIImage(data: frontImageData!), // Replace with actual front image
+                    UIImage(data: backImageData!)  // Replace with actual back image
+                ]
             }
-    
-    
-        
-        //store all data in Scan Struct then add to firebase
-        
-        
+        } catch let error {
+            print("Error to Firestore: \(error)")
+
+            // Handle failure case by removing the placeholder scan
+            DispatchQueue.main.async {
+                self.scans.remove(at: 0)
+                self.retrievedScanImages.remove(at: 0)
+            }
+        }
     }
     
     
