@@ -11,18 +11,16 @@ import SwiftUI
 struct FrontCameraView: View {
     @ObservedObject var cameraModel: CameraModel
     @Binding var path: NavigationPath
-    
-    
+
     var body: some View {
         ZStack {
-            // Camera Preview
+            // Camera Preview with enforced aspect ratio
             CameraPreview(cameraModel: cameraModel)
-                .ignoresSafeArea() // Ensure it fills the screen
+                .aspectRatio(696 / 922, contentMode: .fit)
+                .frame(maxWidth: .infinity, maxHeight: .infinity) // Center on screen
+                .background(Color.black)
             
-            // add a processing screen while front image is updating
             VStack {
-                //instead of navigating just remove
-                
                 Button(action: {
                     cameraModel.toggleCamera()
                 }) {
@@ -30,38 +28,32 @@ struct FrontCameraView: View {
                 }
                 Spacer()
                 Button(action: {
-                   
                     path.removeLast()
                     cameraModel.capturePhoto()
-
-                
-                }){
+                }) {
                     Circle()
                         .stroke(Color.white, lineWidth: 4)
                         .frame(width: 75, height: 75)
                 }
-
             }
         }
         .onAppear {
-            // Check camera authorization and setup
             print("Camera view appearing...")
-                if !cameraModel.session.isRunning {
-                    cameraModel.checkAuthorization() // Restart the session if necessary
-                }
+            if !cameraModel.session.isRunning {
+                cameraModel.checkAuthorization()
+            }
         }
         .onDisappear {
-            cameraModel.stopSession() // Stop the session when the view disappears
-      
+            cameraModel.stopSession()
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    path.removeLast() // Custom back button action
+                    path.removeLast()
                 }) {
                     HStack {
-                        Image(systemName: "chevron.left") // Custom back button icon
+                        Image(systemName: "chevron.left")
                     }
                 }
             }

@@ -344,7 +344,7 @@ class ContentViewModel: ObservableObject {
         let base64 = self.convertImageToBase64(img: img)
         
         //let data: [String: Any] = ["base64": base64] // Your arguments
-        Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
+        Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
  
         let response: String = try await withCheckedThrowingContinuation { continuation in
                 functions.httpsCallable("returnFrontAnalysis").call(base64) { result, error in
@@ -378,7 +378,7 @@ class ContentViewModel: ObservableObject {
         let base64 = self.convertImageToBase64(img: img)
         
         //let data: [String: Any] = ["base64": base64] // Your arguments
-        Functions.functions().useEmulator(withHost: "http://10.0.0.101", port: 5001)
+        Functions.functions().useEmulator(withHost: "http://127.0.0.1", port: 5001)
  
         let response: String = try await withCheckedThrowingContinuation { continuation in
                 functions.httpsCallable("returnBackAnalysis").call(base64) { result, error in

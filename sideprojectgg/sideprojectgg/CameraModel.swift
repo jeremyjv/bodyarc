@@ -117,13 +117,11 @@ class CameraModel: NSObject, ObservableObject {
 
     // Capture Photo
     func capturePhoto() {
-        guard session.isRunning else {
-            print("Session is not running; cannot capture photo.")
-            return
-        }
-        let settings = AVCapturePhotoSettings()
-        photoOutput.capturePhoto(with: settings, delegate: self)
+        let photoSettings = AVCapturePhotoSettings()
+        photoOutput.capturePhoto(with: photoSettings, delegate: self)
     }
+
+
 
     // Stop Session
     func stopSession() {

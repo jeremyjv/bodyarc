@@ -32,18 +32,17 @@ struct FrontScanView: View {
         
       
             VStack(spacing: 16) {
-                // Top Rectangle
-                RectangleComponent()
-                
-                    .frame(height: 50) // Adjust height as per your mockup
+        
                 Text("Upload Front Selfie")
                 
                 // Middle Rectangle
                 Image(uiImage: defaultImage ?? UIImage(named: "scanImage")!)
                     .resizable()
-                    .scaledToFill()
-                    .frame(width: 300, height: 300)
-                    .onChange(of: cameraModel.capturedImage) {_, _ in
+                    .scaledToFit() // Ensures the image scales proportionally
+                    .cornerRadius(35)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity) // Adjust size as needed
+                    .clipped() // Ensures the image doesn't overflow the frame
+                    .onChange(of: cameraModel.capturedImage) { _, _ in
                         Task {
                             defaultImage = cameraModel.capturedImage
                             viewModel.frontImage = cameraModel.capturedImage
@@ -140,25 +139,22 @@ struct FrontScanView: View {
                 
                 Spacer()
                 
-                // Bottom Navigation Bar
-                HStack(spacing: 16) {
-                    ForEach(0..<4) { _ in
-                        RectangleComponent()
-                            .frame(width: 50, height: 50) // Adjust size as per your mockup
-                    }
-                }
-                .padding(.bottom, 16)
+
             }
             .padding()
-            .onChange(of: photosPickerItem) {_, _ in
+            .onChange(of: photosPickerItem) { _, _ in
                 Task {
                     if let photosPickerItem,
-                       let data = try? await photosPickerItem.loadTransferable(type: Data.self) {
-                        if let image = UIImage(data: data) {
-                            defaultImage = image
-                            viewModel.frontImage = image
-                           
-                        }
+                       let data = try? await photosPickerItem.loadTransferable(type: Data.self),
+                       let image = UIImage(data: data) {
+                        // Crop the uploaded image to the desired aspect ratio
+                        let targetWidth: CGFloat = 275
+                        let targetHeight: CGFloat = 445
+                        let croppedImage = image.cropToAspectRatio(width: targetWidth, height: targetHeight)
+                        
+                        // Update the defaultImage and viewModel.frontImage
+                        defaultImage = croppedImage
+                        viewModel.frontImage = croppedImage
                     }
                     photosPickerItem = nil
                 }

@@ -100,63 +100,63 @@ struct ProgressCardView: View {
     let scan: ScanObject
     let images: [UIImage?]
     @Binding var path: NavigationPath
+    let generator = UIImpactFeedbackGenerator(style: .heavy)
 
     var body: some View {
-        HStack(spacing: 10) {
-            // Date and Button (Left Side)
-            VStack(alignment: .leading, spacing: 8) {
-                Text(scan.createdAt?.formattedDateString() ?? "Unknown Date")
-                    .font(.headline)
-                    .foregroundColor(.white) // Ensure text is visible on dark background
-                Button(action: {
-                    path.append(scan)
-                }) {
+        Button(action: {
+            path.append(scan) // Append the scan to the navigation path
+            generator.impactOccurred()
+        }) {
+            HStack(spacing: 10) {
+                // Date and Button (Left Side)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(scan.createdAt?.formattedDateString() ?? "Unknown Date")
+                        .font(.headline)
+                        .foregroundColor(.white) // Ensure text is visible on dark background
                     Text("View Results ->")
                         .font(.subheadline)
                         .foregroundColor(.blue)
                 }
-            }
 
-            Spacer()
+                Spacer()
 
-            // Front and Back Images (Right Side)
-            HStack(spacing: 10) {
-                // Front Image
-                Rectangle()
-                    .fill(images[0] == nil ? Color.gray.opacity(0.3) : Color.white)
-                    .frame(width: 80, height: 100)
-                    .overlay {
-                        if let frontImage = images[0] {
-                            Image(uiImage: frontImage)
-                                .resizable()
-                                .scaledToFit()
-                                .cornerRadius(5)
-                        }
+                // Front and Back Images (Right Side)
+                HStack(spacing: 10) {
+                    // Front Image
+                    if let frontImage = images[0] {
+                        Image(uiImage: frontImage)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 80, height: 100)
+                            .cornerRadius(8)
+                    } else {
+                        Color.gray.opacity(0.3)
+                            .frame(width: 80, height: 100)
+                            .cornerRadius(8)
                     }
-                    .cornerRadius(8)
 
-                // Back Image
-                Rectangle()
-                    .fill(images[1] == nil ? Color.gray.opacity(0.3) : Color.white)
-                    .frame(width: 80, height: 100)
-                    .overlay {
-                        if let backImage = images[1] {
-                            Image(uiImage: backImage)
-                                .resizable()
-                                .scaledToFit()
-                                .cornerRadius(5)
-                        }
+                    // Back Image
+                    if let backImage = images[1] {
+                        Image(uiImage: backImage)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 80, height: 100)
+                            .cornerRadius(8)
+                    } else {
+                        Color.gray.opacity(0.3)
+                            .frame(width: 80, height: 100)
+                            .cornerRadius(8)
                     }
-                    .cornerRadius(8)
+                }
             }
+            .padding()
+            .background(Color.gray.opacity(0.2)) // Dark gray background
+            .cornerRadius(12) // Rounded corners
+            .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2) // Optional: Add subtle shadow for depth
         }
-        .padding()
-        .background(Color.gray.opacity(0.2)) // Dark gray background
-        .cornerRadius(12) // Rounded corners
-        .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2) // Optional: Add subtle shadow for depth
+        .buttonStyle(PlainButtonStyle()) // Use a plain button style to remove the default button appearance
     }
 }
-
 extension Date {
     func formattedDateString() -> String {
         let formatter = DateFormatter()

@@ -53,7 +53,7 @@ struct ScanView: View {
                 Image(uiImage: UIImage(named: "scanImage")!)
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 320, height: 520)
+                    .frame(width: 320, height: 423)
                     .cornerRadius(30)
                     .overlay(
                         // Gradient overlay at the bottom
