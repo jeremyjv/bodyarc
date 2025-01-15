@@ -11,49 +11,31 @@ struct CameraPreview: UIViewRepresentable {
     @ObservedObject var cameraModel: CameraModel
 
     func makeUIView(context: Context) -> UIView {
-        print("CameraPreview: makeUIView called")
         let container = UIView()
-        container.backgroundColor = .black // Debugging background color
-        container.accessibilityLabel = "Camera preview"
-        container.isAccessibilityElement = true
-        
-        // Create a subview for the camera preview
-        let cameraView = UIView()
-        cameraView.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(cameraView)
-        
-        // Enforce aspect ratio (275:370)
-        let aspectRatio = CGFloat(275.0 / 445.0)
-        NSLayoutConstraint.activate([
-            cameraView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            cameraView.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-            cameraView.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: aspectRatio),
-            cameraView.heightAnchor.constraint(equalTo: cameraView.widthAnchor, multiplier: 1.0 / aspectRatio)
-        ])
-        
+        container.backgroundColor = .black
+
+        DispatchQueue.main.async {
+            guard let previewLayer = self.cameraModel.previewLayer else {
+                print("PreviewLayer is nil")
+                return
+            }
+            previewLayer.videoGravity = .resizeAspectFill
+            previewLayer.frame = container.bounds
+            container.layer.addSublayer(previewLayer)
+        }
+
         return container
     }
 
     func updateUIView(_ uiView: UIView, context: Context) {
         DispatchQueue.main.async {
-            guard let previewLayer = cameraModel.previewLayer else {
-                print("CameraPreview: previewLayer is nil. Ensure setupCamera has been called.")
-                return
-            }
+            guard let previewLayer = cameraModel.previewLayer else { return }
 
-            let cameraView = uiView.subviews.first
-            guard let cameraViewLayer = cameraView?.layer else { return }
-            
-            // Ensure the layer is added only once
-            if previewLayer.superlayer != cameraViewLayer {
-                cameraViewLayer.sublayers?
-                    .filter { $0 is AVCaptureVideoPreviewLayer }
-                    .forEach { $0.removeFromSuperlayer() }
-                cameraViewLayer.addSublayer(previewLayer)
-                print("Preview layer added to cameraView.")
+            // Reattach the preview layer if necessary
+            if previewLayer.superlayer != uiView.layer {
+                uiView.layer.addSublayer(previewLayer)
             }
-
-            previewLayer.frame = cameraView?.bounds ?? .zero
+            previewLayer.frame = uiView.bounds
         }
     }
 }

@@ -14,11 +14,11 @@ struct FrontCameraView: View {
 
     var body: some View {
         ZStack {
-            // Camera Preview with enforced aspect ratio
-            CameraPreview(cameraModel: cameraModel)
-                .aspectRatio(696 / 922, contentMode: .fit)
-                .frame(maxWidth: .infinity, maxHeight: .infinity) // Center on screen
-                .background(Color.black)
+       
+           CameraPreview(cameraModel: cameraModel)
+                .cornerRadius(35) // Optional: Add rounded corners
+                .frame(maxWidth: .infinity, maxHeight: .infinity) // Directly set frame
+               .clipped() // Ensure content doesn't overflow
             
             VStack {
                 Button(action: {
