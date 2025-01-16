@@ -22,6 +22,9 @@ struct FrontScanView: View {
     @State private var showPicker: Bool = false
     @State private var showOptionsMenu: Bool = false
     @State private var isTimerEnabled: Bool = false // For 5-second timer
+    
+    @State private var isCountdownActive: Bool = false
+    @State private var countdownValue: Int = 5
     let generator = UIImpactFeedbackGenerator(style: .heavy)
 
     var body: some View {
@@ -33,9 +36,14 @@ struct FrontScanView: View {
             // Image or Camera View
             ZStack {
                 if showCamera {
-                    CameraView(cameraModel: cameraModel, onPhotoTaken: {
-                        captureWithTimerIfNeeded()
-                    })
+                    CameraView(
+                        cameraModel: cameraModel,
+                        onPhotoTaken: {
+                            captureWithTimerIfNeeded()
+                        },
+                        isCountdownActive: $isCountdownActive,
+                        countdownValue: $countdownValue
+                    )
                 } else {
                     DefaultImageView(defaultImage: defaultImage)
                 }
@@ -164,23 +172,49 @@ struct FrontScanView: View {
         Button(action: {
             captureWithTimerIfNeeded()
         }) {
-            Text("Take Picture")
+            Text(isCountdownActive ? "Taking Photo..." : "Take Picture")
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.purple)
+                .background(isCountdownActive ? Color.gray : Color.purple)
                 .foregroundColor(.white)
                 .cornerRadius(10)
         }
+        .disabled(isCountdownActive) // Disable button during countdown
         .padding()
+    }
+    
+    private var countdownOverlay: some View {
+        Group {
+            if isCountdownActive {
+                Text("\(countdownValue)")
+                    .font(.largeTitle)
+                    .bold()
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Circle().fill(Color.black.opacity(0.7)))
+                    .frame(width: 80, height: 80)
+                    .animation(.easeInOut, value: countdownValue)
+                    .transition(.opacity)
+            }
+        }
     }
 
     // MARK: - Handlers
 
     private func captureWithTimerIfNeeded() {
         if isTimerEnabled {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                cameraModel.capturePhoto()
-                generator.impactOccurred()
+            isCountdownActive = true
+            countdownValue = 5
+            
+            // Start the countdown
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+                countdownValue -= 1
+                if countdownValue <= 0 {
+                    timer.invalidate()
+                    isCountdownActive = false
+                    cameraModel.capturePhoto()
+                    generator.impactOccurred()
+                }
             }
         } else {
             cameraModel.capturePhoto()
@@ -228,14 +262,26 @@ struct FrontScanView: View {
 struct CameraView: View {
     @ObservedObject var cameraModel: CameraModel
     let onPhotoTaken: () -> Void
+    @Binding var isCountdownActive: Bool
+    @Binding var countdownValue: Int
 
     var body: some View {
-        VStack {
+        ZStack {
             CameraPreview(cameraModel: cameraModel)
                 .scaledToFill()
                 .frame(width: 275, height: 445)
                 .cornerRadius(20)
                 .clipped()
+            
+            if isCountdownActive {
+                Text("\(countdownValue)")
+                    .font(.largeTitle)
+                    .bold()
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Circle().fill(Color.black.opacity(0.7)))
+                    .frame(width: 80, height: 80)
+            }
         }
     }
 }
