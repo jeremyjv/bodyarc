@@ -21,7 +21,7 @@ struct FrontScanView: View {
     @State private var photosPickerItem: PhotosPickerItem?
     @State private var showPicker: Bool = false
     @State private var showOptionsMenu: Bool = false
-
+    @State private var isTimerEnabled: Bool = false // For 5-second timer
     let generator = UIImpactFeedbackGenerator(style: .heavy)
 
     var body: some View {
@@ -34,8 +34,7 @@ struct FrontScanView: View {
             ZStack {
                 if showCamera {
                     CameraView(cameraModel: cameraModel, onPhotoTaken: {
-                        cameraModel.capturePhoto()
-                        generator.impactOccurred()
+                        captureWithTimerIfNeeded()
                     })
                 } else {
                     DefaultImageView(defaultImage: defaultImage)
@@ -44,9 +43,37 @@ struct FrontScanView: View {
             .frame(width: 275, height: 445) // Consistent dimensions
             .cornerRadius(20)
 
-            // Buttons Below the Content
             if showCamera {
-                cameraCaptureButton // "Take Photo" Button
+                VStack(spacing: 10) {
+                    // Switch Camera and Timer HStack
+                    HStack {
+                        Button(action: {
+                            cameraModel.toggleCamera() // Toggle between front/back cameras
+                        }) {
+                            Text("Switch Camera")
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.purple)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                        
+                        Button(action: {
+                            isTimerEnabled.toggle()
+                        }) {
+                            Text(isTimerEnabled ? "Timer On" : "Timer Off")
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(isTimerEnabled ? Color.green : Color.purple)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                        }
+                    }
+                    .padding(.bottom, 10) // Space above "Take Picture" button
+                    
+                    // Take Picture Button
+                    cameraCaptureButton
+                }
             } else if let _ = defaultImage {
                 buttonGroupForDefaultImage // "Choose Another" and "Continue"
             } else {
@@ -111,7 +138,6 @@ struct FrontScanView: View {
             .confirmationDialog("Choose an option", isPresented: $showOptionsMenu, titleVisibility: .visible) {
                 Button("Take a Selfie") {
                     cameraModel.checkAuthorization()
-
                     showCamera = true
                 }
                 Button("Upload from Photo Library") {
@@ -136,8 +162,7 @@ struct FrontScanView: View {
 
     private var cameraCaptureButton: some View {
         Button(action: {
-            cameraModel.capturePhoto()
-            generator.impactOccurred()
+            captureWithTimerIfNeeded()
         }) {
             Text("Take Picture")
                 .frame(maxWidth: .infinity)
@@ -151,19 +176,23 @@ struct FrontScanView: View {
 
     // MARK: - Handlers
 
+    private func captureWithTimerIfNeeded() {
+        if isTimerEnabled {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                cameraModel.capturePhoto()
+                generator.impactOccurred()
+            }
+        } else {
+            cameraModel.capturePhoto()
+            generator.impactOccurred()
+        }
+    }
+
     private func handleCapturedImage(_ image: UIImage?) {
         if let image = image, let previewLayer = cameraModel.previewLayer {
-            // Crop the image to match the preview's visible area
             let croppedImage = image.cropToMatchPreview(previewLayer: previewLayer)
-            
-            // Flip the image horizontally if using the front-facing camera
-            let finalImage = croppedImage?.flippedHorizontally() ?? croppedImage ?? image
-
-            // Update the default image and view model with the processed image
-            defaultImage = finalImage
-            viewModel.frontImage = finalImage
-
-            // Stop the camera session and close the camera view
+            defaultImage = croppedImage ?? image
+            viewModel.frontImage = croppedImage ?? image
             cameraModel.stopSession()
             showCamera = false
         }
