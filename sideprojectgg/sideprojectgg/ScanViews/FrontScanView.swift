@@ -15,7 +15,7 @@ import PhotosUI
 //when custom picture is loaded into view, it asks to retake or use the image
 struct FrontScanView: View {
     @EnvironmentObject var viewModel: ContentViewModel
-    @ObservedObject var cameraModel: CameraModel
+    @State private var cameraModel = CameraModel()
     @State private var showCamera: Bool = false
     @State private var defaultImage: UIImage?
     @State private var photosPickerItem: PhotosPickerItem?
@@ -44,6 +44,7 @@ struct FrontScanView: View {
                         isCountdownActive: $isCountdownActive,
                         countdownValue: $countdownValue
                     )
+                    .transition(.opacity) // Smooth fade-in
                 } else {
                     DefaultImageView(defaultImage: defaultImage)
                 }
@@ -121,7 +122,9 @@ struct FrontScanView: View {
         .confirmationDialog("Choose an option", isPresented: $showOptionsMenu, titleVisibility: .visible) {
             Button("Take a Selfie") {
                 cameraModel.checkAuthorization()
-                showCamera = true
+                withAnimation {
+                        showCamera = true
+                    }
             }
             Button("Upload from Photo Library") {
                 showPicker = true
@@ -146,7 +149,9 @@ struct FrontScanView: View {
             .confirmationDialog("Choose an option", isPresented: $showOptionsMenu, titleVisibility: .visible) {
                 Button("Take a Selfie") {
                     cameraModel.checkAuthorization()
-                    showCamera = true
+                    withAnimation {
+                            showCamera = true
+                        }
                 }
                 Button("Upload from Photo Library") {
                     showPicker = true

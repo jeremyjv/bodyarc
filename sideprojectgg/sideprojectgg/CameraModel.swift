@@ -137,6 +137,8 @@ class CameraModel: NSObject, ObservableObject {
             }
         }
     }
+    
+    
 
     // Toggle between front and back camera without restarting session
     func toggleCamera() {
