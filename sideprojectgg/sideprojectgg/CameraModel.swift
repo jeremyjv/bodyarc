@@ -16,6 +16,7 @@ class CameraModel: NSObject, ObservableObject {
     private var currentCameraPosition: AVCaptureDevice.Position = .front
     private var isSessionConfigured = false
     @Published var isCameraReady = false
+    @Published var isUsingFrontCamera: Bool = true // Default to front camera
 
     // Check Camera Authorization
     func checkAuthorization() {
@@ -146,12 +147,12 @@ class CameraModel: NSObject, ObservableObject {
         defer {
             session.commitConfiguration()
         }
-
+        
         // Remove existing input
         if let currentInput = session.inputs.first as? AVCaptureDeviceInput {
             session.removeInput(currentInput)
         }
-
+        
         // Add new input for the other camera position
         guard let newDevice = AVCaptureDevice.DiscoverySession(
             deviceTypes: [.builtInWideAngleCamera],
@@ -167,6 +168,7 @@ class CameraModel: NSObject, ObservableObject {
             if session.canAddInput(newInput) {
                 session.addInput(newInput)
                 currentCameraPosition = newPosition
+                isUsingFrontCamera.toggle()
                 print("Switched to \(newPosition == .front ? "front" : "back") camera.")
             } else {
                 print("Unable to add input for new position: \(newPosition.rawValue)")

@@ -193,8 +193,13 @@ struct FrontScanView: View {
             // Crop the image to match the preview's visible area
             let croppedImage = image.cropToMatchPreview(previewLayer: previewLayer)
             
-            // Flip the image horizontally if using the front-facing camera
-            let finalImage = croppedImage?.flippedHorizontally() ?? croppedImage ?? image
+            // Flip the image horizontally only if using the front-facing camera
+            let finalImage: UIImage?
+            if cameraModel.isUsingFrontCamera {
+                finalImage = croppedImage?.flippedHorizontally() ?? croppedImage ?? image
+            } else {
+                finalImage = croppedImage ?? image
+            }
 
             // Update the default image and view model with the processed image
             defaultImage = finalImage
