@@ -26,12 +26,31 @@ struct FrontScanView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            headerView
+            Text("Upload a front selfie")
+                .font(.title2)
+                .bold()
 
-            contentView
+            // Image or Camera View
+            ZStack {
+                if showCamera {
+                    CameraView(cameraModel: cameraModel, onPhotoTaken: {
+                        cameraModel.capturePhoto()
+                        generator.impactOccurred()
+                    })
+                } else {
+                    DefaultImageView(defaultImage: defaultImage)
+                }
+            }
+            .frame(width: 275, height: 445) // Consistent dimensions
+            .cornerRadius(20)
 
-            if !showCamera {
-                actionButton
+            // Buttons Below the Content
+            if showCamera {
+                cameraCaptureButton // "Take Photo" Button
+            } else if let _ = defaultImage {
+                buttonGroupForDefaultImage // "Choose Another" and "Continue"
+            } else {
+                actionButton // "Upload or take selfie"
             }
 
             Spacer()
@@ -53,24 +72,6 @@ struct FrontScanView: View {
 
     // MARK: - Subviews
 
-    private var headerView: some View {
-        Text("Upload a front selfie")
-            .font(.title2)
-            .bold()
-    }
-
-    @ViewBuilder
-    private var contentView: some View {
-        if showCamera {
-            CameraView(cameraModel: cameraModel, onPhotoTaken: {
-                cameraModel.capturePhoto()
-                generator.impactOccurred()
-            })
-        } else {
-            DefaultImageView(defaultImage: defaultImage)
-        }
-    }
-
     private var actionButton: some View {
         Button(action: {
             showOptionsMenu = true
@@ -91,6 +92,59 @@ struct FrontScanView: View {
                 showPicker = true
             }
             Button("Cancel", role: .cancel) {}
+        }
+        .padding()
+    }
+
+    private var buttonGroupForDefaultImage: some View {
+        VStack(spacing: 10) {
+            Button(action: {
+                showOptionsMenu = true
+            }) {
+                Text("Choose Another")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .foregroundColor(.black)
+                    .cornerRadius(10)
+            }
+            .confirmationDialog("Choose an option", isPresented: $showOptionsMenu, titleVisibility: .visible) {
+                Button("Take a Selfie") {
+                    cameraModel.checkAuthorization()
+
+                    showCamera = true
+                }
+                Button("Upload from Photo Library") {
+                    showPicker = true
+                }
+                Button("Cancel", role: .cancel) {}
+            }
+
+            Button(action: {
+                // Add your custom logic for "Continue" here
+            }) {
+                Text("Continue")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.purple)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
+        }
+        .padding()
+    }
+
+    private var cameraCaptureButton: some View {
+        Button(action: {
+            cameraModel.capturePhoto()
+            generator.impactOccurred()
+        }) {
+            Text("Take Picture")
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.purple)
+                .foregroundColor(.white)
+                .cornerRadius(10)
         }
         .padding()
     }
@@ -131,17 +185,6 @@ struct CameraView: View {
                 .frame(width: 275, height: 445)
                 .cornerRadius(20)
                 .clipped()
-
-            // "Take Picture" button below the camera view
-            Button(action: onPhotoTaken) {
-                Text("Take Picture")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.purple)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-            }
-            .padding(.top)
         }
     }
 }
@@ -159,8 +202,5 @@ struct DefaultImageView: View {
             .cornerRadius(20)
             .clipped()
     }
-}
-#Preview {
-    //FrontScanView(cameraModel: _cameraModel)
 }
 
