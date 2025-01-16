@@ -92,8 +92,10 @@ struct FrontScanView: View {
             Spacer()
         }
         .padding()
-        .onChange(of: cameraModel.capturedImage) { _, newImage in
-            handleCapturedImage(newImage)
+        .onReceive(cameraModel.$capturedImage) { newImage in
+            if let newImage = newImage {
+                handleCapturedImage(newImage)
+            }
         }
         .onChange(of: photosPickerItem) { _, _ in
             handlePhotoPicker()
