@@ -31,33 +31,37 @@ struct CameraPreview: UIViewRepresentable {
         DispatchQueue.main.async {
             guard let previewLayer = cameraModel.previewLayer else { return }
 
-            // Reattach the preview layer if necessary
-            if previewLayer.superlayer != uiView.layer {
-                uiView.layer.addSublayer(previewLayer)
+            // Remove existing preview layers to prevent stacking
+            uiView.layer.sublayers?.forEach { layer in
+                if layer is AVCaptureVideoPreviewLayer {
+                    layer.removeFromSuperlayer()
+                }
             }
+
+            // Add the preview layer
             previewLayer.frame = uiView.bounds
+            uiView.layer.addSublayer(previewLayer)
         }
     }
 }
 
 extension UIImage {
-    func cropToAspectRatio(width: CGFloat, height: CGFloat) -> UIImage? {
-        let targetAspectRatio = width / height
-        let currentAspectRatio = size.width / size.height
-
-        var newSize: CGSize
-        if currentAspectRatio > targetAspectRatio {
-            // Wider than target, crop width
-            newSize = CGSize(width: size.height * targetAspectRatio, height: size.height)
-        } else {
-            // Taller than target, crop height
-            newSize = CGSize(width: size.width, height: size.width / targetAspectRatio)
-        }
-
-        let origin = CGPoint(x: (size.width - newSize.width) / 2, y: (size.height - newSize.height) / 2)
-        let cropRect = CGRect(origin: origin, size: newSize)
-
-        guard let cgImage = self.cgImage?.cropping(to: cropRect) else { return nil }
-        return UIImage(cgImage: cgImage, scale: scale, orientation: imageOrientation)
+    func cropToMatchPreview(previewLayer: AVCaptureVideoPreviewLayer) -> UIImage? {
+        guard let cgImage = self.cgImage else { return nil }
+        
+        // Convert the preview bounds to image coordinates
+        let metadataOutputRect = previewLayer.metadataOutputRectConverted(fromLayerRect: previewLayer.bounds)
+        
+        // Calculate crop rect in pixel coordinates
+        let cropRect = CGRect(
+            x: metadataOutputRect.origin.x * CGFloat(cgImage.width),
+            y: metadataOutputRect.origin.y * CGFloat(cgImage.height),
+            width: metadataOutputRect.size.width * CGFloat(cgImage.width),
+            height: metadataOutputRect.size.height * CGFloat(cgImage.height)
+        )
+        
+        // Perform cropping
+        guard let croppedCGImage = cgImage.cropping(to: cropRect) else { return nil }
+        return UIImage(cgImage: croppedCGImage, scale: self.scale, orientation: self.imageOrientation)
     }
 }
