@@ -64,4 +64,21 @@ extension UIImage {
         guard let croppedCGImage = cgImage.cropping(to: cropRect) else { return nil }
         return UIImage(cgImage: croppedCGImage, scale: self.scale, orientation: self.imageOrientation)
     }
+    
+    func flippedHorizontally() -> UIImage? {
+            UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
+            let context = UIGraphicsGetCurrentContext()
+            
+            // Flip horizontally
+            context?.translateBy(x: self.size.width, y: 0)
+            context?.scaleBy(x: -1.0, y: 1.0)
+            
+            // Draw the image
+            self.draw(at: CGPoint.zero)
+            
+            let flippedImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            return flippedImage
+        }
 }
