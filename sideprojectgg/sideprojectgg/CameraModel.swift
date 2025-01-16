@@ -43,7 +43,7 @@ class CameraModel: NSObject, ObservableObject {
     // Configure Camera
     func setupCamera(for position: AVCaptureDevice.Position, completion: @escaping (Bool) -> Void) {
         print("Setting up camera for position: \(position.rawValue)")
-        
+
         session.beginConfiguration()
         defer {
             session.commitConfiguration()
@@ -79,26 +79,27 @@ class CameraModel: NSObject, ObservableObject {
             if session.canAddOutput(photoOutput) {
                 session.addOutput(photoOutput)
             }
-
-            // Set preview layer
-            DispatchQueue.main.async {
-                let layer = AVCaptureVideoPreviewLayer(session: self.session)
-                layer.videoGravity = .resizeAspectFill
-                self.previewLayer = layer
-                print("Preview layer setup complete.")
-                completion(true)
-            }
-
-            isSessionConfigured = true
-
-            // Start session
-            DispatchQueue.global(qos: .userInitiated).async {
-                self.session.startRunning()
-                print("Camera session started: \(self.session.isRunning)")
-            }
         } catch {
             print("Error configuring camera: \(error.localizedDescription)")
             completion(false)
+            return
+        }
+
+        DispatchQueue.main.async {
+            // Set preview layer outside the configuration block
+            let layer = AVCaptureVideoPreviewLayer(session: self.session)
+            layer.videoGravity = .resizeAspectFill
+            self.previewLayer = layer
+            print("Preview layer setup complete.")
+            completion(true)
+        }
+
+        isSessionConfigured = true
+
+        // Start session
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.session.startRunning()
+            print("Camera session started: \(self.session.isRunning)")
         }
     }
 

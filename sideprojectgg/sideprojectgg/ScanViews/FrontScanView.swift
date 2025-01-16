@@ -26,6 +26,14 @@ struct FrontScanView: View {
     @State private var isCountdownActive: Bool = false
     @State private var countdownValue: Int = 5
     let generator = UIImpactFeedbackGenerator(style: .heavy)
+    
+    private let screenWidth = UIScreen.main.bounds.width
+    private var previewWidth: CGFloat {
+        screenWidth * 0.9 // 90% of the screen width
+    }
+    private var previewHeight: CGFloat {
+        previewWidth * 4 / 3 // Aspect ratio of 4:3 (common for cameras)
+    }
 
     var body: some View {
         VStack(spacing: 16) {
@@ -42,14 +50,16 @@ struct FrontScanView: View {
                             captureWithTimerIfNeeded()
                         },
                         isCountdownActive: $isCountdownActive,
-                        countdownValue: $countdownValue
+                        countdownValue: $countdownValue,
+                        width: previewWidth,
+                        height: previewHeight
                     )
                     .transition(.opacity) // Smooth fade-in
                 } else {
-                    DefaultImageView(defaultImage: defaultImage)
+                    DefaultImageView(defaultImage: defaultImage, width: previewWidth, height: previewHeight)
                 }
             }
-            .frame(width: 275, height: 445) // Consistent dimensions
+            .frame(width: previewWidth, height: previewHeight) // Consistent dimensions
             .cornerRadius(20)
 
             if showCamera {
@@ -271,12 +281,15 @@ struct CameraView: View {
     let onPhotoTaken: () -> Void
     @Binding var isCountdownActive: Bool
     @Binding var countdownValue: Int
+    
+    let width: CGFloat
+    let height: CGFloat
 
     var body: some View {
         ZStack {
             CameraPreview(cameraModel: cameraModel)
                 .scaledToFill()
-                .frame(width: 275, height: 445)
+                .frame(width: width, height: height) // Use passed dimensions
                 .cornerRadius(20)
                 .clipped()
             
@@ -297,12 +310,14 @@ struct CameraView: View {
 
 struct DefaultImageView: View {
     let defaultImage: UIImage?
+    let width: CGFloat
+    let height: CGFloat
 
     var body: some View {
         Image(uiImage: defaultImage ?? UIImage(named: "scanImage")!)
             .resizable()
             .scaledToFill()
-            .frame(width: 275, height: 445)
+            .frame(width: width, height: height) // Use passed dimensions
             .cornerRadius(20)
             .clipped()
     }
