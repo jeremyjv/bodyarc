@@ -269,10 +269,59 @@ struct FrontScanView: View {
             if let photosPickerItem,
                let data = try? await photosPickerItem.loadTransferable(type: Data.self),
                let image = UIImage(data: data) {
+                
                 defaultImage = image
-                viewModel.frontImage = image
+                
+                // Crop the image to match the preview dimensions
+                if let croppedImage = cropImageToPreviewDimensions(image: image, previewWidth: previewWidth, previewHeight: previewHeight) {
+                    viewModel.frontImage = croppedImage
+                } else {
+                    // Fallback in case cropping fails
+                    defaultImage = image
+                    viewModel.frontImage = image
+                }
             }
         }
+    }
+    
+    private func cropImageToPreviewDimensions(image: UIImage, previewWidth: CGFloat, previewHeight: CGFloat) -> UIImage? {
+        // Calculate the target aspect ratio (4:3 in this case)
+        let targetAspectRatio = previewWidth / previewHeight
+        
+        guard let cgImage = image.cgImage else { return nil }
+        
+        let originalWidth = CGFloat(cgImage.width)
+        let originalHeight = CGFloat(cgImage.height)
+        let originalAspectRatio = originalWidth / originalHeight
+        
+        var cropRect: CGRect
+        
+        // Determine the cropping rectangle
+        if originalAspectRatio > targetAspectRatio {
+            // Image is wider than target, crop the sides
+            let newWidth = originalHeight * targetAspectRatio
+            cropRect = CGRect(
+                x: (originalWidth - newWidth) / 2,
+                y: 0,
+                width: newWidth,
+                height: originalHeight
+            )
+        } else {
+            // Image is taller than target, crop the top and bottom
+            let newHeight = originalWidth / targetAspectRatio
+            cropRect = CGRect(
+                x: 0,
+                y: (originalHeight - newHeight) / 2,
+                width: originalWidth,
+                height: newHeight
+            )
+        }
+        
+        // Perform cropping
+        guard let croppedCGImage = cgImage.cropping(to: cropRect) else { return nil }
+        
+        // Convert cropped CGImage back to UIImage
+        return UIImage(cgImage: croppedCGImage, scale: image.scale, orientation: image.imageOrientation)
     }
 }
 
