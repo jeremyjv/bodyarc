@@ -27,6 +27,8 @@ struct FrontScanView: View {
     @State private var countdownValue: Int = 5
     let generator = UIImpactFeedbackGenerator(style: .heavy)
     
+    @Binding var path: NavigationPath
+    
     private let screenWidth = UIScreen.main.bounds.width
     private var previewWidth: CGFloat {
         screenWidth * 0.9 // 90% of the screen width
@@ -172,7 +174,7 @@ struct FrontScanView: View {
             }
 
             Button(action: {
-                // Add your custom logic for "Continue" here
+                path.append("BackScanView")
             }) {
                 Text("Continue")
                     .frame(maxWidth: .infinity)

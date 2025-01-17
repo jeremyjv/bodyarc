@@ -15,186 +15,276 @@ import PhotosUI
 //when custom picture is loaded into view, it asks to retake or use the image
 struct BackScanView: View {
     @EnvironmentObject var viewModel: ContentViewModel
-    @ObservedObject var cameraModel: CameraModel
-    @State private var isShowingOptions = false // To toggle the menu
-    
+    @State private var cameraModel = CameraModel()
+    @State private var showCamera: Bool = false
     @State private var defaultImage: UIImage?
     @State private var photosPickerItem: PhotosPickerItem?
-    @State private var showPicker: Bool = false // For PhotosPicker
-    @State private var showCamera: Bool = false // For Selfie
-    @State private var analysis: String?
+    @State private var showPicker: Bool = false
+    @State private var showOptionsMenu: Bool = false
+    @State private var isTimerEnabled: Bool = false // For 5-second timer
     
-
+    @State private var isCountdownActive: Bool = false
+    @State private var countdownValue: Int = 5
+    let generator = UIImpactFeedbackGenerator(style: .heavy)
     
-
-    @Environment(\.dismiss) var dismiss
     @Binding var path: NavigationPath
+    
+    private let screenWidth = UIScreen.main.bounds.width
+    private var previewWidth: CGFloat {
+        screenWidth * 0.9 // 90% of the screen width
+    }
+    private var previewHeight: CGFloat {
+        previewWidth * 4 / 3 // Aspect ratio of 4:3 (common for cameras)
+    }
 
     var body: some View {
-        
-      
-            VStack(spacing: 16) {
-                // Top Rectangle
-                RectangleComponent()
-                
-                    .frame(height: 50) // Adjust height as per your mockup
-                Text("Upload Back Selfie")
-                
-                // Middle Rectangle
-                Image(uiImage: defaultImage ?? UIImage(named: "scanImage")!)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 300, height: 300)
-                    .onChange(of: cameraModel.capturedImage) {_, _ in
-                        Task {
-                            defaultImage = cameraModel.capturedImage
-                            viewModel.backImage = cameraModel.capturedImage
-                        }
-                    }
-                
-                
-                //Select Photo from camera roll
-                //if default image = UIImage(named: "scanImage") else "retake photo" / "use photo" -> backscanview
-                //have this open as a menu instead
-                if defaultImage == nil {
-                    Button(action: {
-                        isShowingOptions = true // Show the menu
-                        showPicker = false
-                    }) {
-                        Text("Upload or take selfie")
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    .padding()
-                    .confirmationDialog("Select an option", isPresented: $isShowingOptions, titleVisibility: .visible) {
-                        Button(action: {
-                            path.append("BackCameraView")
-                        })
-                        {
-                            Text("Take a selfie")
-                                .padding()
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                        }
-                        
-                        Button(action: {
-                            showPicker.toggle()
-                        }) {
-                            Text("Upload Image")
-                        }
-                        
-                    }
-                    .photosPicker(isPresented: $showPicker, selection: $photosPickerItem)
-                  
+        VStack(spacing: 16) {
+            Text("Upload a front selfie")
+                .font(.title2)
+                .bold()
 
+            // Image or Camera View
+            ZStack {
+                if showCamera {
+                    CameraView(
+                        cameraModel: cameraModel,
+                        onPhotoTaken: {
+                            captureWithTimerIfNeeded()
+                        },
+                        isCountdownActive: $isCountdownActive,
+                        countdownValue: $countdownValue,
+                        width: previewWidth,
+                        height: previewHeight
+                    )
+                    .transition(.opacity) // Smooth fade-in
                 } else {
-                    Button(action: {
-                        isShowingOptions = true
-                        showPicker = false
-                    }) {
-                        Text("Use Another")
-                    }
-                    .confirmationDialog("Select an option", isPresented: $isShowingOptions, titleVisibility: .visible) {
+                    DefaultImageView(defaultImage: defaultImage, width: previewWidth, height: previewHeight)
+                }
+            }
+            .frame(width: previewWidth, height: previewHeight) // Consistent dimensions
+            .cornerRadius(20)
+
+            if showCamera {
+                VStack(spacing: 10) {
+                    // Switch Camera and Timer HStack
+                    HStack {
                         Button(action: {
-                            path.append("BackCameraView")
-                        })
-                        {
-                            Text("Take a selfie")
+                            cameraModel.toggleCamera() // Toggle between front/back cameras
+                        }) {
+                            Text("Switch Camera")
+                                .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color.blue)
+                                .background(Color.purple)
                                 .foregroundColor(.white)
                                 .cornerRadius(10)
                         }
                         
                         Button(action: {
-                            showPicker.toggle()
+                            isTimerEnabled.toggle()
                         }) {
-                            Text("Upload Image")
+                            Text(isTimerEnabled ? "Timer On" : "Timer Off")
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(isTimerEnabled ? Color.green : Color.purple)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
                         }
-                        
                     }
-                    .photosPicker(isPresented: $showPicker, selection: $photosPickerItem)
+                    .padding(.bottom, 10) // Space above "Take Picture" button
                     
-                    
-                    
-                    Button(action: {
-                        //return to contentView with empty path
-                        path = NavigationPath()
-                        
-                        
-                        //run paywall business logic
-                        
-                        
-                        //run analysis logic here  --> create different
-                        Task {
-                            await viewModel.handleScanUploadAction()
-                            
+                    // Take Picture Button
+                    cameraCaptureButton
+                }
+            } else if let _ = defaultImage {
+                buttonGroupForDefaultImage // "Choose Another" and "Continue"
+            } else {
+                actionButton // "Upload or take selfie"
+            }
 
-                        }
-                     
-                        
-                        
-         
-                    }) {
-                        Text("-Continue-")
-                    }
-                    
-                    
-                }
-                
-                
-                
-                Spacer()
-                
-                // Bottom Navigation Bar
-                HStack(spacing: 16) {
-                    ForEach(0..<4) { _ in
-                        RectangleComponent()
-                            .frame(width: 50, height: 50) // Adjust size as per your mockup
-                    }
-                }
-                .padding(.bottom, 16)
-            }
-            .padding()
-            .onChange(of: photosPickerItem) {_, _ in
-                Task {
-                    if let photosPickerItem,
-                       let data = try? await photosPickerItem.loadTransferable(type: Data.self) {
-                        if let image = UIImage(data: data) {
-                            defaultImage = image
-                            viewModel.backImage = image
-                            
-                            
-                            
-                        }
-                    }
-                    photosPickerItem = nil
-                }
-            }
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        path.removeLast() // Custom back button action
-                    }) {
-                        HStack {
-                            Image(systemName: "chevron.left") // Custom back button icon
-                        }
-                    }
-                }
-            }
-            .onChange(of: viewModel.backImage) { _, _ in
-                print("Back Image updated to new image")
-            }
-            
+            Spacer()
         }
-        
+        .padding()
+        .onReceive(cameraModel.$capturedImage) { newImage in
+            if let newImage = newImage {
+                handleCapturedImage(newImage)
+            }
+        }
+        .onChange(of: photosPickerItem) { _, _ in
+            handlePhotoPicker()
+        }
+        .onDisappear {
+            if showCamera {
+                cameraModel.stopSession()
+            }
+        }
+        .photosPicker(isPresented: $showPicker, selection: $photosPickerItem)
+    }
+
+    // MARK: - Subviews
+
+    private var actionButton: some View {
+        Button(action: {
+            showOptionsMenu = true
+        }) {
+            Text("Upload or take selfie")
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color.purple)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+        }
+        .confirmationDialog("Choose an option", isPresented: $showOptionsMenu, titleVisibility: .visible) {
+            Button("Take a Selfie") {
+                cameraModel.checkAuthorization()
+                withAnimation {
+                        showCamera = true
+                    }
+            }
+            Button("Upload from Photo Library") {
+                showPicker = true
+            }
+            Button("Cancel", role: .cancel) {}
+        }
+        .padding()
+    }
+
+    private var buttonGroupForDefaultImage: some View {
+        VStack(spacing: 10) {
+            Button(action: {
+                showOptionsMenu = true
+            }) {
+                Text("Choose Another")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .foregroundColor(.black)
+                    .cornerRadius(10)
+            }
+            .confirmationDialog("Choose an option", isPresented: $showOptionsMenu, titleVisibility: .visible) {
+                Button("Take a Selfie") {
+                    cameraModel.checkAuthorization()
+                    withAnimation {
+                            showCamera = true
+                        }
+                }
+                Button("Upload from Photo Library") {
+                    showPicker = true
+                }
+                Button("Cancel", role: .cancel) {}
+            }
+
+            Button(action: {
+                //clear path -> call handle scan upload
+                
+                //run subscription business logic
+                
+                Task {
+                    path = NavigationPath()
+                    await viewModel.handleScanUploadAction()
+                    
+                }
+            }) {
+                Text("Continue")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.purple)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
+        }
+        .padding()
+    }
+
+    private var cameraCaptureButton: some View {
+        Button(action: {
+            captureWithTimerIfNeeded()
+        }) {
+            Text(isCountdownActive ? "Taking Photo..." : "Take Picture")
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(isCountdownActive ? Color.gray : Color.purple)
+                .foregroundColor(.white)
+                .cornerRadius(10)
+        }
+        .disabled(isCountdownActive) // Disable button during countdown
+        .padding()
+    }
     
+    private var countdownOverlay: some View {
+        Group {
+            if isCountdownActive {
+                Text("\(countdownValue)")
+                    .font(.largeTitle)
+                    .bold()
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Circle().fill(Color.black.opacity(0.7)))
+                    .frame(width: 80, height: 80)
+                    .animation(.easeInOut, value: countdownValue)
+                    .transition(.opacity)
+            }
+        }
+    }
+
+    // MARK: - Handlers
+
+    private func captureWithTimerIfNeeded() {
+        if isTimerEnabled {
+            isCountdownActive = true
+            countdownValue = 5
+            
+            // Start the countdown
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+                countdownValue -= 1
+                if countdownValue <= 0 {
+                    timer.invalidate()
+                    isCountdownActive = false
+                    cameraModel.capturePhoto()
+                    generator.impactOccurred()
+                }
+            }
+        } else {
+            cameraModel.capturePhoto()
+            generator.impactOccurred()
+        }
+    }
+
+    private func handleCapturedImage(_ image: UIImage?) {
+        if let image = image, let previewLayer = cameraModel.previewLayer {
+            // Crop the image to match the preview's visible area
+            let croppedImage = image.cropToMatchPreview(previewLayer: previewLayer)
+            
+            // Flip the image horizontally only if using the front-facing camera
+            let finalImage: UIImage?
+            if cameraModel.isUsingFrontCamera {
+                finalImage = croppedImage?.flippedHorizontally() ?? croppedImage ?? image
+            } else {
+                finalImage = croppedImage ?? image
+            }
+
+            // Update the default image and view model with the processed image
+            defaultImage = finalImage
+            viewModel.backImage = finalImage
+
+            // Stop the camera session and close the camera view
+            cameraModel.stopSession()
+            showCamera = false
+        }
+    }
+
+    private func handlePhotoPicker() {
+        Task {
+            if let photosPickerItem,
+               let data = try? await photosPickerItem.loadTransferable(type: Data.self),
+               let image = UIImage(data: data) {
+                defaultImage = image
+                viewModel.backImage = image
+            }
+        }
+    }
 }
+
+
 
 #Preview {
     ContentView()
