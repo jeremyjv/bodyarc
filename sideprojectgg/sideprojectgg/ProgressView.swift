@@ -63,37 +63,45 @@ struct ProgressView: View {
     }
 
     var body: some View {
-        VStack {
-            Text("Your Progress")
-                .font(.title)
-                .padding()
+            VStack {
+                Text("Your Progress")
+                    .font(.title)
+                    .padding()
 
-            if loadingScreen {
-                Text("Retrieving scans...")
-            } else {
-                ScrollView {
-                    LazyVStack(spacing: 20) {
-                        ForEach(retrievedScanImages.indices, id: \.self) { index in
-                            if let scan = scans?[index] {
-                                ProgressCardView(
-                                    scan: scan,
-                                    images: retrievedScanImages[index],
-                                    path: $path
+                if loadingScreen {
+                    Text("Retrieving scans...")
+                } else {
+                    ScrollView {
+                        LazyVStack(spacing: 20) {
+                            ForEach(retrievedScanImages.indices, id: \.self) { index in
+                                if let scan = scans?[index] {
+                                    ProgressCardView(
+                                        scan: scan,
+                                        images: retrievedScanImages[index],
+                                        path: $path
+                                    )
+                                }
+                            }
+
+                            // Show the loading card if a scan is in progress
+                            if viewModel.isScanProcessing {
+                                LoadingCardView(
+                                    frontImage: viewModel.frontImage,
+                                    backImage: viewModel.backImage
                                 )
                             }
                         }
+                        .padding()
                     }
-                    .padding()
+                }
+            }
+            .onAppear {
+                if !hasLoadedData {
+                    hasLoadedData = true
+                    Task { await loadData() }
                 }
             }
         }
-        .onAppear {
-            if !hasLoadedData {
-                hasLoadedData = true
-                Task { await loadData() }
-            }
-        }
-    }
 }
     
 struct ProgressCardView: View {
@@ -157,6 +165,60 @@ struct ProgressCardView: View {
         .buttonStyle(PlainButtonStyle()) // Use a plain button style to remove the default button appearance
     }
 }
+
+struct LoadingCardView: View {
+    let frontImage: UIImage?
+    let backImage: UIImage?
+
+    var body: some View {
+        HStack(spacing: 10) {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Processing Scan...")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                Text("This may take a few moments.")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
+
+            Spacer()
+
+            HStack(spacing: 10) {
+                // Front Image
+                if let frontImage = frontImage {
+                    Image(uiImage: frontImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 80, height: 100)
+                        .cornerRadius(8)
+                } else {
+                    Color.gray.opacity(0.3)
+                        .frame(width: 80, height: 100)
+                        .cornerRadius(8)
+                }
+
+                // Back Image
+                if let backImage = backImage {
+                    Image(uiImage: backImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 80, height: 100)
+                        .cornerRadius(8)
+                } else {
+                    Color.gray.opacity(0.3)
+                        .frame(width: 80, height: 100)
+                        .cornerRadius(8)
+                }
+            }
+        }
+        .padding()
+        .background(Color.gray.opacity(0.2))
+        .cornerRadius(12)
+        .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
+    }
+}
+
+
 extension Date {
     func formattedDateString() -> String {
         let formatter = DateFormatter()

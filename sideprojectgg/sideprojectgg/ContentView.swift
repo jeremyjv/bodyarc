@@ -20,9 +20,7 @@ struct ContentView: View {
     @StateObject private var cameraModel = CameraModel()
     
     
-    //load all necessary data
-    @State private var retrievedScanImages: [[UIImage?]] = []  // No longer optional
-    @State private var scans: [ScanObject]?
+
     
 
     
@@ -47,7 +45,7 @@ struct ContentView: View {
                             Label("Scan", systemImage: "magnifyingglass")
                         })
                     
-                        ProgressView(retrievedScanImages: $retrievedScanImages, scans: $scans, path: $path).tabItem({
+                        ProgressView(retrievedScanImages: $viewModel.retrievedScanImages, scans: $viewModel.scans, path: $path).tabItem({
                             Label("Progress", systemImage: "person")
                         })
                         

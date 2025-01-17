@@ -45,8 +45,10 @@ class ContentViewModel: ObservableObject {
     
     private var authStateListenerHandle: AuthStateDidChangeListenerHandle?
     
-    @Published var scans: [ScanObject] = []
+    @Published var scans: [ScanObject]? = []
     @Published var retrievedScanImages: [[UIImage?]] = []
+    
+    @Published var isScanProcessing: Bool = false
     
  
     
@@ -152,7 +154,9 @@ class ContentViewModel: ObservableObject {
             print("Images are missing")
             return
         }
-
+        
+        
+        isScanProcessing = true // Set processing state
         // Placeholder scan object with empty fields
         let placeholderScan = ScanObject(
             createdAt: Date(),
@@ -166,8 +170,8 @@ class ContentViewModel: ObservableObject {
 
         // Notify ProgressView of a new scan in progress
         DispatchQueue.main.async {
-            self.scans.insert(placeholderScan, at: 0) // Insert at the top
-            self.retrievedScanImages.insert([nil, nil], at: 0) // Placeholder images
+            self.scans!.insert(placeholderScan, at: 0) // Insert at the top
+            self.retrievedScanImages.insert([frontImage, backImage], at: 0) // Placeholder images
         }
 
         do {
@@ -207,6 +211,12 @@ class ContentViewModel: ObservableObject {
                 backAnalysis: backAnalysis,
                 muscleRanking: muscleRanking
             )
+            
+            //automatically update progress view once we have the scan
+            DispatchQueue.main.async {
+                self.scans![0] = scan
+                self.isScanProcessing = false // Reset processing state
+            }
 
             // Write muscleRanking to User Firestore
             DispatchQueue.main.async {
@@ -228,20 +238,20 @@ class ContentViewModel: ObservableObject {
 
             // Update the placeholder scan with actual data in ProgressView
             DispatchQueue.main.async {
-                self.scans[0] = scan // Replace placeholder scan
+                self.scans![0] = scan // Replace placeholder scan
                 self.retrievedScanImages[0] = [
                     UIImage(data: frontImageData!), // Replace with actual front image
                     UIImage(data: backImageData!)  // Replace with actual back image
                 ]
             }
         } catch let error {
-            print("Error to Firestore: \(error)")
 
-            // Handle failure case by removing the placeholder scan
-            DispatchQueue.main.async {
-                self.scans.remove(at: 0)
-                self.retrievedScanImages.remove(at: 0)
-            }
+            print("Error processing scan: \(error)")
+                    DispatchQueue.main.async {
+                        self.scans!.remove(at: 0)
+                        self.retrievedScanImages.remove(at: 0)
+                        self.isScanProcessing = false // Reset processing state
+                    }
         }
     }
     
