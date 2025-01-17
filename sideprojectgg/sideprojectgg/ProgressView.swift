@@ -73,6 +73,14 @@ struct ProgressView: View {
                 } else {
                     ScrollView {
                         LazyVStack(spacing: 20) {
+                            
+                            if viewModel.isScanProcessing {
+                                    LoadingCardView(
+                                        frontImage: viewModel.frontImage,
+                                        backImage: viewModel.backImage
+                                    )
+                                }
+                            
                             ForEach(retrievedScanImages.indices, id: \.self) { index in
                                 if let scan = scans?[index] {
                                     ProgressCardView(
@@ -83,13 +91,6 @@ struct ProgressView: View {
                                 }
                             }
 
-                            // Show the loading card if a scan is in progress
-                            if viewModel.isScanProcessing {
-                                LoadingCardView(
-                                    frontImage: viewModel.frontImage,
-                                    backImage: viewModel.backImage
-                                )
-                            }
                         }
                         .padding()
                     }
