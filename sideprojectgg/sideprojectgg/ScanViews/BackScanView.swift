@@ -135,10 +135,10 @@ struct BackScanView: View {
         }
         .confirmationDialog("Choose an option", isPresented: $showOptionsMenu, titleVisibility: .visible) {
             Button("Take a Selfie") {
-                cameraModel.checkAuthorization()
                 withAnimation {
                         showCamera = true
                     }
+                cameraModel.checkAuthorization()
             }
             Button("Upload from Photo Library") {
                 showPicker = true
@@ -162,10 +162,10 @@ struct BackScanView: View {
             }
             .confirmationDialog("Choose an option", isPresented: $showOptionsMenu, titleVisibility: .visible) {
                 Button("Take a Selfie") {
-                    cameraModel.checkAuthorization()
                     withAnimation {
                             showCamera = true
                         }
+                    cameraModel.checkAuthorization()
                 }
                 Button("Upload from Photo Library") {
                     showPicker = true
