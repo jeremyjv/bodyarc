@@ -157,11 +157,11 @@ class ContentViewModel: ObservableObject {
                     }
                 }
                 
+                
                 //create their own referral code being the first 6 Characters
                 let referralCode = firebaseUser.uid.prefix(6).uppercased()
                 
-                let referralAmount = 0
-                
+                //new user always starts with referralAmount == 0
                 let userModel = User(email: firebaseUser.email, uid: firebaseUser.uid, intake: intakeForm, referralCode: referralCode, referralAmount: 0)
                 
                 //when another user uses their code we increase the referralAmount for the user with the corresponding referral code.

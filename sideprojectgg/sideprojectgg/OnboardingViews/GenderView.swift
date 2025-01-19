@@ -57,6 +57,10 @@ struct GenderView: View {
                     
                     case "AuthView":
                         AuthView(intakeForm: $intakeForm, path: $path)
+                    
+                    case "ReferralView":
+                        ReferralView(intakeForm: $intakeForm, path: $path)
+                    
                         
                     default:
                         GenderView()
