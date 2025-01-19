@@ -49,7 +49,7 @@ struct ContentView: View {
                             Label("Progress", systemImage: "person")
                         })
                         
-                        RoutineView(muscleOrder: viewModel.muscleRankings!).tabItem({
+                        RoutineView().tabItem({
                             Label("Routine", systemImage: "person")
                         })
                        

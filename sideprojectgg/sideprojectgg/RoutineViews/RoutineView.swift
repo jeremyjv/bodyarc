@@ -13,8 +13,6 @@ struct RoutineView: View {
     @EnvironmentObject var viewModel: ContentViewModel
     @State private var hasLoadedData = false
     
-    // Accept a custom order of muscles as a list of strings
-    let muscleOrder: [String]
 
     @State private var selectedMuscle: MuscleGroup? = nil // Track selected muscle group
     
@@ -70,7 +68,7 @@ struct RoutineView: View {
                     .font(.headline)
                     .padding(.horizontal)
 
-                ForEach(muscleOrder, id: \.self) { muscleName in
+                ForEach(viewModel.muscleRankings!, id: \.self) { muscleName in
                     if let muscle = MuscleGroup(rawValue: muscleName) {
                         Button(action: {
                             selectedMuscle = muscle
