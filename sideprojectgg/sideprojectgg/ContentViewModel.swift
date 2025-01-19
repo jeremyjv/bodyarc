@@ -118,7 +118,13 @@ class ContentViewModel: ObservableObject {
             let userInFireStore = try await checkIfUserExists(uid: firebaseUser.uid)
             
             if userInFireStore == false {
-                let userModel = User(email: firebaseUser.email, uid: firebaseUser.uid, intake: intakeForm)
+                let userReferral = firebaseUser.uid.prefix(6).uppercased()
+                
+                let userModel = User(email: firebaseUser.email, uid: firebaseUser.uid, intake: intakeForm, userReferral: userReferral)
+                
+            
+                
+                //create their referral code being the first 6 Characters
             
                 do {
                     try db.collection("users").document(firebaseUser.uid).setData(from: userModel)

@@ -18,6 +18,7 @@ struct User: Codable {
     var uid: String?
     var intake: IntakeForm?
     var muscleRanking: [String]?
+    var userReferral: String?
     
 }
 
