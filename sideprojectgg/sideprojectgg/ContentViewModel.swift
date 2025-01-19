@@ -125,33 +125,31 @@ class ContentViewModel: ObservableObject {
                     let db = Firestore.firestore()
                     
                     do {
-                        // Query for the user with the given referral code
+                        // Query for all users with the given referral code
                         let querySnapshot = try await db.collection("users")
                             .whereField("referralCode", isEqualTo: referralCode)
                             .getDocuments()
                         
-                        if let document = querySnapshot.documents.first {
-                            let userID = document.documentID
-                            
-                            // Increment the referralAmount by 1
-                            await MainActor.run {
-                                db.collection("users").document(userID).updateData([
-                                    "referralAmount": FieldValue.increment(Int64(1))
-                                ]) { error in
-                                    if let error = error {
-                                        print("Error updating user: \(error.localizedDescription)")
-                                    } else {
-                                        print("Successfully incremented referral amount for user with ID: \(userID)")
+                        if querySnapshot.documents.isEmpty {
+                            print("No users found with referralCode \(referralCode).")
+                        } else {
+                            // Iterate over all matching documents and update their referralAmount
+                            for document in querySnapshot.documents {
+                                let userID = document.documentID
+                                
+                                await MainActor.run {
+                                    db.collection("users").document(userID).updateData([
+                                        "referralAmount": FieldValue.increment(Int64(1))
+                                    ]) { error in
+                                        if let error = error {
+                                            print("Error updating user \(userID): \(error.localizedDescription)")
+                                        } else {
+                                            print("Successfully incremented referral amount for user with ID: \(userID)")
+                                        }
                                     }
                                 }
                             }
-                        } else {
-                            print("No user found with referralCode \(referralCode).")
                         }
-
-                        
-                    
-                        
                     } catch {
                         print("Error: \(error.localizedDescription)")
                     }
