@@ -179,7 +179,8 @@ class ContentViewModel: ObservableObject {
                 
             }
             
-
+            self.uid = firebaseUser.uid
+            
             //want to redirect to GoalsView
             isLoggedIn = true
             
