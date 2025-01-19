@@ -208,21 +208,9 @@ class ContentViewModel: ObservableObject {
         
         isScanProcessing = true // Set processing state
         // Placeholder scan object with empty fields
-        let placeholderScan = ScanObject(
-            createdAt: Date(),
-            userUID: self.uid,
-            frontImage: nil,
-            backImage: nil,
-            frontAnalysis: nil,
-            backAnalysis: nil,
-            muscleRanking: nil
-        )
-
+ 
         // Notify ProgressView of a new scan in progress
-        DispatchQueue.main.async {
-            self.scans!.insert(placeholderScan, at: 0) // Insert at the top
-            self.retrievedScanImages.insert([frontImage, backImage], at: 0) // Placeholder images
-        }
+       
 
         do {
             // Compute front and back analysis
@@ -264,7 +252,10 @@ class ContentViewModel: ObservableObject {
             
             //automatically update progress view once we have the scan
             DispatchQueue.main.async {
-                self.scans![0] = scan
+                
+                self.scans!.insert(scan, at: 0) // Insert at the top
+                self.retrievedScanImages.insert([frontImage, backImage], at: 0) // Placeholder images
+                
                 self.isScanProcessing = false // Reset processing state
             }
 

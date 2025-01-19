@@ -15,6 +15,8 @@ struct ProgressView: View {
     @Binding var path: NavigationPath
     @State private var hasLoadedData = false
     @State private var loadingScreen = true
+    
+    //for scan prompt : if viewModel.scans.count == 0 ----> direct them to scan
 
     func loadData() async {
         do {
@@ -56,6 +58,7 @@ struct ProgressView: View {
                         }
                     }
                 }
+                self.loadingScreen = false
             }
         } catch {
             print("Error fetching scan objects: \(error)")
@@ -70,7 +73,11 @@ struct ProgressView: View {
 
                 if loadingScreen {
                     Text("Retrieving scans...")
-                } else {
+                } else if viewModel.scans!.count == 0 {
+                    Text("Scan to get your ratings")
+                }
+    
+                else {
                     ScrollView {
                         LazyVStack(spacing: 20) {
                             
@@ -81,11 +88,11 @@ struct ProgressView: View {
                                     )
                                 }
                             
-                            ForEach(viewModel.retrievedScanImages.indices, id: \.self) { index in
-                                if let scan = viewModel.scans?[index] {
+                            ForEach(retrievedScanImages.indices, id: \.self) { index in
+                                if let scan = scans?[index] {
                                     ProgressCardView(
                                         scan: scan,
-                                        images: viewModel.retrievedScanImages[index],
+                                        images: retrievedScanImages[index],
                                         path: $path
                                     )
                                 }
