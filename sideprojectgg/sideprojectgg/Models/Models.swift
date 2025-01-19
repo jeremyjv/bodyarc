@@ -18,7 +18,8 @@ struct User: Codable {
     var uid: String?
     var intake: IntakeForm?
     var muscleRanking: [String]?
-    var userReferral: String?
+    var referralCode: String?
+    var referralAmount: Int?
     
 }
 
@@ -28,12 +29,14 @@ struct IntakeForm: Codable {
     var goal: String?
     var availability: String?
     var muscleToGrow: String?
+    var referralCode: String?
     
     init() {
         gender = nil
         goal = nil
         availability = nil
         muscleToGrow = nil
+        referralCode = nil
     }
 }
 

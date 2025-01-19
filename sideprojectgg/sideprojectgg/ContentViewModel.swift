@@ -118,15 +118,59 @@ class ContentViewModel: ObservableObject {
             let userInFireStore = try await checkIfUserExists(uid: firebaseUser.uid)
             
             if userInFireStore == false {
-                let userReferral = firebaseUser.uid.prefix(6).uppercased()
                 
-                let userModel = User(email: firebaseUser.email, uid: firebaseUser.uid, intake: intakeForm, userReferral: userReferral)
                 
-            
+                //if intake form has a referral code -> query firebase and add 1 to the user that owns that referral code
+                if let referralCode = intakeForm.referralCode {
+                    let db = Firestore.firestore()
+                    
+                    do {
+                        // Query for the user with the given referral code
+                        let querySnapshot = try await db.collection("users")
+                            .whereField("referralCode", isEqualTo: referralCode)
+                            .getDocuments()
+                        
+                        if let document = querySnapshot.documents.first {
+                            let userID = document.documentID
+                            
+                            // Increment the referralAmount by 1
+                            await MainActor.run {
+                                db.collection("users").document(userID).updateData([
+                                    "referralAmount": FieldValue.increment(Int64(1))
+                                ]) { error in
+                                    if let error = error {
+                                        print("Error updating user: \(error.localizedDescription)")
+                                    } else {
+                                        print("Successfully incremented referral amount for user with ID: \(userID)")
+                                    }
+                                }
+                            }
+                        } else {
+                            print("No user found with referralCode \(referralCode).")
+                        }
+
+                        
+                    
+                        
+                    } catch {
+                        print("Error: \(error.localizedDescription)")
+                    }
+                }
                 
-                //create their referral code being the first 6 Characters
-            
+                //create their own referral code being the first 6 Characters
+                let referralCode = firebaseUser.uid.prefix(6).uppercased()
+                
+                let referralAmount = 0
+                
+                let userModel = User(email: firebaseUser.email, uid: firebaseUser.uid, intake: intakeForm, referralCode: referralCode, referralAmount: 0)
+                
+                //when another user uses their code we increase the referralAmount for the user with the corresponding referral code.
+                
+                //safeguard so only increase referralAmount when new user is created, use intake form to capture referral code -> or else they could just re-enter code everytime
+                
                 do {
+                    
+                    
                     try db.collection("users").document(firebaseUser.uid).setData(from: userModel)
                     print("added user \(firebaseUser.uid) to firestore")
                 } catch let error {
