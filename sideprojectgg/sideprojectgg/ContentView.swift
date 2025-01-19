@@ -57,6 +57,8 @@ struct ContentView: View {
                             
                         case "BackCameraView":
                             BackCameraView(cameraModel: cameraModel, path: $path)
+                        case "PaywallView":
+                            PaywallView()
                         
                         //add case for rating view
                                 //but need to pass scan object to rating view to mount

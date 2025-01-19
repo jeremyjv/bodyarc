@@ -11,6 +11,8 @@ import FirebaseFirestore
 import FirebaseAuth
 import GoogleSignIn
 import FirebaseFirestore
+import RevenueCat
+import RevenueCatUI
 
 
 class AppDelegate: NSObject, UIApplicationDelegate {
@@ -48,10 +50,9 @@ struct sideprojectggApp: App {
   @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     //now we can access from any view under ContentView and update info in respective pages
-    
-    
-    //we can only have one main actor, so combine everything together since we're trying to reference authViewModel from viewModel
-    //LEAD Action refactor authViewModel into viewModel
+    init() {
+        Purchases.configure(withAPIKey: "appl_QHxSKCyTmIlFUuTfLecrfUoEvtu")
+    }
     
     @StateObject private var viewModel = ContentViewModel()
     
@@ -66,6 +67,7 @@ struct sideprojectggApp: App {
             
             ContentView()
               .environmentObject(viewModel)
+              .presentPaywallIfNeeded(requiredEntitlementIdentifier: "WeeklyPremiumA")
             
         }
       

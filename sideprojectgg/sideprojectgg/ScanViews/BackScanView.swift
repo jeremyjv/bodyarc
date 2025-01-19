@@ -176,6 +176,8 @@ struct BackScanView: View {
             Button(action: {
                 //clear path -> call handle scan upload
                 
+                
+                
                 //run subscription business logic
                 
                 Task {
