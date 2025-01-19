@@ -70,14 +70,23 @@ struct ProgressView: View {
                 Text("Your Progress")
                     .font(.title)
                     .padding()
-
+                
                 if loadingScreen {
-                    Text("Retrieving scans...")
+                    Text("Loading...")
+                } else if viewModel.isScanProcessing && viewModel.scans!.count == 0 {
+                    // Show the loading card when a scan is in progress
+                    
+                    ScrollView {
+                        LazyVStack(spacing: 20) {
+                            LoadingCardView(
+                                frontImage: viewModel.frontImage,
+                                backImage: viewModel.backImage
+                            )
+                        }
+                    }
                 } else if viewModel.scans!.count == 0 {
                     Text("Scan to get your ratings")
-                }
-    
-                else {
+                } else {
                     ScrollView {
                         LazyVStack(spacing: 20) {
                             
