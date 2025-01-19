@@ -67,7 +67,7 @@ struct sideprojectggApp: App {
             
             ContentView()
               .environmentObject(viewModel)
-              .presentPaywallIfNeeded(requiredEntitlementIdentifier: "WeeklyPremiumA")
+              .presentPaywallIfNeeded(requiredEntitlementIdentifier: "MonthlyPremiumA")
             
         }
       
