@@ -21,17 +21,6 @@ struct ContentView: View {
     
     
 
-    
-
-    
-    
-    
-
-    
-    enum Destination: Hashable {
-        case string(String)
-        case scanObject(ScanObject)
-    }
     var body: some View {
         
         

@@ -12,6 +12,7 @@ struct ReferralView: View {
     let generator = UIImpactFeedbackGenerator(style: .heavy)
     
     @State private var referralInput: String = "" // Local state for the text input
+    @State private var showError: Bool = false // Track if an error should be shown
     
     
     var body: some View {
@@ -26,11 +27,35 @@ struct ReferralView: View {
                 .frame(maxWidth: 350, alignment: .leading)
             
             Spacer().frame(height: 60)
+            // TextField for referral code
             TextField("Enter your referral code", text: $referralInput)
-                .textFieldStyle(RoundedBorderTextFieldStyle()) // Rounded style for input
+                .textFieldStyle(RoundedBorderTextFieldStyle())
                 .textInputAutocapitalization(.characters) // Force uppercase input
                 .padding()
-                .frame(maxWidth: 350) // Width of the text field
+                .frame(maxWidth: 350)
+                .onChange(of: referralInput) { newValue, _ in
+                    // Trim the input to 6 characters
+                    if newValue.count > 6 {
+                        referralInput = String(newValue.prefix(6))
+                    }
+                    // Validate if length is exactly 6
+                    showError = referralInput.count != 6 && referralInput.count != 0
+                }
+            
+            Text("Or Continue and Skip")
+                .foregroundColor(.gray)
+                .font(.footnote)
+                .frame(maxWidth: 350, alignment: .leading)
+                .padding(.top, 5)
+
+            // Error message
+            if showError {
+                Text("Referral codes are 6 characters.")
+                    .foregroundColor(.red)
+                    .font(.footnote)
+                    .frame(maxWidth: 350, alignment: .leading)
+                    .padding(.top, 5)
+            }
             
        
             Button(action: {

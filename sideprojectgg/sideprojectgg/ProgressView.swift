@@ -81,11 +81,11 @@ struct ProgressView: View {
                                     )
                                 }
                             
-                            ForEach(retrievedScanImages.indices, id: \.self) { index in
-                                if let scan = scans?[index] {
+                            ForEach(viewModel.retrievedScanImages.indices, id: \.self) { index in
+                                if let scan = viewModel.scans?[index] {
                                     ProgressCardView(
                                         scan: scan,
-                                        images: retrievedScanImages[index],
+                                        images: viewModel.retrievedScanImages[index],
                                         path: $path
                                     )
                                 }

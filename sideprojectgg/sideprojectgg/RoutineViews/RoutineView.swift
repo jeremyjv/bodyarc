@@ -8,6 +8,8 @@
 import SwiftUI
 import FirebaseFirestore
 
+
+//need case where if user does not have scan, Direct them to Scan View
 struct RoutineView: View {
     
     @EnvironmentObject var viewModel: ContentViewModel
@@ -15,6 +17,7 @@ struct RoutineView: View {
     
 
     @State private var selectedMuscle: MuscleGroup? = nil // Track selected muscle group
+    
     
     func loadData() async {
         Task {
