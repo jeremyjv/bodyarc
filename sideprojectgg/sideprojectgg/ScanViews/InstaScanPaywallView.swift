@@ -34,6 +34,11 @@ struct InstaScanPaywallView: View {
                         if let _ = customerInfo, error == nil {
                             // Increment user's instaScans by 1 here
                             
+                            DispatchQueue.main.async {
+                                // Optimistically update the user's local state
+                                viewModel.user?.instaScans = (viewModel.user?.instaScans ?? 0) + 1
+                            }
+                            
                             let db = Firestore.firestore()
                             let userRef = db.collection("users").document(viewModel.uid!)
                             
@@ -43,7 +48,9 @@ struct InstaScanPaywallView: View {
                                     if let error = error {
                                         print("Failed to increment instaScans: \(error.localizedDescription)")
                                     } else {
+                                      
                                         print("InstaScans incremented successfully!")
+                                        
                                     }
                                 }
                             

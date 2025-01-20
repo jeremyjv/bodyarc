@@ -93,8 +93,14 @@ struct ScanView: View {
                        let lastGoldScan = user.lastGoldScan,
                        Calendar.current.date(byAdding: .day, value: -7, to: Date())! < lastGoldScan && isGold! {
                         //if user is not a gold member // never display this
-                    
-                        CustomScanButton(title: "InstaScan", path: $path, dest: "InstaScanPaywallView")
+                        
+                        //only redirect to paywall if they don't have instascans
+                        if user.instaScans == 0 {
+                            CustomScanButton(title: "InstaScan Now", path: $path, dest: "InstaScanPaywallView")
+                        } else {
+                            CustomScanButton(title: "InstaScan Now", path: $path, dest: "FrontScanView")
+                        }
+                      
                     } else {
                         
                         CustomScanButton(title: "Begin Scan", path: $path, dest: "FrontScanView")
