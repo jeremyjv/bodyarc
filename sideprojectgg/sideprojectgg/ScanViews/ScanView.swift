@@ -32,6 +32,9 @@ struct ScanView: View {
     @State private var defaultImage: UIImage?
     @State private var photosPickerItem: PhotosPickerItem?
     @State private var analysis: String?
+    
+    @State private var user: User? // User model to hold Firestore data
+    @State private var loading = true // Loading state for Firestore fetch
   
 
     
@@ -40,46 +43,103 @@ struct ScanView: View {
         
 
         VStack(spacing: 10) {
-            Button(action: {
-                viewModel.signOut()
-            }) {
-                Text("sign out")
-            }
             
-            Button(action: {
-                path.append("InstaScanPaywallView")
-            }) {
-                Text("InstaScan")
-            }
-            
-            
-            
-            ZStack {
-                Image(uiImage: UIImage(named: "scanImage")!)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 320, height: 423)
-                    .cornerRadius(30)
-                    .overlay(
-                        // Gradient overlay at the bottom
-                        LinearGradient(
-                            gradient: Gradient(stops: [
-                                .init(color: Color.clear, location: 0.65), // Transition starts 70% down
-                                .init(color: Color.black, location: 0.85) // Fully black at the bottom
-                            ]),
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                        .cornerRadius(30)
-                    )
-                CustomScanButton(title: "Begin Scan", path: $path)
-                    .offset(y: 200)
+            if loading {
+                Text("Loading Data")
+            } else {
+                Button(action: {
+                    viewModel.signOut()
+                }) {
+                    Text("sign out")
+                }
                 
+                Button(action: {
+                    path.append("InstaScanPaywallView")
+                }) {
+                    Text("InstaScan")
+                }
+                
+                
+                
+                ZStack {
+                    Image(uiImage: UIImage(named: "scanImage")!)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 320, height: 423)
+                        .cornerRadius(30)
+                        .overlay(
+                            // Gradient overlay at the bottom
+                            LinearGradient(
+                                gradient: Gradient(stops: [
+                                    .init(color: Color.clear, location: 0.65), // Transition starts 70% down
+                                    .init(color: Color.black, location: 0.85) // Fully black at the bottom
+                                ]),
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                            .cornerRadius(30)
+                        )
+                    
+                    // if user's last scan less than 7 days ago, display instascan button
+                    
+                    
+                    
+                    if let user = viewModel.user,
+                       let lastGoldScan = user.lastGoldScan,
+                       Calendar.current.date(byAdding: .day, value: -7, to: Date())! < lastGoldScan {
+                        
+                    
+                        CustomScanButton(title: "InstaScan", path: $path, dest: "InstaScanPaywallView")
+                    } else {
+                        
+                        CustomScanButton(title: "Begin Scan", path: $path, dest: "FrontScanView")
+                            .offset(y: 200)
+                    }
+                    
+                }
             }
             
         }
+        .onAppear(perform: fetchUserData) // Fetch user data when view appears
     
         
+    }
+ 
+    
+    // Fetch user data from Firestore
+    func fetchUserData() {
+        let db = Firestore.firestore()
+        guard let uid = viewModel.uid else { return }
+        let userRef = db.collection("users").document(uid)
+        
+        userRef.getDocument { snapshot, error in
+            if let error = error {
+                print("Error fetching user: \(error.localizedDescription)")
+                loading = false
+                return
+            }
+            
+            do {
+                if let snapshot = snapshot {
+                    // Decode Firestore data directly into the User model
+                    viewModel.user = try snapshot.data(as: User.self)
+                    print("User fetched successfully: \(String(describing: viewModel.user))")
+                } else {
+                    print("User document does not exist.")
+                }
+            } catch {
+                print("Error decoding user data: \(error.localizedDescription)")
+            }
+            
+            loading = false
+        }
+    }
+    
+    // Logic to determine if the InstaScan button should be shown
+    private func shouldShowInstaScanButton(lastScanDate: Date?) -> Bool {
+        guard let lastScan = lastScanDate else { return false } // don't show if no scan date exists
+        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        return lastScan < sevenDaysAgo
     }
   
 }
@@ -87,12 +147,12 @@ struct ScanView: View {
 struct CustomScanButton: View {
     var title: String
     @Binding var path: NavigationPath
-    @StateObject private var cameraModel = CameraModel()
+    var dest: String
     let generator = UIImpactFeedbackGenerator(style: .heavy)
 
     var body: some View {
         Button(action: {
-            path.append("FrontScanView")
+            path.append(dest)
             generator.impactOccurred()
         }) {
             // Use a ZStack to ensure the entire area is tappable
@@ -119,6 +179,8 @@ struct CustomScanButton: View {
             .padding()
         }
     }
+   
+    
 }
 
 

@@ -31,7 +31,7 @@ struct InstaScanPaywallView: View {
                     
                     //obtain first package
                     Purchases.shared.purchase(package: packages[0]) { transaction, customerInfo, error, userCancelled in
-                        if let customerInfo = customerInfo, error == nil {
+                        if let _ = customerInfo, error == nil {
                             // Increment user's instaScans by 1 here
                             
                             let db = Firestore.firestore()

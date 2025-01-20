@@ -255,11 +255,13 @@ struct BackScanView: View {
     // MARK: - Handlers
     
     func setLastGoldScan() {
+        viewModel.user!.lastGoldScan = Date()
         Task.detached {
             let db = Firestore.firestore()
             let userRef = await db.collection("users").document(viewModel.uid!)
             
             do {
+                
                 try await userRef.updateData([
                     "lastGoldScan": Date()
                 ])

@@ -23,6 +23,8 @@ struct User: Codable {
     var instaScans: Int?
     var lastGoldScan: Date?
     
+    
+    
 }
 
 //this will be editable in the top right profile section (gear icon)

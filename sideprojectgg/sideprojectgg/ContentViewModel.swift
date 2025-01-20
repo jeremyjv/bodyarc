@@ -33,6 +33,8 @@ class ContentViewModel: ObservableObject {
     @Published var frontAnalysis: FrontAnalysis?
     @Published var backAnalysis: BackAnalysis?
     
+    @Published var user: User?
+    
     let db = Firestore.firestore()
     
     //Auth view model data
