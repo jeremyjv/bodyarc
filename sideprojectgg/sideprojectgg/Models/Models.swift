@@ -20,6 +20,8 @@ struct User: Codable {
     var muscleRanking: [String]?
     var referralCode: String?
     var referralAmount: Int?
+    var instaScans: Int?
+    var lastScan: Date?
     
 }
 
