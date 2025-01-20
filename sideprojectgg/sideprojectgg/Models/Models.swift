@@ -21,7 +21,7 @@ struct User: Codable {
     var referralCode: String?
     var referralAmount: Int?
     var instaScans: Int?
-    var lastScan: Date?
+    var lastGoldScan: Date?
     
 }
 

@@ -8,9 +8,10 @@
 import SwiftUI
 import RevenueCat
 import RevenueCatUI
+import Firebase
 
 struct InstaScanPaywallView: View {
-    
+    @EnvironmentObject var viewModel: ContentViewModel
     //this code snippet is when the user wants to InstaScan -> update userTable to have active scan
     
 
@@ -32,6 +33,21 @@ struct InstaScanPaywallView: View {
                     Purchases.shared.purchase(package: packages[0]) { transaction, customerInfo, error, userCancelled in
                         if let customerInfo = customerInfo, error == nil {
                             // Increment user's instaScans by 1 here
+                            
+                            let db = Firestore.firestore()
+                            let userRef = db.collection("users").document(viewModel.uid!)
+                            
+                            userRef.updateData([
+                                    "instaScans": FieldValue.increment(Int64(1))
+                                ]) { error in
+                                    if let error = error {
+                                        print("Failed to increment instaScans: \(error.localizedDescription)")
+                                    } else {
+                                        print("InstaScans incremented successfully!")
+                                    }
+                                }
+                            
+                            
                         } else if let error = error {
                             // Handle the error
                             print("Purchase failed: \(error.localizedDescription)")

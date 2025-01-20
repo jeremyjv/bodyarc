@@ -184,7 +184,7 @@ struct BackScanView: View {
                     do {
                         let customerInfo = try await Purchases.shared.customerInfo()
                         
-                        //if the user has bodyarc gold OR has bought a
+                        //if the (user has Body Arc Gold AND last Gold Scan more than 7 Days Ago) OR (has instascan available)
                         if customerInfo.entitlements["MonthlyPremiumA"]?.isActive == true {
                             //run analysis logic as usual
                             path = NavigationPath()
