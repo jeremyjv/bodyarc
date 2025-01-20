@@ -37,6 +37,7 @@ struct ScanView: View {
     
     @State private var user: User? // User model to hold Firestore data
     @State private var loading = true // Loading state for Firestore fetch
+    @State private var loaded = false
     
 
     
@@ -87,10 +88,11 @@ struct ScanView: View {
                         //if user is not a gold member // never display this
                         
                         //only redirect to paywall if they don't have instascans
-                        if user.instaScans == 0 {
-                            CustomScanButton(title: "InstaScan Now", path: $path, dest: "InstaScanPaywallView")
-                        } else {
+                        if let instascan = user.instaScans, instascan > 0 {
                             CustomScanButton(title: "InstaScan Now", path: $path, dest: "FrontScanView")
+                            
+                        } else {
+                            CustomScanButton(title: "InstaScan Now", path: $path, dest: "InstaScanPaywallView")
                         }
                       
                     } else {
@@ -104,9 +106,14 @@ struct ScanView: View {
             
         }
         .onAppear {
-            Task {
-                await fetchUserDataAndConfigurePurchase() // Fetch user data when view appears
+            if !loaded {
+                Task {
+                    await fetchUserDataAndConfigurePurchase() // Fetch user data when view appears
+                    loaded = true
+                }
+                
             }
+       
         }
   
     
@@ -137,6 +144,7 @@ struct ScanView: View {
                 // Decode Firestore data into the User model
                 let user = try Firestore.Decoder().decode(User.self, from: data)
                 viewModel.user = user
+                print("instascans", viewModel.user?.instaScans)
                 print("User fetched successfully: \(String(describing: viewModel.user))")
             } else {
                 print("User document does not exist.")

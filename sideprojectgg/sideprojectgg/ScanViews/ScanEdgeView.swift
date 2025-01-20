@@ -23,16 +23,11 @@ struct ScanEdgeView: View {
         .sheet(isPresented: $showPaywall, content: {
             PaywallView()
                 .paywallFooter(condensed: true)
+            //want to run handleScanUpload and lastGoldScan on a successfull purchase from the paywall footer
         })
         Text("Invite 3 Friends")
         
-        
-        
-        
-        
-        //Have a redirect to PaywallView
-        
-        //Have a popup sheet for referrals
+
     }
 }
 
