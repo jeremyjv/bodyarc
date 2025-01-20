@@ -12,6 +12,8 @@ import Firebase
 import FirebaseFunctions
 import PhotosUI
 import FirebaseFirestore
+import RevenueCat
+import RevenueCatUI
 
 
 
@@ -35,7 +37,10 @@ struct ScanView: View {
     
     @State private var user: User? // User model to hold Firestore data
     @State private var loading = true // Loading state for Firestore fetch
-  
+    
+
+    
+    @State var isGold: Bool?
 
     
 
@@ -86,8 +91,8 @@ struct ScanView: View {
                     
                     if let user = viewModel.user,
                        let lastGoldScan = user.lastGoldScan,
-                       Calendar.current.date(byAdding: .day, value: -7, to: Date())! < lastGoldScan {
-                        
+                       Calendar.current.date(byAdding: .day, value: -7, to: Date())! < lastGoldScan && isGold! {
+                        //if user is not a gold member // never display this
                     
                         CustomScanButton(title: "InstaScan", path: $path, dest: "InstaScanPaywallView")
                     } else {
@@ -101,6 +106,12 @@ struct ScanView: View {
             
         }
         .onAppear(perform: fetchUserData) // Fetch user data when view appears
+        .onAppear {
+            Task {
+                let customerInfo = try await Purchases.shared.customerInfo()
+                self.isGold = customerInfo.entitlements["MonthlyPremiumA"]?.isActive == true
+            }
+        }
     
         
     }
