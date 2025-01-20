@@ -6,12 +6,27 @@
 //
 
 import SwiftUI
+import RevenueCat
+import RevenueCatUI
 
 //need to mount front image to this view
 struct ScanEdgeView: View {
+    
+    @State var showPaywall: Bool = false
     var body: some View {
-        Text("Get Body Arc Gold")
+        Button(action: {
+            showPaywall = true
+        }) {
+            
+            Text("🥇Get Body Arc Gold")
+        }
+        .sheet(isPresented: $showPaywall, content: {
+            PaywallView()
+                .paywallFooter(condensed: true)
+        })
         Text("Invite 3 Friends")
+        
+        
         
         
         

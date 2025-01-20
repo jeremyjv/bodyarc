@@ -9,6 +9,7 @@ import SwiftUI
 import Firebase
 import FirebaseFunctions
 import PhotosUI
+import RevenueCat
 
 
 
@@ -61,6 +62,7 @@ struct ContentView: View {
                             PaywallView()
                         case "ScanEdgeView":
                             ScanEdgeView()
+                                
                         case "InstaScanPaywallView":
                             InstaScanPaywallView()
                         

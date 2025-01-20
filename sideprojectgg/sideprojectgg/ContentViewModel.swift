@@ -15,6 +15,7 @@ import FirebaseAuth
 import GoogleSignIn
 
 
+
 @MainActor
 class ContentViewModel: ObservableObject {
     
@@ -116,6 +117,7 @@ class ContentViewModel: ObservableObject {
             let firebaseUser = result.user
             
             //store data as struct then pass to firebase
+            
             
             let userInFireStore = try await checkIfUserExists(uid: firebaseUser.uid)
             

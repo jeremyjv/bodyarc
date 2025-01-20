@@ -51,6 +51,7 @@ struct sideprojectggApp: App {
     
     //now we can access from any view under ContentView and update info in respective pages
     init() {
+        
         Purchases.configure(withAPIKey: "appl_QHxSKCyTmIlFUuTfLecrfUoEvtu")
     }
     
@@ -67,7 +68,7 @@ struct sideprojectggApp: App {
             
             ContentView()
               .environmentObject(viewModel)
-              .presentPaywallIfNeeded(requiredEntitlementIdentifier: "MonthlyPremiumA")
+              
             
         }
       

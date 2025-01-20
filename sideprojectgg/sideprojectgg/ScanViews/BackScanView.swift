@@ -182,6 +182,7 @@ struct BackScanView: View {
                 //clear path -> call handle scan upload
                 Task {
                     
+                    //handle a run where once they pay we automattically run analysis on current front and back images
                     
                     //run subscription, instaScan, and lastScan business logic
                     do {

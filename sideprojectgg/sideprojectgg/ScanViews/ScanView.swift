@@ -58,14 +58,6 @@ struct ScanView: View {
                     Text("sign out")
                 }
                 
-                Button(action: {
-                    path.append("InstaScanPaywallView")
-                }) {
-                    Text("InstaScan")
-                }
-                
-                
-                
                 ZStack {
                     Image(uiImage: UIImage(named: "scanImage")!)
                         .resizable()
@@ -111,45 +103,50 @@ struct ScanView: View {
             }
             
         }
-        .onAppear(perform: fetchUserData) // Fetch user data when view appears
         .onAppear {
             Task {
-                let customerInfo = try await Purchases.shared.customerInfo()
-                self.isGold = customerInfo.entitlements["MonthlyPremiumA"]?.isActive == true
+                await fetchUserDataAndConfigurePurchase() // Fetch user data when view appears
             }
         }
+  
     
         
     }
  
     
     // Fetch user data from Firestore
-    func fetchUserData() {
+    func fetchUserDataAndConfigurePurchase() async {
         let db = Firestore.firestore()
+        
         guard let uid = viewModel.uid else { return }
         let userRef = db.collection("users").document(uid)
         
-        userRef.getDocument { snapshot, error in
-            if let error = error {
-                print("Error fetching user: \(error.localizedDescription)")
-                loading = false
-                return
-            }
-            
-            do {
-                if let snapshot = snapshot {
-                    // Decode Firestore data directly into the User model
-                    viewModel.user = try snapshot.data(as: User.self)
-                    print("User fetched successfully: \(String(describing: viewModel.user))")
-                } else {
-                    print("User document does not exist.")
-                }
-            } catch {
-                print("Error decoding user data: \(error.localizedDescription)")
-            }
-            
-            loading = false
+        // Configure Purchases with the custom App User ID
+        Purchases.shared.logIn(uid) { (customerInfo, created, error) in
+            print("customer is gold", customerInfo!.entitlements["MonthlyPremiumA"]?.isActive == true)
         }
+        
+        do {
+            // Step 1: Fetch Customer Info from RevenueCat
+            let customerInfo = try await Purchases.shared.customerInfo()
+            self.isGold = customerInfo.entitlements["MonthlyPremiumA"]?.isActive == true
+            
+            // Step 2: Fetch User Data from Firestore
+            let snapshot = try await userRef.getDocument()
+            if let data = snapshot.data() {
+                // Decode Firestore data into the User model
+                let user = try Firestore.Decoder().decode(User.self, from: data)
+                viewModel.user = user
+                print("User fetched successfully: \(String(describing: viewModel.user))")
+            } else {
+                print("User document does not exist.")
+            }
+        } catch {
+            print("Error: \(error.localizedDescription)")
+        }
+        
+        // Step 3: Mark loading as complete
+        loading = false
     }
     
     // Logic to determine if the InstaScan button should be shown
