@@ -12,67 +12,84 @@ import Firebase
 
 struct InstaScanPaywallView: View {
     @EnvironmentObject var viewModel: ContentViewModel
-    //this code snippet is when the user wants to InstaScan -> update userTable to have active scan
+    @Binding var path: NavigationPath // Ensure you can modify the navigation stack
     
-
-    
-    //Business logic for this is: if it is successful we add 1 to their instascan then decrement their instascan when they scan
+    @State private var isProcessing: Bool = false // Track if purchase is in progress
     
     var body: some View {
-        Text("InstaScan paywall here")
-        Button(action: {
-            //put BodyArcOneOff Package Here
-            
-            //obtain InstaScanPackage
-            Purchases.shared.getOfferings { (offerings, error) in
-                if let instaScan = offerings?["InstaScan"] {
-                    let packages = instaScan.availablePackages
-                    // `packages` should contain each coin package with an identifier like 'coins-100'
-                    
-                    //obtain first package
-                    Purchases.shared.purchase(package: packages[0]) { transaction, customerInfo, error, userCancelled in
-                        if let _ = customerInfo, error == nil {
-                            // Increment user's instaScans by 1 here
+        ZStack {
+            VStack {
+                Text("InstaScan Paywall Here")
+                
+                Button(action: {
+                    isProcessing = true // Start processing
+                    Purchases.shared.getOfferings { offerings, error in
+                        guard let instaScan = offerings?["InstaScan"], error == nil else {
+                            print("Failed to fetch offerings: \(error?.localizedDescription ?? "Unknown error")")
+                            isProcessing = false // Stop processing
+                            return
+                        }
+                        
+                        let packages = instaScan.availablePackages
+                        Purchases.shared.purchase(package: packages[0]) { transaction, customerInfo, error, userCancelled in
+                            isProcessing = false // Stop processing after purchase completes
                             
-                            DispatchQueue.main.async {
-                                // Optimistically update the user's local state
+                            if let _ = customerInfo, error == nil {
+                                // Update local state optimistically
                                 viewModel.user?.instaScans = (viewModel.user?.instaScans ?? 0) + 1
-                            }
-                            
-                            let db = Firestore.firestore()
-                            let userRef = db.collection("users").document(viewModel.uid!)
-                            
-                            userRef.updateData([
+                                
+                                // Update Firestore
+                                let db = Firestore.firestore()
+                                let userRef = db.collection("users").document(viewModel.uid!)
+                                userRef.updateData([
                                     "instaScans": FieldValue.increment(Int64(1))
                                 ]) { error in
                                     if let error = error {
                                         print("Failed to increment instaScans: \(error.localizedDescription)")
                                     } else {
-                                      
                                         print("InstaScans incremented successfully!")
-                                        
                                     }
                                 }
-                            
-                            
-                        } else if let error = error {
-                            // Handle the error
-                            print("Purchase failed: \(error.localizedDescription)")
-                        } else if userCancelled {
-                            print("User cancelled the purchase.")
+                                
+                                // Navigate to FrontScanView
+                                path = NavigationPath()
+                                path.append("FrontScanView")
+                            } else if let error = error {
+                                print("Purchase failed: \(error.localizedDescription)")
+                            } else if userCancelled {
+                                print("User cancelled the purchase.")
+                            }
                         }
                     }
+                }) {
+                    Text("Purchase InstaScan")
+                        .font(.headline)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
                 }
             }
+            .padding()
             
-            
-           
-        }) {
-            Text("Purchase instascan")
+            // Show a processing overlay when isProcessing is true
+            if isProcessing {
+                Color.black.opacity(0.5) // Dim background
+                    .edgesIgnoringSafeArea(.all)
+                
+                VStack {
+                    Text("Processing...")
+                        .progressViewStyle(CircularProgressViewStyle())
+                        .padding()
+                        .background(Color.gray)
+                        .cornerRadius(10)
+                }
+            }
         }
     }
 }
 
 #Preview {
-    InstaScanPaywallView()
+   
 }

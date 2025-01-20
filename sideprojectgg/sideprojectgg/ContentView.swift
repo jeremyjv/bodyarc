@@ -64,7 +64,7 @@ struct ContentView: View {
                             ScanEdgeView()
                                 
                         case "InstaScanPaywallView":
-                            InstaScanPaywallView()
+                            InstaScanPaywallView(path: $path)
                         
                         //add case for rating view
                                 //but need to pass scan object to rating view to mount
