@@ -12,6 +12,7 @@ import FirebaseFunctions
 import PhotosUI
 import RevenueCat
 import RevenueCatUI
+import FirebaseFirestore
 
 //make it so that when the default front image is showing it asks to upload or take picture
 //when custom picture is loaded into view, it asks to retake or use the image
@@ -38,6 +39,8 @@ struct BackScanView: View {
     private var previewHeight: CGFloat {
         previewWidth * 4 / 3 // Aspect ratio of 4:3 (common for cameras)
     }
+    
+    let db = Firestore.firestore()
 
     var body: some View {
         VStack(spacing: 16) {
@@ -189,7 +192,12 @@ struct BackScanView: View {
                             //run analysis logic as usual
                             path = NavigationPath()
                             //redirect to Progress View
+                            setLastGoldScan()
                             await viewModel.handleScanUploadAction()
+                            
+                            
+                            
+                            
                             
                         } else {
                             //append ScanEdgeView to navigationPath
@@ -245,6 +253,26 @@ struct BackScanView: View {
     }
 
     // MARK: - Handlers
+    
+    func setLastGoldScan() {
+        Task.detached {
+            let db = Firestore.firestore()
+            let userRef = await db.collection("users").document(viewModel.uid!)
+            
+            do {
+                try await userRef.updateData([
+                    "lastGoldScan": Date()
+                ])
+                await MainActor.run {
+                    print("Last Gold Scan updated")
+                }
+            } catch {
+                await MainActor.run {
+                    print("Failed to update last gold scan: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
 
     private func captureWithTimerIfNeeded() {
         if isTimerEnabled {
