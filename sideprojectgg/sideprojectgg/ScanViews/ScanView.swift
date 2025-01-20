@@ -33,8 +33,15 @@ struct ScanView: View {
     @State private var photosPickerItem: PhotosPickerItem?
     @State private var analysis: String?
   
+    //this code snippet is when the user wants to InstaScan -> update userTable to have active scan
     
+    //todo: Add instaScan and lastScan to user Table
     
+//    Purchases.shared.purchase(package: package) { (transaction, customerInfo, error, userCancelled)
+//        if let customerInfo, error == nil {
+//            // validate the purchase with your server, and display content
+//        }
+//    }
     
 
     var body: some View {

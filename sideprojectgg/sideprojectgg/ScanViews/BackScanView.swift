@@ -10,6 +10,8 @@ import SwiftUI
 import Firebase
 import FirebaseFunctions
 import PhotosUI
+import RevenueCat
+import RevenueCatUI
 
 //make it so that when the default front image is showing it asks to upload or take picture
 //when custom picture is loaded into view, it asks to retake or use the image
@@ -175,16 +177,30 @@ struct BackScanView: View {
 
             Button(action: {
                 //clear path -> call handle scan upload
-                
-                
-                
-                //run subscription business logic
-                
                 Task {
-                    path = NavigationPath()
-                    await viewModel.handleScanUploadAction()
                     
+                    
+                    //run subscription, instaScan, and lastScan business logic
+                    do {
+                        let customerInfo = try await Purchases.shared.customerInfo()
+                        
+                        //if the user has bodyarc gold OR has bought a
+                        if customerInfo.entitlements["MonthlyPremiumA"]?.isActive == true {
+                            //run analysis logic as usual
+                            path = NavigationPath()
+                            //redirect to Progress View
+                            await viewModel.handleScanUploadAction()
+                            
+                        } else {
+                            //append ScanEdgeView to navigationPath
+                            path.append("ScanEdgeView")
+                        }
+                    } catch {
+                        print("error fetching customer info")
+                    }
                 }
+                
+                
             }) {
                 Text("Continue")
                     .frame(maxWidth: .infinity)
