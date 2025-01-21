@@ -111,8 +111,7 @@ struct ScanView: View {
                 Task {
                     await fetchUserDataAndConfigurePurchase()
                 }
-                loaded = true
-                loading = false
+                
             }
         }
         .onChange(of: viewModel.uid) { _, _ in
@@ -163,6 +162,8 @@ struct ScanView: View {
         }
         
         // Step 3: Mark loading as complete
+        loaded = true
+        loading = false
         
     }
     
