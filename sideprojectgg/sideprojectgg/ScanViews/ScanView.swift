@@ -153,6 +153,7 @@ struct ScanView: View {
                 // Decode Firestore data into the User model
                 let user = try Firestore.Decoder().decode(User.self, from: data)
                 viewModel.user = user
+            
               
                 print("User fetched successfully: \(String(describing: viewModel.user))")
             } else {
@@ -168,12 +169,6 @@ struct ScanView: View {
         
     }
     
-    // Logic to determine if the InstaScan button should be shown
-    private func shouldShowInstaScanButton(lastScanDate: Date?) -> Bool {
-        guard let lastScan = lastScanDate else { return false } // don't show if no scan date exists
-        let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
-        return lastScan < sevenDaysAgo
-    }
   
 }
 
