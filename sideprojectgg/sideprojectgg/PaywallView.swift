@@ -32,15 +32,20 @@ struct PaywallView: View {
                     Purchases.shared.purchase(package: packages[0]) { transaction, customerInfo, error, userCancelled in
                         if let _ = customerInfo, error == nil {
                             //handle after payment scan logic here
+                            DispatchQueue.main.async {
+                                viewModel.isGold = true
+                                viewModel.user!.lastGoldScan = Date()
+                                setLastGoldScan()
+                                path = NavigationPath()
+                            }
                         
                             //redirect to Progress View
                             Task {
-                                viewModel.user!.lastGoldScan = Date()
-                                setLastGoldScan()
+                                
                                 await viewModel.handleScanUploadAction()
                             }
                             //close paywall and redirect to progress view
-                            path = NavigationPath()
+                       
                 
                         }
                     }
@@ -57,7 +62,6 @@ struct PaywallView: View {
     }
     
     func setLastGoldScan() {
-        viewModel.user!.lastGoldScan = Date()
         Task.detached {
             let db = Firestore.firestore()
             let userRef = await db.collection("users").document(viewModel.uid!)

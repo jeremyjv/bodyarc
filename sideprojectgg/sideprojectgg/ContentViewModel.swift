@@ -53,6 +53,8 @@ class ContentViewModel: ObservableObject {
     
     @Published var isScanProcessing: Bool = false
     
+    @Published var isGold: Bool?
+    
  
     
     init() {

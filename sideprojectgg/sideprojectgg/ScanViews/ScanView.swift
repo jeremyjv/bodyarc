@@ -84,7 +84,7 @@ struct ScanView: View {
                     
                     if let user = viewModel.user,
                        let lastGoldScan = user.lastGoldScan,
-                       let isGold = isGold, // Safely unwrap `isGold`
+                       let isGold = viewModel.isGold, // Safely unwrap `isGold`
                        Calendar.current.date(byAdding: .day, value: -7, to: Date())! < lastGoldScan && isGold {
                         //if user is not a gold member // never display this
                         
@@ -144,7 +144,7 @@ struct ScanView: View {
             // Configure Purchases with the custom App User ID
             Purchases.shared.logIn(uid) { (customerInfo, created, error) in
                 print("customer is gold", customerInfo!.entitlements["MonthlyPremiumA"]?.isActive == true)
-                self.isGold = customerInfo!.entitlements["MonthlyPremiumA"]?.isActive == true
+                viewModel.isGold = customerInfo!.entitlements["MonthlyPremiumA"]?.isActive == true
             }
             
             // Step 2: Fetch User Data from Firestore
