@@ -193,7 +193,16 @@ struct BackScanView: View {
                             //run analysis logic as usual
                             path = NavigationPath()
                             //redirect to Progress View
-                            setLastGoldScan()
+                            
+                            
+                            
+                            //only set last gold if user has no insta scans,.. aka its the regular weekly one
+                            if viewModel.user?.instaScans == 0 {
+                                setLastGoldScan()
+                            }
+                            
+                            //decrement instascan
+                            
                             await viewModel.handleScanUploadAction()
                             
                             

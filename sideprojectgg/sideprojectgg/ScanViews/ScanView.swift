@@ -152,7 +152,7 @@ struct ScanView: View {
                 // Decode Firestore data into the User model
                 let user = try Firestore.Decoder().decode(User.self, from: data)
                 viewModel.user = user
-                print("instascans", viewModel.user?.instaScans)
+              
                 print("User fetched successfully: \(String(describing: viewModel.user))")
             } else {
                 print("User document does not exist.")
