@@ -15,6 +15,7 @@ struct ScanEdgeView: View {
     @EnvironmentObject var viewModel: ContentViewModel
     @Binding var path: NavigationPath
     @State var showPaywall: Bool = false
+    @State var showReferral: Bool = false
     var body: some View {
         Button(action: {
             showPaywall = true
@@ -28,6 +29,17 @@ struct ScanEdgeView: View {
             //want to run handleScanUpload and lastGoldScan on a successfull purchase from the paywall footer
         }
         Text("Invite 3 Friends")
+        
+        Button(action: {
+            showReferral = true
+        }) {
+            
+            Text("Invite 3 Friends")
+        }
+        .sheet(isPresented: $showReferral) {
+            RedeemReferralView()
+            //want to run handleScanUpload and lastGoldScan on a successfull purchase from the paywall footer
+        }
         
 
     }
