@@ -84,7 +84,8 @@ struct ScanView: View {
                     
                     if let user = viewModel.user,
                        let lastGoldScan = user.lastGoldScan,
-                       Calendar.current.date(byAdding: .day, value: -7, to: Date())! < lastGoldScan && isGold! {
+                       let isGold = isGold, // Safely unwrap `isGold`
+                       Calendar.current.date(byAdding: .day, value: -7, to: Date())! < lastGoldScan && isGold {
                         //if user is not a gold member // never display this
                         
                         //only redirect to paywall if they don't have instascans
@@ -108,18 +109,27 @@ struct ScanView: View {
         .onAppear {
             if !loaded {
                 Task {
-                    await fetchUserDataAndConfigurePurchase() // Fetch user data when view appears
-                    loaded = true
+                    await fetchUserDataAndConfigurePurchase()
                 }
-                
+                loaded = true
+                loading = false
             }
-       
+        }
+        .onChange(of: viewModel.uid) { _, _ in
+            resetStates()
+            Task {
+                await fetchUserDataAndConfigurePurchase()
+            }
         }
   
     
         
     }
- 
+    
+    private func resetStates() {
+            loading = true
+            loaded = false
+        }
     
     // Fetch user data from Firestore
     func fetchUserDataAndConfigurePurchase() async {
@@ -128,15 +138,14 @@ struct ScanView: View {
         guard let uid = viewModel.uid else { return }
         let userRef = db.collection("users").document(uid)
         
-        // Configure Purchases with the custom App User ID
-        Purchases.shared.logIn(uid) { (customerInfo, created, error) in
-            print("customer is gold", customerInfo!.entitlements["MonthlyPremiumA"]?.isActive == true)
-        }
-        
+
         do {
             // Step 1: Fetch Customer Info from RevenueCat
-            let customerInfo = try await Purchases.shared.customerInfo()
-            self.isGold = customerInfo.entitlements["MonthlyPremiumA"]?.isActive == true
+            // Configure Purchases with the custom App User ID
+            Purchases.shared.logIn(uid) { (customerInfo, created, error) in
+                print("customer is gold", customerInfo!.entitlements["MonthlyPremiumA"]?.isActive == true)
+                self.isGold = customerInfo!.entitlements["MonthlyPremiumA"]?.isActive == true
+            }
             
             // Step 2: Fetch User Data from Firestore
             let snapshot = try await userRef.getDocument()
@@ -154,7 +163,7 @@ struct ScanView: View {
         }
         
         // Step 3: Mark loading as complete
-        loading = false
+        
     }
     
     // Logic to determine if the InstaScan button should be shown

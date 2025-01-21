@@ -22,20 +22,24 @@ struct InstaScanPaywallView: View {
                 Text("InstaScan Paywall Here")
                 
                 Button(action: {
-                    isProcessing = true // Start processing
+                
                     Purchases.shared.getOfferings { offerings, error in
                         guard let instaScan = offerings?["InstaScan"], error == nil else {
                             print("Failed to fetch offerings: \(error?.localizedDescription ?? "Unknown error")")
-                            isProcessing = false // Stop processing
+                          
                             return
                         }
                         
                         let packages = instaScan.availablePackages
                         Purchases.shared.purchase(package: packages[0]) { transaction, customerInfo, error, userCancelled in
-                            isProcessing = false // Stop processing after purchase completes
+                            isProcessing = true // Stop processing after purchase completes
                             
                             if let _ = customerInfo, error == nil {
                                 // Update local state optimistically
+                                isProcessing = false
+                                // Navigate to FrontScanView
+                                path = NavigationPath()
+                                path.append("FrontScanView")
                                 viewModel.user?.instaScans = (viewModel.user?.instaScans ?? 0) + 1
                                 
                                 // Update Firestore
@@ -52,13 +56,13 @@ struct InstaScanPaywallView: View {
                                 }
                                 
                                 // Navigate to FrontScanView
-                                path = NavigationPath()
-                                path.append("FrontScanView")
+                                
                             } else if let error = error {
                                 print("Purchase failed: \(error.localizedDescription)")
                             } else if userCancelled {
                                 print("User cancelled the purchase.")
                             }
+                            isProcessing = false
                         }
                     }
                 }) {
