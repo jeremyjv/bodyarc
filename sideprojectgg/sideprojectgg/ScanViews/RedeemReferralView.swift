@@ -11,6 +11,8 @@ import FirebaseFirestore
 struct RedeemReferralView: View {
     //eventually add loading while we check referral
     @EnvironmentObject var viewModel: ContentViewModel
+    @Binding var path: NavigationPath
+    
     var body: some View {
         Button(action: {
             Task {
@@ -79,11 +81,18 @@ struct RedeemReferralView: View {
     private func handleReferralRedemption() {
         //run scan business logic here
         
-        print("Handled BUSINESS LOGIC")
+        Task {
+            await viewModel.handleScanUploadAction()
+        }
+        
+        DispatchQueue.main.async {
+            //redirect
+            path = NavigationPath()
+            //redirect
+        }
+
         
     }
 }
 
-#Preview {
-    RedeemReferralView()
-}
+

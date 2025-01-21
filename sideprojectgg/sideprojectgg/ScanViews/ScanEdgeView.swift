@@ -37,7 +37,7 @@ struct ScanEdgeView: View {
             Text("Invite 3 Friends")
         }
         .sheet(isPresented: $showReferral) {
-            RedeemReferralView()
+            RedeemReferralView(path: $path)
             //want to run handleScanUpload and lastGoldScan on a successfull purchase from the paywall footer
         }
         
