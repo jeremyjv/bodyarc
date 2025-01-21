@@ -191,17 +191,41 @@ struct BackScanView: View {
                         //if the (user has Body Arc Gold) OR (has instascan available)
                         if customerInfo.entitlements["MonthlyPremiumA"]?.isActive == true {
                             //run analysis logic as usual
-                            path = NavigationPath()
+                            //path = NavigationPath()
                             //redirect to Progress View
                             
                             
                             
-                            //only set last gold if user has no insta scans,.. aka its the regular weekly one
+                            //only set lastGoldScan if user has no insta scans,.. aka its the regular weekly one
                             if viewModel.user?.instaScans == 0 {
                                 setLastGoldScan()
                             }
                             
                             //decrement instascan
+                            // Set instaScans to 0 in Firestore
+                            // Firestore operation wrapped in DispatchQueue
+                            DispatchQueue.main.async {
+                                path = NavigationPath()
+                                viewModel.user?.instaScans = 0
+                                let db = Firestore.firestore()
+                                if let uid = viewModel.uid {
+                                    let userRef = db.collection("users").document(uid)
+
+                                    userRef.updateData([
+                                        "instaScans": Int64(0)
+                                    ]) { error in
+                                        if let error = error {
+                                            print("Failed to set instaScans to 0: \(error.localizedDescription)")
+                                        } else {
+                                            print("InstaScans set to 0 successfully!")
+                                        }
+                                    }
+                                    
+                               
+                                } else {
+                                    print("Error: viewModel.uid is nil")
+                                }
+                            }
                             
                             await viewModel.handleScanUploadAction()
                             
@@ -228,7 +252,8 @@ struct BackScanView: View {
         }
         .padding()
     }
-
+    
+    
     private var cameraCaptureButton: some View {
         Button(action: {
             captureWithTimerIfNeeded()

@@ -40,7 +40,7 @@ struct InstaScanPaywallView: View {
                                 // Navigate to FrontScanView
                                 path = NavigationPath()
                                 path.append("FrontScanView")
-                                viewModel.user?.instaScans = (viewModel.user?.instaScans ?? 0) + 1
+                                viewModel.user?.instaScans = 1
                                 
                                 // Update Firestore
                                 let db = Firestore.firestore()
