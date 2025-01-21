@@ -20,6 +20,8 @@ struct PaywallView: View {
         Button(action: {
             //put BodyArcOneOff Package Here
             
+            //update local data with dispatch here
+            
             //obtain InstaScanPackage
             Purchases.shared.getOfferings { (offerings, error) in
                 if let instaScan = offerings?["BodyArcGoldA"] {
@@ -33,6 +35,7 @@ struct PaywallView: View {
                         
                             //redirect to Progress View
                             Task {
+                                viewModel.user!.lastGoldScan = Date()
                                 setLastGoldScan()
                                 await viewModel.handleScanUploadAction()
                             }

@@ -117,6 +117,7 @@ struct ScanView: View {
         .onChange(of: viewModel.uid) { _, _ in
             resetStates()
             Task {
+                print("fetching new user")
                 await fetchUserDataAndConfigurePurchase()
             }
         }

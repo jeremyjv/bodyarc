@@ -196,15 +196,16 @@ struct BackScanView: View {
                             
                             
                             
-                            //only set lastGoldScan if user has no insta scans,.. aka its the regular weekly one
-                            if viewModel.user?.instaScans == 0 {
-                                setLastGoldScan()
-                            }
                             
                             //decrement instascan
                             // Set instaScans to 0 in Firestore
                             // Firestore operation wrapped in DispatchQueue
                             DispatchQueue.main.async {
+                                //only set lastGoldScan if user has no insta scans,.. aka its the regular weekly one
+                                if viewModel.user?.instaScans == 0 {
+                                    setLastGoldScan()
+                                }
+                                
                                 path = NavigationPath()
                                 viewModel.user?.instaScans = 0
                                 let db = Firestore.firestore()
@@ -288,7 +289,7 @@ struct BackScanView: View {
     // MARK: - Handlers
     
     func setLastGoldScan() {
-        viewModel.user!.lastGoldScan = Date()
+        
         Task.detached {
             let db = Firestore.firestore()
             let userRef = await db.collection("users").document(viewModel.uid!)
