@@ -12,10 +12,10 @@ import Firebase
 
 struct InstaScanPaywallView: View {
     @EnvironmentObject var viewModel: ContentViewModel
-    @Binding var path: NavigationPath // Ensure you can modify the navigation stack
-    
-    @State private var isProcessing: Bool = false // Track if purchase is in progress
-    @State private var showDotsAnimation: Bool = false // Control dots animation
+    @Binding var path: NavigationPath
+
+    @State private var isProcessing: Bool = false
+    @State private var showDotsAnimation: Bool = false
 
     var body: some View {
         ZStack {
@@ -24,10 +24,12 @@ struct InstaScanPaywallView: View {
                 Text("InstaScan Paywall Here")
                     .font(.title)
                     .padding(.bottom, 20)
-                
+
                 Button(action: {
                     isProcessing = true
-                    showDotsAnimation = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        showDotsAnimation = true
+                    }
                     handlePurchase()
                 }) {
                     Text("Purchase InstaScan")
@@ -40,24 +42,24 @@ struct InstaScanPaywallView: View {
                 }
             }
             .padding()
-            
+
             // Loading Overlay
             if isProcessing {
                 Color.black.opacity(0.5) // Dim background
                     .edgesIgnoringSafeArea(.all)
-                
+
                 VStack(spacing: 20) {
                     Text("Processing...")
-                        .font(.headline)
+                        .font(.title)
                         .foregroundColor(.white)
-                    
+
                     // Dots animation
-                    HStack(spacing: 5) {
-                        ForEach(0..<3) { index in
+                    HStack(spacing: 10) {
+                        ForEach(0..<5) { index in
                             Circle()
                                 .frame(width: 10, height: 10)
                                 .foregroundColor(.white)
-                                .scaleEffect(showDotsAnimation ? 1.2 : 1)
+                                .scaleEffect(showDotsAnimation ? 1.75 : 1)
                                 .animation(
                                     Animation.easeInOut(duration: 0.6)
                                         .repeatForever()
@@ -71,14 +73,22 @@ struct InstaScanPaywallView: View {
         }
         .onAppear {
             if isProcessing {
-                withAnimation {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     showDotsAnimation = true
                 }
             }
         }
-        
+        .onChange(of: isProcessing) { newValue, _ in
+            if newValue {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    showDotsAnimation = true
+                }
+            } else {
+                showDotsAnimation = false
+            }
+        }
     }
-    
+
     private func handlePurchase() {
         DispatchQueue.main.async {
             Purchases.shared.getOfferings { offerings, error in
@@ -87,7 +97,7 @@ struct InstaScanPaywallView: View {
                     isProcessing = false
                     return
                 }
-                
+
                 let packages = instaScan.availablePackages
                 Purchases.shared.purchase(package: packages[0]) { transaction, customerInfo, error, userCancelled in
                     if let _ = customerInfo, error == nil {
@@ -95,7 +105,7 @@ struct InstaScanPaywallView: View {
                         viewModel.user?.instaScans = 1
                         path = NavigationPath()
                         path.append("FrontScanView")
-                        
+
                         // Update Firestore
                         let db = Firestore.firestore()
                         let userRef = db.collection("users").document(viewModel.uid!)
@@ -108,7 +118,6 @@ struct InstaScanPaywallView: View {
                                 print("InstaScans incremented successfully!")
                             }
                         }
-                        
                     } else if let error = error {
                         print("Purchase failed: \(error.localizedDescription)")
                     } else if userCancelled {
