@@ -9,13 +9,15 @@ import SwiftUI
 import FirebaseFirestore
 
 struct RedeemReferralView: View {
-    
+    //eventually add loading while we check referral
     @EnvironmentObject var viewModel: ContentViewModel
     var body: some View {
         Button(action: {
-            
+            Task {
+                fetchUserReferrals()
+            }
         }) {
-            
+            Text("Redeem Referrals")
         }
         Text("Your Referral Code: \(viewModel.user!.referralCode!)")
     }
@@ -76,6 +78,8 @@ struct RedeemReferralView: View {
     // Function to handle the redemption logic
     private func handleReferralRedemption() {
         //run scan business logic here
+        
+        print("Handled BUSINESS LOGIC")
         
     }
 }
