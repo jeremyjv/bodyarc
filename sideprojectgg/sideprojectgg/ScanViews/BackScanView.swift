@@ -230,6 +230,7 @@ struct BackScanView: View {
                                 }
                                 
                                 path = NavigationPath()
+                                viewModel.selectedTab = "ProgressView"
                                 
                              
                             }

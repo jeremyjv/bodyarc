@@ -88,6 +88,7 @@ struct RedeemReferralView: View {
         DispatchQueue.main.async {
             //redirect
             path = NavigationPath()
+            viewModel.selectedTab = "ProgressView"
             //redirect
         }
 

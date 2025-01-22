@@ -29,19 +29,22 @@ struct ContentView: View {
           
             NavigationStack(path: $path) {
                     
-                    TabView {
+                TabView(selection: $viewModel.selectedTab) {
                         
                         ScanView(path: $path).tabItem({
                             Label("Scan", systemImage: "magnifyingglass")
                         })
+                        .tag("ScanView")
                     
                         ProgressView(retrievedScanImages: $viewModel.retrievedScanImages, scans: $viewModel.scans, path: $path).tabItem({
                             Label("Progress", systemImage: "person")
                         })
+                        .tag("ProgressView")
                         
                         RoutineView().tabItem({
                             Label("Routine", systemImage: "person")
                         })
+                        .tag("RoutineView")
                        
                         
                     }

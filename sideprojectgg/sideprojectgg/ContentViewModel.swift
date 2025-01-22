@@ -55,6 +55,8 @@ class ContentViewModel: ObservableObject {
     
     @Published var isGold: Bool?
     
+    @Published var selectedTab: String = "ScanView"
+    
  
     
     init() {
