@@ -22,6 +22,9 @@ struct ScanEdgeView: View {
 
     var body: some View {
         ZStack {
+            
+            Color(red: 26/255, green: 26/255, blue: 26/255)
+            .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
             // Main Content
             VStack(spacing: 10) {
                 Button(action: {
