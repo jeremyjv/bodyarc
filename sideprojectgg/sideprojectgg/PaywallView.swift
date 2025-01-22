@@ -37,6 +37,7 @@ struct PaywallView: View {
                                 viewModel.user!.lastGoldScan = Date()
                                 setLastGoldScan()
                                 path = NavigationPath()
+                                path.append("ProgressView")
                             }
                         
                             //redirect to Progress View

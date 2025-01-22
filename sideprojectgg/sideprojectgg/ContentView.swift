@@ -65,6 +65,8 @@ struct ContentView: View {
                                 
                         case "InstaScanPaywallView":
                             InstaScanPaywallView(path: $path)
+                        case "ProgressView":
+                            ProgressView(retrievedScanImages: $viewModel.retrievedScanImages, scans: $viewModel.scans, path: $path)
                         
                         //add case for rating view
                                 //but need to pass scan object to rating view to mount
