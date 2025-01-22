@@ -19,24 +19,27 @@ struct ScanEdgeView: View {
     @State var showReferral: Bool = false
     @State private var textToCopy = "Hello, this text is copied to the clipboard!"
     @State private var showPopup = false // Controls the visibility of the popup
+    
+    let generator = UIImpactFeedbackGenerator(style: .heavy)
 
     var body: some View {
         ZStack {
             
-            Color(red: 26/255, green: 26/255, blue: 26/255)
+            Color(red: 15/255, green: 15/255, blue: 15/255)
             .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
             // Main Content
-            VStack(spacing: 10) {
+            VStack(spacing: 15) {
                 Button(action: {
+                    generator.impactOccurred()
                     showPaywall = true
                 }) {
-                    Text("🥇 Get Body Arc Gold")
+                    Text("🥇Get BodyArc Gold")
                         .font(.system(size: 18, weight: .medium))
                         .foregroundColor(.white)
                         .padding()
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity, minHeight: 70) // Set minimum height
                         .background(Color(red: 0.0627, green: 0.4745, blue: 0.6980))
-                        .cornerRadius(30)
+                        .cornerRadius(35)
                 }
                 .padding(.horizontal)
                 .fullScreenCover(isPresented: $showPaywall) {
@@ -44,15 +47,16 @@ struct ScanEdgeView: View {
                 }
                 
                 Button(action: {
+                    generator.impactOccurred()
                     showReferral = true
                 }) {
                     Text("Invite 3 Friends")
                         .font(.system(size: 18, weight: .medium))
                         .foregroundColor(.white)
                         .padding()
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity, minHeight: 70) // Set minimum height
                         .background(Color.black)
-                        .cornerRadius(30)
+                        .cornerRadius(35)
                 }
                 .padding(.horizontal)
                 .sheet(isPresented: $showReferral) {
