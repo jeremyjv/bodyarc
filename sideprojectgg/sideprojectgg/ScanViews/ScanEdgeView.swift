@@ -29,6 +29,75 @@ struct ScanEdgeView: View {
             .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
             // Main Content
             VStack(spacing: 15) {
+                
+                //add blurred ratings
+                ZStack {
+                    // Black background for ratings
+                    Rectangle()
+                        .fill(Color(red: 0.05, green: 0.05, blue: 0.05))
+                        .cornerRadius(20)
+                        .frame(width: 320, height: 300) // Adjust height as needed
+                    
+                    
+                    // Ratings
+                    VStack(spacing: 20) {
+                        HStack(spacing: 35) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("V-Taper")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                RoundedBlurView()
+                         
+                                ProgressBar(score: 0)
+                            }
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Leanness")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                RoundedBlurView()
+    
+                                ProgressBar(score: 0)
+                            }
+                        }
+                        HStack(spacing: 35) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Shoulders")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                RoundedBlurView()
+                                ProgressBar(score: 0)
+                            }
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Chest")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                RoundedBlurView()
+                                ProgressBar(score: 0)
+                            }
+                        }
+                        HStack(spacing: 35) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Arms")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                RoundedBlurView()
+                                ProgressBar(score: 0)
+                            }
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Abs")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                RoundedBlurView()
+                                ProgressBar(score: 0)
+                            }
+                        }
+                
+            
+                    }
+                    .padding()
+                    .offset(y: 20)
+                }
+                
                 Button(action: {
                     generator.impactOccurred()
                     showPaywall = true
@@ -172,4 +241,51 @@ struct ScanEdgeView: View {
             viewModel.selectedTab = "ProgressView"
         }
     }
+}
+
+
+struct RoundedBlurView: View {
+    var cornerRadius: CGFloat = 16
+    var height: CGFloat = 25
+    var shadowRadius: CGFloat = 15 // Increased shadow radius for more drama
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: cornerRadius)
+            .fill(
+                RadialGradient(
+                    gradient: Gradient(colors: [
+                        Color.white.opacity(0.7), // Brighter center
+                        Color.black.opacity(0.0)
+                    ]),
+                    center: .center,
+                    startRadius: 1,
+                    endRadius: 100 // Reduced radius for a tighter, more dramatic glow
+                )
+            )
+            .frame(width: 50, height: height) // Adjusted width for better visibility
+            .shadow(color: Color.white.opacity(0.5), radius: shadowRadius, x: 0, y: 5) // Stronger shadow
+    }
+}
+
+struct BlurredProgressBar: View {
+    var score: Int
+
+    var body: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                // Background bar
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(height: 12) // Adjust height here
+
+                // Foreground bar
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color(red: 215/255, green: 215/255, blue: 215/255))
+                    .frame(width: CGFloat(score) / 100.0 * geometry.size.width, height: 12) // Adjust height here
+            }
+        }
+        .frame(width: 120, height: 12) // Set the width to a shorter value (e.g., 100) // Set the fixed height of the ProgressBar
+    }
+
+
 }
