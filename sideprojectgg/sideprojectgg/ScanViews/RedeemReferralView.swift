@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseFirestore
+import UIKit
 
 struct RedeemReferralView: View {
     //eventually add loading while we check referral
@@ -17,11 +18,27 @@ struct RedeemReferralView: View {
         Button(action: {
             Task {
                 fetchUserReferrals()
+                
+        
             }
         }) {
             Text("Redeem Referrals")
         }
-        Text("Your Referral Code: \(viewModel.user!.referralCode!)")
+        
+        Button(action: {
+            Task {
+                UIPasteboard.general.string = viewModel.user!.referralCode!
+                
+            }
+        }) {
+            Text("Your Referral Code: \(viewModel.user!.referralCode!)")
+            Text("copy to clipboard")
+        }
+        
+        
+        
+        
+
     }
     
     //create function to redeem referral
