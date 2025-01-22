@@ -23,7 +23,7 @@ struct ScanEdgeView: View {
     var body: some View {
         ZStack {
             // Main Content
-            VStack {
+            VStack(spacing: 10) {
                 Button(action: {
                     showPaywall = true
                 }) {
@@ -35,7 +35,7 @@ struct ScanEdgeView: View {
                         .background(Color(red: 0.0627, green: 0.4745, blue: 0.6980))
                         .cornerRadius(30)
                 }
-                .padding()
+                .padding(.horizontal)
                 .fullScreenCover(isPresented: $showPaywall) {
                     PaywallView(path: $path)
                 }
@@ -51,7 +51,7 @@ struct ScanEdgeView: View {
                         .background(Color.black)
                         .cornerRadius(30)
                 }
-                .padding()
+                .padding(.horizontal)
                 .sheet(isPresented: $showReferral) {
                     VStack {
                         Button(action: {
