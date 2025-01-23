@@ -44,10 +44,10 @@ struct PaywallView: View {
             Spacer()
 
             // Features Section
-            VStack(alignment: .leading, spacing: 30) {
-                FeatureRow(icon: "lock", title: "See Your Ratings 👤", description: "View your results and share your ratings with friends")
-                FeatureRow(icon: "lock", title: "Start Your Aesthetics Plan 💪", description: "Full Access to Body Building Style Reps, Sets, and Progressions for Growth")
-                FeatureRow(icon: "lock", title: "Scan Weekly 📸", description: "One scan per week to document your physique progress")
+            VStack(alignment: .leading, spacing: 50) {
+                FeatureRow(title: "See Your Ratings 👤", description: "View your results and share your ratings with friends")
+                FeatureRow(title: "Start Your Aesthetics Plan 💪", description: "Full Access to Body Building Style Reps, Sets, and Progressions for Growth")
+                FeatureRow(title: "Scan Weekly 📸", description: "One scan per week to document your physique progress")
             }
             .padding(.horizontal, 20)
 
@@ -58,18 +58,15 @@ struct PaywallView: View {
 }
 
 struct FeatureRow: View {
-    let icon: String
     let title: String
     let description: String
 
     var body: some View {
-        HStack(alignment: .top) {
+        HStack(alignment: .top, spacing: 16) {
             // Icon Section
-            Image(systemName: icon)
-                .foregroundColor(.white)
-                .padding(8)
-                .background(Circle().fill(Color.gray))
-                .frame(width: 40, height: 40)
+            Image(uiImage: UIImage(named: "lock")!)
+                .padding(16)
+                .frame(width: 20, height: 20)
 
             VStack(alignment: .leading, spacing: 5) {
                 // Title
