@@ -13,6 +13,7 @@ import FirebaseFirestore
 import FirebaseStorage
 import FirebaseAuth
 import GoogleSignIn
+import RevenueCat
 
 
 
@@ -57,6 +58,8 @@ class ContentViewModel: ObservableObject {
     
     @Published var selectedTab: String = "ScanView"
     
+    @Published var subOffering: Offering?
+    @Published var instaOffering: Offering?
  
     
     init() {

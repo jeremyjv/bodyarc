@@ -147,6 +147,28 @@ struct ScanView: View {
                 viewModel.isGold = customerInfo!.entitlements["MonthlyPremiumA"]?.isActive == true
             }
             
+     
+            Purchases.shared.getOfferings { offerings, error in
+                guard let offering = offerings?["BodyArcGoldA"], error == nil else {
+                    print("Failed to fetch offerings: \(error?.localizedDescription ?? "Unknown error")")
+             
+                    return
+                }
+                
+                viewModel.subOffering = offering
+            }
+            
+            Purchases.shared.getOfferings { offerings, error in
+                guard let offering = offerings?["InstaScan"], error == nil else {
+                    print("Failed to fetch offerings: \(error?.localizedDescription ?? "Unknown error")")
+             
+                    return
+                }
+                
+                viewModel.instaOffering = offering
+            }
+            
+            
             // Step 2: Fetch User Data from Firestore
             let snapshot = try await userRef.getDocument()
             if let data = snapshot.data() {

@@ -20,7 +20,12 @@ struct ScanEdgeView: View {
     @State private var textToCopy = "Hello, this text is copied to the clipboard!"
     @State private var showPopup = false // Controls the visibility of the popup
     
+    @State var offering: Offering?
+    
+    
     let generator = UIImpactFeedbackGenerator(style: .heavy)
+    
+    
 
     var body: some View {
         ZStack {
@@ -131,6 +136,7 @@ struct ScanEdgeView: View {
                 .padding(.horizontal)
                 .fullScreenCover(isPresented: $showPaywall) {
                     PaywallView(path: $path)
+                        .paywallFooter(offering: viewModel.subOffering!, condensed: true)
                 }
                 
                 Button(action: {
