@@ -68,6 +68,8 @@ struct sideprojectggApp: App {
             
             ContentView()
               .environmentObject(viewModel)
+        
+              
               
             
         }

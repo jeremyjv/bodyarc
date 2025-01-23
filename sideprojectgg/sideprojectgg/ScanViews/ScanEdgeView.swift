@@ -135,7 +135,7 @@ struct ScanEdgeView: View {
                 }
                 .padding(.horizontal)
                 .fullScreenCover(isPresented: $showPaywall) {
-                    PaywallView(path: $path)
+                    PaywallView()
                         .paywallFooter(condensed: true)
                         .onPurchaseCompleted({ customerInfo in
                             

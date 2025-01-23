@@ -62,7 +62,7 @@ struct ContentView: View {
                         case "BackCameraView":
                             BackCameraView(cameraModel: cameraModel, path: $path)
                         case "PaywallView":
-                            PaywallView(path: $path)
+                            PaywallView()
                         case "ScanEdgeView":
                             ScanEdgeView(path: $path)
                                 
