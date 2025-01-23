@@ -34,6 +34,11 @@ struct ScanEdgeView: View {
                 Text("👀Unlock your ratings")
                     .font(.largeTitle)
                     .padding(.horizontal)
+                Text("Invite 3 friends or get BodyArc Gold to see your ratings")
+                    .font(.body) // Small font size
+                    .foregroundColor(.white.opacity(0.7)) // Faint white text
+                    .multilineTextAlignment(.center) // Centers text within its own frame
+                    .padding(.horizontal)
                 //add blurred ratings
                 Spacer()
                 ZStack {
@@ -182,7 +187,9 @@ struct ScanEdgeView: View {
             }
         }
         .animation(.easeInOut, value: showPopup)
+        .navigationBarBackButtonHidden(true) // Back button removed
     }
+
 
     // Popup View
     private func PopupView() -> some View {
