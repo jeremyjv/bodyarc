@@ -137,7 +137,30 @@ struct ScanEdgeView: View {
                 .fullScreenCover(isPresented: $showPaywall) {
                     PaywallView(path: $path)
                         .paywallFooter(offering: viewModel.subOffering!, condensed: true)
+                        .onPurchaseCompleted({ customerInfo in
+                            
+                            print(customerInfo)
+                            
+                            //handle after payment scan logic here
+                            DispatchQueue.main.async {
+                                viewModel.isGold = true
+                                viewModel.user!.lastGoldScan = Date()
+                                setLastGoldScan()
+                                path = NavigationPath()
+                                viewModel.selectedTab = "ProgressView"
+                            }
+                            
+                            //redirect to Progress View
+                            Task {
+                                await viewModel.handleScanUploadAction()
+                            }
+                            
+                        
+                            
+                    })
+                            
                 }
+                
                 
                 Button(action: {
                     generator.impactOccurred()
@@ -196,6 +219,28 @@ struct ScanEdgeView: View {
         .navigationBarBackButtonHidden(true) // Back button removed
     }
 
+    
+    
+    func setLastGoldScan() {
+        Task.detached {
+            let db = Firestore.firestore()
+            let userRef = await db.collection("users").document(viewModel.uid!)
+            
+            do {
+                
+                try await userRef.updateData([
+                    "lastGoldScan": Date()
+                ])
+                await MainActor.run {
+                    print("Last Gold Scan updated")
+                }
+            } catch {
+                await MainActor.run {
+                    print("Failed to update last gold scan: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
 
     // Popup View
     private func PopupView() -> some View {
