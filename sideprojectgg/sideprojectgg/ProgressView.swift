@@ -66,10 +66,13 @@ struct ProgressView: View {
     }
 
     var body: some View {
-            VStack {
+        VStack(alignment: .leading) {
+            
                 Text("Your Progress")
-                    .font(.title)
+                    .font(.largeTitle)
+                    .bold()
                     .padding()
+                
                 
                 if loadingScreen {
                     Text("Loading...")
@@ -78,6 +81,7 @@ struct ProgressView: View {
                     
                     ScrollView {
                         LazyVStack(spacing: 20) {
+                            
                             LoadingCardView(
                                 frontImage: viewModel.frontImage,
                                 backImage: viewModel.backImage
@@ -85,10 +89,12 @@ struct ProgressView: View {
                         }
                     }
                 } else if viewModel.scans!.count == 0 {
+                    
                     Text("Scan to get your ratings")
                 } else {
                     ScrollView {
-                        LazyVStack(spacing: 20) {
+                        LazyVStack(alignment: .leading, spacing: 20) {
+                            
                             
                             if viewModel.isScanProcessing {
                                     LoadingCardView(
