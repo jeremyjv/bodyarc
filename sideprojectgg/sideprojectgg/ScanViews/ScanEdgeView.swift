@@ -28,9 +28,12 @@ struct ScanEdgeView: View {
             Color(red: 15/255, green: 15/255, blue: 15/255)
             .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
             // Main Content
+            
+            
             VStack(spacing: 15) {
-                
+                Text("Unlock your ratings")
                 //add blurred ratings
+                Spacer()
                 ZStack {
                     // Black background for ratings
                     Rectangle()
@@ -38,9 +41,17 @@ struct ScanEdgeView: View {
                         .cornerRadius(20)
                         .frame(width: 320, height: 300) // Adjust height as needed
                     
+                   
+                    Image(uiImage: viewModel.frontImage!)
+                        .resizable()
+                        .scaledToFit()
+                        .cornerRadius(20)
+                        .frame(width: 250, height: 250) // Adjust dimensions as needed
+                        .offset(y: -210)
+                    
                     
                     // Ratings
-                    VStack(spacing: 20) {
+                    VStack(spacing: 5) {
                         HStack(spacing: 35) {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("V-Taper")
