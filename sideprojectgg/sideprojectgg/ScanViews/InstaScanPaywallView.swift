@@ -91,14 +91,8 @@ struct InstaScanPaywallView: View {
 
     private func handlePurchase() {
         DispatchQueue.main.async {
-            Purchases.shared.getOfferings { offerings, error in
-                guard let instaScan = offerings?["InstaScan"], error == nil else {
-                    print("Failed to fetch offerings: \(error?.localizedDescription ?? "Unknown error")")
-                    isProcessing = false
-                    return
-                }
-
-                let packages = instaScan.availablePackages
+                
+                let packages = viewModel.instaOffering!.availablePackages
                 Purchases.shared.purchase(package: packages[0]) { transaction, customerInfo, error, userCancelled in
                     if let _ = customerInfo, error == nil {
                         isProcessing = false
@@ -125,7 +119,7 @@ struct InstaScanPaywallView: View {
                     }
                     isProcessing = false
                 }
-            }
+            
         }
     }
 }
