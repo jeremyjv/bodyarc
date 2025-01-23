@@ -31,7 +31,9 @@ struct ScanEdgeView: View {
             
             
             VStack(spacing: 15) {
-                Text("Unlock your ratings")
+                Text("👀Unlock your ratings")
+                    .font(.largeTitle)
+                    .padding(.horizontal)
                 //add blurred ratings
                 Spacer()
                 ZStack {
