@@ -16,29 +16,107 @@ struct InstaScanPaywallView: View {
 
     @State private var isProcessing: Bool = false
     @State private var showDotsAnimation: Bool = false
+    
+    let generator = UIImpactFeedbackGenerator(style: .heavy)
 
     var body: some View {
         ZStack {
             // Main Paywall Content
-            VStack {
-                Text("InstaScan Paywall Here")
+            VStack(spacing: 30) {
+                
+                Text("Insta Scan")
                     .font(.title)
-                    .padding(.bottom, 20)
-
+                    .fontWeight(.bold)
+                
+                Spacer()
+                
+                ZStack {
+                    // Black background for ratings
+                    Rectangle()
+                        .fill(Color(red: 0.05, green: 0.05, blue: 0.05))
+                        .cornerRadius(20)
+                        .frame(width: 320, height: 300) // Adjust height as needed
+                    
+        
+                    
+                    // Ratings
+                    VStack(spacing: 5) {
+                        HStack(spacing: 35) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("V-Taper")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                RoundedBlurView()
+                         
+                                ProgressBar(score: 87)
+                            }
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Leanness")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                RoundedBlurView()
+    
+                                ProgressBar(score: 95)
+                            }
+                        }
+                        HStack(spacing: 35) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Shoulders")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                RoundedBlurView()
+                                ProgressBar(score: 75)
+                            }
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Chest")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                RoundedBlurView()
+                                ProgressBar(score: 55)
+                            }
+                        }
+                        HStack(spacing: 35) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Arms")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                RoundedBlurView()
+                                ProgressBar(score: 66)
+                            }
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Abs")
+                                    .font(.headline)
+                                    .foregroundColor(.white)
+                                RoundedBlurView()
+                                ProgressBar(score: 60)
+                            }
+                        }
+            
+                    }
+                    .padding()
+                    .offset(y: 20)
+                }
+                
+                Text("Our scans are expensive for us thank you for understanding 🫡")
+                    .font(.body)
+                    .foregroundColor(.gray)
+                    .multilineTextAlignment(.center) // Centers the text across multiple lines
+                
                 Button(action: {
+                    generator.impactOccurred()
                     isProcessing = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         showDotsAnimation = true
                     }
                     handlePurchase()
                 }) {
-                    Text("Purchase InstaScan")
-                        .font(.headline)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
+                    Text("Get Ratings Now")
+                        .font(.system(size: 18, weight: .medium))
                         .foregroundColor(.white)
-                        .cornerRadius(10)
+                        .padding()
+                        .frame(maxWidth: .infinity, minHeight: 70) // Set minimum height
+                        .background(Color(red: 0.0627, green: 0.4745, blue: 0.6980))
+                        .cornerRadius(35)
                 }
             }
             .padding()

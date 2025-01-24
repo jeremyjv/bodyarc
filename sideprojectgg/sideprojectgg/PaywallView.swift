@@ -42,6 +42,7 @@ struct PaywallView: View {
                 .foregroundColor(.white)
 
             Spacer()
+            Spacer()
 
             // Features Section
             VStack(alignment: .leading, spacing: 50) {
