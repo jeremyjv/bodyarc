@@ -21,6 +21,21 @@ struct InstaScanPaywallView: View {
 
     var body: some View {
         ZStack {
+            
+            VStack {
+                LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color.blue.opacity(0.2), // Start with a yellowish hue
+                            Color.clear,               // Fade to transparent
+                            Color.black
+                        ]),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: UIScreen.main.bounds.height * 0.5) // Top 30% of the screen
+                Spacer()
+            }
+            .edgesIgnoringSafeArea(.top)
             // Main Paywall Content
             VStack(spacing: 30) {
                 
