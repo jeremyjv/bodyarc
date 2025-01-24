@@ -55,7 +55,7 @@ struct ScanEdgeView: View {
                 Text("👀Unlock your ratings")
                     .font(.largeTitle)
                     .padding(.horizontal)
-                Text("Invite 3 friends or get BodyArc Gold to see your ratings")
+                Text("Invite 3 friends or get BodyArc Gold to see your physique ratings")
                     .font(.body) // Small font size
                     .foregroundColor(.white.opacity(0.7)) // Faint white text
                     .multilineTextAlignment(.center) // Centers text within its own frame
@@ -386,6 +386,15 @@ struct BlurredProgressBar: View {
         }
         .frame(width: 120, height: 12) // Set the width to a shorter value (e.g., 100) // Set the fixed height of the ProgressBar
     }
+}
 
+extension UINavigationController: @retroactive UIGestureRecognizerDelegate {
+    override open func viewDidLoad() {
+        super.viewDidLoad()
+        interactivePopGestureRecognizer?.delegate = self
+    }
 
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return viewControllers.count > 1
+    }
 }
