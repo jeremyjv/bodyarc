@@ -40,7 +40,7 @@ struct InstaScanPaywallView: View {
             VStack(spacing: 30) {
                 
                 Text("Insta Scan")
-                    .font(.title)
+                    .font(.largeTitle)
                     .fontWeight(.bold)
                 
                 Spacer()
@@ -50,7 +50,7 @@ struct InstaScanPaywallView: View {
                     Rectangle()
                         .fill(Color(red: 0.05, green: 0.05, blue: 0.05))
                         .cornerRadius(20)
-                        .frame(width: 320, height: 300) // Adjust height as needed
+                        .frame(width: 320, height: 250) // Adjust height as needed
                     
         
                     
@@ -109,10 +109,11 @@ struct InstaScanPaywallView: View {
             
                     }
                     .padding()
-                    .offset(y: 20)
+              
                 }
+                Spacer()
                 
-                Text("Our scans are expensive for us thank you for understanding 🫡")
+                Text("We have a small fee because our scans are expensive for us, thank you for understanding 🫡")
                     .font(.body)
                     .foregroundColor(.gray)
                     .multilineTextAlignment(.center) // Centers the text across multiple lines
@@ -140,8 +141,12 @@ struct InstaScanPaywallView: View {
             if isProcessing {
                 Color.black.opacity(0.5) // Dim background
                     .edgesIgnoringSafeArea(.all)
+                
+                
 
                 VStack(spacing: 20) {
+                    
+                    Spacer() 
                     Text("Processing...")
                         .font(.title)
                         .foregroundColor(.white)
@@ -161,6 +166,10 @@ struct InstaScanPaywallView: View {
                                 )
                         }
                     }
+                    
+                    Spacer()
+                    Spacer()
+                        
                 }
             }
         }
