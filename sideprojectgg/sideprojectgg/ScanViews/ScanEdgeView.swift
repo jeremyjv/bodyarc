@@ -205,11 +205,11 @@ struct ScanEdgeView: View {
                 }
                 .padding(.horizontal)
                 .sheet(isPresented: $showReferral) {
-                    VStack {
+                    VStack(spacing: 20) {
                         
                         HStack(spacing: 80) {
                             Text("🎟️")
-                                .font(.system(size: 70))
+                                .font(.system(size: 90))
                                 .padding()
                         
                             
@@ -217,35 +217,69 @@ struct ScanEdgeView: View {
                             
                             Button(action: {
                                 Task {
+                                    generator.impactOccurred()
                                     fetchUserReferrals()
                                 }
                             }) {
                                 Text("Redeem")
                                     .font(.title)
                                     .foregroundColor(.white)
+                                    .bold()
                                     .padding()
+                                    .frame(width: 160, height: 60) // Set button size
+                                    .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
+                                    .cornerRadius(35) // Rounded corners
                                 
                             }
                             
                             
                         }
                    
-                        
-                        Button(action: {
-                            Task {
-                                UIPasteboard.general.string = viewModel.user!.referralCode!
-                                showPopup = true // Show the popup
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text("Your Referral Code:")
+                                .bold()
+                                .padding(.horizontal)
+                       
                                 
-                                // Automatically dismiss the popup after 2 seconds
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                    withAnimation {
-                                        showPopup = false
+                            Button(action: {
+                                Task {
+                                    generator.impactOccurred()
+                                    UIPasteboard.general.string = viewModel.user!.referralCode!
+                                    showPopup = true // Show the popup
+                                    
+                                    // Automatically dismiss the popup after 2 seconds
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                        withAnimation {
+                                            showPopup = false
+                                        }
                                     }
                                 }
+                            }) {
+                                Spacer()
+                                Text("\(viewModel.user!.referralCode!)")
+                                    .font(.title)
+                                    .foregroundColor(.white)
+                                    .bold()
+                                    .padding()
+                                Spacer()
+                                Spacer()
+                                
+                                Text("copy")
+                                    .font(.title)
+                                    .foregroundColor(.gray)
+                             
+                            
+                                Image(uiImage: UIImage(named: "saveClipboard")!) // Replace with your logo asset
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.white)
+                                    .scaledToFit()
+                                Spacer()
                             }
-                        }) {
-                            Text("Your Referral Code: \(viewModel.user!.referralCode!)")
-                            Text("Copy to Clipboard")
+                            .frame(maxWidth: .infinity, maxHeight: 60) // Set button size
+                            .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
+                            .cornerRadius(35) // Rounded corners
+                            .padding()
                         }
                     }
                     .presentationDetents([.fraction(0.40)])
