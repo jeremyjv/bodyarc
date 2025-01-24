@@ -32,17 +32,7 @@ struct PaywallView: View {
             
             VStack(spacing: 20) {
                 // Header Section
-                HStack {
-                    Button(action: {
-                        // Dismiss or close action
-                    }) {
-                        Image(systemName: "xmark")
-                            .foregroundColor(.gray)
-                            .padding()
-                    }
-                    Spacer()
-                }
-                .padding(.top)
+            
                 
                 
                 Spacer()
@@ -103,7 +93,9 @@ struct FeatureRow: View {
             }
             .padding(.leading, 10)
         }
+        
     }
+
 }
 
 #Preview {

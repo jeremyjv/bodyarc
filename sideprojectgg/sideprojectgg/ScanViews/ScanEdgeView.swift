@@ -151,29 +151,42 @@ struct ScanEdgeView: View {
                 }
                 .padding(.horizontal)
                 .fullScreenCover(isPresented: $showPaywall) {
-                    PaywallView()
-                        .paywallFooter(condensed: true)
-                        .onPurchaseCompleted({ customerInfo in
-                            
-                            print(customerInfo)
-                            
-                            //handle after payment scan logic here
-                            DispatchQueue.main.async {
-                                viewModel.isGold = true
-                                viewModel.user!.lastGoldScan = Date()
-                                setLastGoldScan()
-                                path = NavigationPath()
-                                viewModel.selectedTab = "ProgressView"
+                    NavigationStack {
+                        PaywallView()
+                            .paywallFooter(condensed: true)
+                            .onPurchaseCompleted({ customerInfo in
+                                
+                                print(customerInfo)
+                                
+                                //handle after payment scan logic here
+                                DispatchQueue.main.async {
+                                    viewModel.isGold = true
+                                    viewModel.user!.lastGoldScan = Date()
+                                    setLastGoldScan()
+                                    path = NavigationPath()
+                                    viewModel.selectedTab = "ProgressView"
+                                }
+                                
+                                //redirect to Progress View
+                                Task {
+                                    await viewModel.handleScanUploadAction()
+                                }
+                            })
+                            .toolbar {
+                                ToolbarItem(placement: .navigationBarLeading) {
+                                    Button(action: {
+                                        showPaywall = false
+                                    }) {
+                                        HStack {
+                                            Image(systemName: "xmark")
+                                                .foregroundColor(.gray)
+                                                .padding()
+                                        }
+                                        .padding(.top)
+                                    }
+                                }
                             }
-                            
-                            //redirect to Progress View
-                            Task {
-                                await viewModel.handleScanUploadAction()
-                            }
-                            
-                        
-                            
-                    })
+                    }
                             
                 }
                 
