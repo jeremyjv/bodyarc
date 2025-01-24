@@ -46,72 +46,79 @@ struct RoutineView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                // Nutrition Section
-                Text("Your Routine")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding(.horizontal)
-                
-                
-                //this is based on intake form 
-                Text("Nutrition")
-                    .font(.headline)
-                    .padding(.horizontal)
-                
-                Rectangle()
-                    .fill(Color.gray.opacity(0.3))
-                    .frame(height: 100)
-                    .cornerRadius(10)
-                    .padding(.horizontal)
-
-                // Training Styles Section
-                Text("Training Strategies for Growth")
-                    .font(.headline)
-                    .padding(.horizontal)
-
-                ForEach(viewModel.muscleRankings!, id: \.self) { muscleName in
-                    if let muscle = MuscleGroup(rawValue: muscleName) {
-                        Button(action: {
-                            selectedMuscle = muscle
-                        }) {
-                            HStack {
-                                Text(muscle.rawValue)
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.white)
-                            }
-                            .padding()
-                            .background(Color.gray.opacity(0.3))
-                            .cornerRadius(10)
-                        }
+        ZStack {
+            Color(red: 15/255, green: 15/255, blue: 15/255)
+                .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    // Nutrition Section
+                    Text("Your Routine")
+                        .font(.largeTitle)
+                        .bold()
                         .padding(.horizontal)
-                    } else {
-                        // Handle invalid muscle names gracefully
-                        Text("Invalid Muscle: \(muscleName)")
-                            .font(.caption)
-                            .foregroundColor(.red)
+                        .foregroundColor(.white)
+                    
+                    
+                    //this is based on intake form
+                    Text("Nutrition")
+                        .font(.headline)
+                        .padding(.horizontal)
+                        .foregroundColor(.white)
+                    
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.3))
+                        .frame(height: 100)
+                        .cornerRadius(10)
+                        .padding(.horizontal)
+                    
+                    // Training Styles Section
+                    Text("Training Strategies for Growth")
+                        .font(.headline)
+                        .padding(.horizontal)
+                        .foregroundColor(.white)
+                    
+                    ForEach(viewModel.muscleRankings!, id: \.self) { muscleName in
+                        if let muscle = MuscleGroup(rawValue: muscleName) {
+                            Button(action: {
+                                selectedMuscle = muscle
+                            }) {
+                                HStack {
+                                    Text(muscle.rawValue)
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(.white)
+                                }
+                                .padding()
+                                .background(Color.gray.opacity(0.3))
+                                .cornerRadius(10)
+                            }
                             .padding(.horizontal)
+                        } else {
+                            // Handle invalid muscle names gracefully
+                            Text("Invalid Muscle: \(muscleName)")
+                                .font(.caption)
+                                .foregroundColor(.red)
+                                .padding(.horizontal)
+                        }
+                    }
+                }
+                .padding(.vertical)
+            }
+            .onAppear {
+                if !hasLoadedData {
+                    hasLoadedData = true
+                    Task {
+                        await loadData()
                     }
                 }
             }
-            .padding(.vertical)
-        }
-        .onAppear {
-            if !hasLoadedData {
-                hasLoadedData = true
-                Task {
-                    await loadData()
-                }
+            .sheet(item: $selectedMuscle) { muscle in
+                muscle.view
+                    .presentationDetents([.fraction(0.95)]) // Custom detents
+                    .presentationDragIndicator(.visible) // Shows drag indicator
             }
-        }
-        .sheet(item: $selectedMuscle) { muscle in
-            muscle.view
-                .presentationDetents([.fraction(0.95)]) // Custom detents
-                .presentationDragIndicator(.visible) // Shows drag indicator
         }
     }
 

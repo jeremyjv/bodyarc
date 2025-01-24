@@ -66,62 +66,69 @@ struct ProgressView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading) {
-            
-                Text("Your Progress")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding()
-                
-                
-                if loadingScreen {
-                    Text("Loading...")
-                } else if viewModel.isScanProcessing && viewModel.scans!.count == 0 {
-                    // Show the loading card when a scan is in progress
+        ZStack {
+            Color(red: 15/255, green: 15/255, blue: 15/255)
+                .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
+                VStack(alignment: .leading) {
                     
-                    ScrollView {
-                        LazyVStack(spacing: 20) {
-                            
-                            LoadingCardView(
-                                frontImage: viewModel.frontImage,
-                                backImage: viewModel.backImage
-                            )
+                    Text("Your Progress")
+                        .font(.largeTitle)
+                        .foregroundColor(.white)
+                        .bold()
+                        .padding()
+                    
+                    
+                    if loadingScreen {
+                        Text("Loading...")
+                            .foregroundColor(.white)
+                    } else if viewModel.isScanProcessing && viewModel.scans!.count == 0 {
+                        // Show the loading card when a scan is in progress
+                        
+                        ScrollView {
+                            LazyVStack(spacing: 20) {
+                                
+                                LoadingCardView(
+                                    frontImage: viewModel.frontImage,
+                                    backImage: viewModel.backImage
+                                )
+                            }
                         }
-                    }
-                } else if viewModel.scans!.count == 0 {
-                    
-                    Text("Scan to get your ratings")
-                } else {
-                    ScrollView {
-                        LazyVStack(alignment: .leading, spacing: 20) {
-                            
-                            
-                            if viewModel.isScanProcessing {
+                    } else if viewModel.scans!.count == 0 {
+                        
+                        Text("Scan to get your ratings")
+                            .foregroundColor(.white)
+                    } else {
+                        ScrollView {
+                            LazyVStack(alignment: .leading, spacing: 20) {
+                                
+                                
+                                if viewModel.isScanProcessing {
                                     LoadingCardView(
                                         frontImage: viewModel.frontImage,
                                         backImage: viewModel.backImage
                                     )
                                 }
-                            
-                            ForEach(retrievedScanImages.indices, id: \.self) { index in
-                                if let scan = scans?[index] {
-                                    ProgressCardView(
-                                        scan: scan,
-                                        images: retrievedScanImages[index],
-                                        path: $path
-                                    )
+                                
+                                ForEach(retrievedScanImages.indices, id: \.self) { index in
+                                    if let scan = scans?[index] {
+                                        ProgressCardView(
+                                            scan: scan,
+                                            images: retrievedScanImages[index],
+                                            path: $path
+                                        )
+                                    }
                                 }
+                                
                             }
-
+                            .padding()
                         }
-                        .padding()
                     }
                 }
-            }
-            .onAppear {
-                if !hasLoadedData {
-                    hasLoadedData = true
-                    Task { await loadData() }
+                .onAppear {
+                    if !hasLoadedData {
+                        hasLoadedData = true
+                        Task { await loadData() }
+                    }
                 }
             }
         }
