@@ -52,14 +52,34 @@ struct ScanView: View {
             .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
             VStack(spacing: 10) {
                 
-                if loading {
-                    Text("Loading Data")
-                } else {
+                HStack {
+                    Text("Physique Analysis")
+                        .font(.title)
+                        .foregroundColor(.white)
+                        .lineLimit(1)
+                        .bold()
+                        .padding()
+                    
+                    Spacer()
+                    
                     Button(action: {
                         viewModel.signOut()
                     }) {
-                        Text("sign out")
+                        Image(systemName: "gear")
+                            .resizable()                // Makes the icon resizable
+                            .scaledToFit()              // Ensures it maintains aspect ratio
+                            .frame(width: 30, height: 30) // Sets the size
+                            .foregroundColor(.gray)     // Sets the color of the icon
+                            .padding()
                     }
+                }
+                
+                
+                if loading {
+                    Text("Loading Data")
+                        .foregroundColor(.white)
+                } else {
+                    
                     
                     ZStack {
                         Image(uiImage: UIImage(named: "scanImage")!)
@@ -228,7 +248,7 @@ struct CustomScanButton: View {
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
             }
-            .frame(maxWidth: 300, maxHeight: 80) // Set button dimensions
+            .frame(maxWidth: 320, maxHeight: 80) // Set button dimensions
             .padding()
         }
     }
