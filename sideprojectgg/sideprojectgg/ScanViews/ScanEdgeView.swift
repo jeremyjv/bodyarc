@@ -32,6 +32,22 @@ struct ScanEdgeView: View {
             
             Color(red: 15/255, green: 15/255, blue: 15/255)
             .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
+            
+            VStack {
+                LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color.blue.opacity(0.2), // Start with a yellowish hue
+                            Color.clear,               // Fade to transparent
+                            Color(red: 15/255, green: 15/255, blue: 15/255)
+                        ]),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: UIScreen.main.bounds.height * 0.5) // Top 30% of the screen
+                Spacer()
+            }
+            .edgesIgnoringSafeArea(.top)
+            
             // Main Content
             
             
