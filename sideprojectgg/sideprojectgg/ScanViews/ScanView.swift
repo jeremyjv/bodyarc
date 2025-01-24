@@ -123,11 +123,12 @@ struct ScanView: View {
                         } else {
                             
                             CustomScanButton(title: "Begin Scan", path: $path, dest: "FrontScanView")
-                                .offset(y: 200)
+                                .offset(y: 210)
                         }
                         
                     }
                 }
+                Spacer()
                 Spacer()
             }
             

@@ -151,9 +151,10 @@ struct ProgressCardView: View {
                     Text(scan.createdAt?.formattedDateString() ?? "Unknown Date")
                         .font(.headline)
                         .foregroundColor(.white) // Ensure text is visible on dark background
-                    Text("View Results ->")
+                    Text("View Results")
                         .font(.subheadline)
-                        .foregroundColor(.blue)
+                        .foregroundColor(.white)
+                        .bold()
                 }
 
                 Spacer()
