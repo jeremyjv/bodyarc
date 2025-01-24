@@ -206,13 +206,30 @@ struct ScanEdgeView: View {
                 .padding(.horizontal)
                 .sheet(isPresented: $showReferral) {
                     VStack {
-                        Button(action: {
-                            Task {
-                                fetchUserReferrals()
+                        
+                        HStack(spacing: 80) {
+                            Text("🎟️")
+                                .font(.system(size: 70))
+                                .padding()
+                        
+                            
+                         
+                            
+                            Button(action: {
+                                Task {
+                                    fetchUserReferrals()
+                                }
+                            }) {
+                                Text("Redeem")
+                                    .font(.title)
+                                    .foregroundColor(.white)
+                                    .padding()
+                                
                             }
-                        }) {
-                            Text("Redeem Referrals")
+                            
+                            
                         }
+                   
                         
                         Button(action: {
                             Task {
