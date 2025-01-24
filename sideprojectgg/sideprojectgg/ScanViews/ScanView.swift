@@ -52,6 +52,7 @@ struct ScanView: View {
             .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
             VStack(spacing: 10) {
                 
+                Spacer()
                 HStack {
                     Text("Physique Analysis")
                         .font(.title)
@@ -73,6 +74,7 @@ struct ScanView: View {
                             .padding()
                     }
                 }
+                Spacer()
                 
                 
                 if loading {
@@ -85,7 +87,7 @@ struct ScanView: View {
                         Image(uiImage: UIImage(named: "scanImage")!)
                             .resizable()
                             .scaledToFill()
-                            .frame(width: 320, height: 423)
+                            .frame(maxWidth: 330, maxHeight: 500)
                             .cornerRadius(30)
                             .overlay(
                                 // Gradient overlay at the bottom
@@ -126,7 +128,9 @@ struct ScanView: View {
                         
                     }
                 }
+                Spacer()
             }
+            
             
         }
         .onAppear {
@@ -248,7 +252,7 @@ struct CustomScanButton: View {
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
             }
-            .frame(maxWidth: 320, maxHeight: 80) // Set button dimensions
+            .frame(maxWidth: 330, maxHeight: 80) // Set button dimensions
             .padding()
         }
     }
