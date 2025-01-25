@@ -280,6 +280,17 @@ struct ScanEdgeView: View {
                             .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
                             .cornerRadius(35) // Rounded corners
                             .padding()
+                            
+                            ShareLink(items: ["https://www.linkedin.com/in/jeremyvillanueva15/",
+                                              "Check out this app and use my code: \(URL(string: viewModel.user!.referralCode!)!) to get your physique ratings!"]
+                                      ,preview: { _ in
+
+                                SharePreview("App Preview", image: Image("appPreviewImage"))
+
+                            }) {
+                                Label("Share", systemImage: "square.and.arrow.up")
+                            }
+                                    .padding()
                         }
                     }
                     .presentationDetents([.fraction(0.40)])

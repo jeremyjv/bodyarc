@@ -167,8 +167,21 @@ class ContentViewModel: ObservableObject {
                 }
                 
                 
-                //create their own referral code being the first 6 Characters
-                let referralCode = firebaseUser.uid.prefix(6).uppercased()
+                //logic for creating referral code
+                let randomNumber = String(Int.random(in: 10...99))
+                
+                let uidString = "\(firebaseUser.uid)"
+                
+                let startIndex = uidString.index(uidString.startIndex, offsetBy: 0) // First character
+                let middleIndex = uidString.index(uidString.startIndex, offsetBy: 3) // Up to the 4th character
+                let endIndex = uidString.index(uidString.startIndex, offsetBy: 5)   // 6th character
+
+                // Slice the string using indices
+                let firstPart = uidString[startIndex..<middleIndex]
+                let lastChar = uidString[endIndex]
+
+                // Create the referral code
+                let referralCode = "\(firstPart)\(randomNumber)\(lastChar)"
                 
                 //new user always starts with referralAmount == 0
                 let userModel = User(email: firebaseUser.email, uid: firebaseUser.uid, intake: intakeForm, referralCode: referralCode, referralAmount: 0)
