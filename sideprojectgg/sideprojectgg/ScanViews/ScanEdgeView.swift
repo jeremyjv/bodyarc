@@ -281,16 +281,36 @@ struct ScanEdgeView: View {
                             .cornerRadius(35) // Rounded corners
                             .padding()
                             
-                            ShareLink(items: ["https://www.linkedin.com/in/jeremyvillanueva15/",
-                                              "Check out this app and use my code: \(URL(string: viewModel.user!.referralCode!)!) to get your physique ratings!"]
-                                      ,preview: { _ in
+                        
+                                ShareLink(
+                                    items: [
+                                        "https://www.linkedin.com/in/jeremyvillanueva15/",
+                                        "Check out this app and use my code: \(viewModel.user!.referralCode!) to get your physique ratings!"
+                                    ],
+                                    preview: { _ in
+                                        SharePreview("App Preview")
+                                    }
+                                ) {
+                                    Text("Share")
+                                        .frame(maxWidth: .infinity, maxHeight: 60) // Set button size
+                                        .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
+                                        .cornerRadius(35) // Rounded corners
+                                        .padding()
+                                }
+                                .simultaneousGesture(
+                                    TapGesture()
+                                        .onEnded { _ in
+                                            // Trigger an asynchronous task
+                                            Task {
+                                                generator.impactOccurred()
+                                            }
+                                        }
+                                )
+                                .padding()
+                  
+                            
 
-                                SharePreview("App Preview", image: Image("appPreviewImage"))
-
-                            }) {
-                                Label("Share", systemImage: "square.and.arrow.up")
-                            }
-                                    .padding()
+                            
                         }
                     }
                     .presentationDetents([.fraction(0.40)])
