@@ -94,25 +94,41 @@ struct RatingView: View {
             .onAppear {
                 // Fetch the front image
                 Task {
-                    if scanObject.frontImage != nil {
-                        do {
-                            frontImage = try await viewModel.loadImage(from: scanObject.frontImage!)
-                            isLoading = false // Set loading to false after fetching
-                        } catch {
-                            print("Failed to fetch front image: \(error)")
-                            isLoading = false
+                    isLoading = true // Set loading to true at the start
+                    
+                    async let frontImageTask: Void = {
+                        if let frontImageURL = scanObject.frontImage {
+                            do {
+                                let image = try await viewModel.loadImage(from: frontImageURL)
+                                await MainActor.run {
+                                    frontImage = image
+                                }
+                            } catch {
+                                print("Failed to fetch front image: \(error)")
+                            }
                         }
-                    }
-                    if scanObject.backImage != nil {
-                        do {
-                            backImage = try await viewModel.loadImage(from: scanObject.backImage!)
-                            isLoading = false // Set loading to false after fetching
-                        } catch {
-                            print("Failed to fetch back image: \(error)")
-                            isLoading = false
+                    }()
+                    
+                    async let backImageTask: Void = {
+                        if let backImageURL = scanObject.backImage {
+                            do {
+                                let image = try await viewModel.loadImage(from: backImageURL)
+                                await MainActor.run {
+                                    backImage = image
+                                }
+                            } catch {
+                                print("Failed to fetch back image: \(error)")
+                            }
                         }
+                    }()
+                    
+                    // Wait for both tasks to complete
+                    await frontImageTask
+                    await backImageTask
+                    
+                    await MainActor.run {
+                        isLoading = false // Set loading to false after all tasks are complete
                     }
-                 
                 }
             }
             .toolbar {

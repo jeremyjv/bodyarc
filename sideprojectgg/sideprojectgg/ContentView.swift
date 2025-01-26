@@ -50,17 +50,21 @@ struct ContentView: View {
                     }
                     .navigationDestination(for: String.self) { destination in
                         switch destination {
+                            
+                        case "FrontInstructionsView":
+                            FrontInstructionsView(path: $path)
+                        
                         case "FrontScanView":
                             FrontScanView(path: $path)
-                            
-                        case "FrontCameraView":
-                            FrontCameraView(cameraModel: cameraModel, path: $path)
+                        
                             
                         case "BackScanView":
                             BackScanView(path: $path)
                             
-                        case "BackCameraView":
-                            BackCameraView(cameraModel: cameraModel, path: $path)
+                        case "BackInstructionsView":
+                            BackInstructionsView(path: $path)
+                            
+            
                         case "PaywallView":
                             PaywallView()
                         case "ScanEdgeView":

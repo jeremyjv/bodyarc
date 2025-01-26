@@ -177,7 +177,7 @@ struct FrontScanView: View {
             }
 
             Button(action: {
-                path.append("BackScanView")
+                path.append("BackInstructionsView")
             }) {
                 Text("Continue")
                     .frame(maxWidth: .infinity)

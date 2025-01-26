@@ -115,14 +115,16 @@ struct ScanView: View {
                             //only redirect to paywall if they don't have instascans
                             if let instascan = user.instaScans, instascan > 0 {
                                 CustomScanButton(title: "Insta Scan Now", path: $path, dest: "FrontScanView")
+                                    .offset(y: 210)
                                 
                             } else {
                                 CustomScanButton(title: "Insta Scan Now", path: $path, dest: "InstaScanPaywallView")
+                                    .offset(y: 210)
                             }
                             
                         } else {
                             
-                            CustomScanButton(title: "Begin Scan", path: $path, dest: "FrontScanView")
+                            CustomScanButton(title: "Begin Scan", path: $path, dest: "FrontInstructionsView")
                                 .offset(y: 210)
                         }
                         

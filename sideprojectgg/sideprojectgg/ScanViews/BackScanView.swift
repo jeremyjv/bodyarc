@@ -20,7 +20,7 @@ struct BackScanView: View {
     @EnvironmentObject var viewModel: ContentViewModel
     @State private var cameraModel = CameraModel()
     @State private var showCamera: Bool = false
-    @State private var defaultImage: UIImage?
+    @State private var defaultImage: UIImage? = UIImage(named: "backScanImage")!
     @State private var photosPickerItem: PhotosPickerItem?
     @State private var showPicker: Bool = false
     @State private var showOptionsMenu: Bool = false
@@ -44,7 +44,7 @@ struct BackScanView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            Text("Upload a front selfie")
+            Text("Upload a back selfie")
                 .font(.title2)
                 .bold()
 
