@@ -22,6 +22,7 @@ struct RatingView: View {
     
     @State private var currentPage = 0 // Track the current page
     @State private var isLoading = true // State to track loading
+        
     
 
     // just do a (while) front image == nil -> loading and you're good
@@ -70,13 +71,13 @@ struct RatingView: View {
 
                         // Custom Dots
                         HStack(spacing: 8) {
-                            ForEach(0..<4) { index in // Adjust the number of pages
+                            ForEach(0..<5) { index in // Adjust the number of pages
                                 Circle()
                                     .fill(currentPage == index ? Color.white : Color.gray.opacity(0.5))
                                     .frame(width: 10, height: 10)
                             }
                         }
-                        .padding(.bottom, 60)
+                        .padding(.bottom, 50)
                     }
                     .edgesIgnoringSafeArea(.all) // Ensures the TabView fills the screen
                 }
