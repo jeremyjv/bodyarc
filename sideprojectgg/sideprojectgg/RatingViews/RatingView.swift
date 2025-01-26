@@ -71,11 +71,20 @@ struct RatingView: View {
 
                         // Custom Dots
                         HStack(spacing: 8) {
-                            ForEach(0..<5) { index in // Adjust the number of pages
-                                Circle()
-                                    .fill(currentPage == index ? Color.white : Color.gray.opacity(0.5))
-                                    .frame(width: 10, height: 10)
+                            if backImage != nil {
+                                ForEach(0..<5) { index in // Adjust the number of pages
+                                    Circle()
+                                        .fill(currentPage == index ? Color.white : Color.gray.opacity(0.5))
+                                        .frame(width: 10, height: 10)
+                                }
+                            } else {
+                                ForEach(0..<3) { index in // Adjust the number of pages
+                                    Circle()
+                                        .fill(currentPage == index ? Color.white : Color.gray.opacity(0.5))
+                                        .frame(width: 10, height: 10)
+                                }
                             }
+                            
                         }
                         .padding(.bottom, 50)
                     }
