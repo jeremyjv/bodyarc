@@ -193,7 +193,7 @@ struct FrontScanView: View {
             }
             Button("Cancel", role: .cancel) {}
         }
-        .padding()
+     
     }
 
     private var buttonGroupForDefaultImage: some View {

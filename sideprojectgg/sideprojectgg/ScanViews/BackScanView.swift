@@ -134,9 +134,10 @@ struct BackScanView: View {
                     buttonGroupForDefaultImage // "Choose Another" and "Continue"
                 } else {
                     actionButton // "Upload or take selfie"
+                    skipButton // "skip back scan" button
                 }
                 
-                Spacer()
+    
             }
             .padding()
             .onReceive(cameraModel.$capturedImage) { newImage in
@@ -158,6 +159,35 @@ struct BackScanView: View {
         
 
     // MARK: - Subviews
+    
+    private var skipButton: some View {
+        Button(action: {
+            generator.impactOccurred()
+            viewModel.backImage = nil
+            handleBusinessLogic()
+        }) {
+            ZStack {
+                // Background gradient
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color(red: 4 / 255, green: 96 / 255, blue: 255 / 255),
+                        Color(red: 4 / 255, green: 180 / 255, blue: 255 / 255)
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .cornerRadius(10) // Match the corner radius to your original button
+                .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2) // Add shadow for depth
+
+                // Button text
+                Text("Skip Back Scan")
+                    .font(.title2) // Match the font size of the custom button
+                    .fontWeight(.semibold) // Match the font weight
+                    .foregroundColor(.white) // Set text color to white
+            }
+            .frame(maxWidth: .infinity, maxHeight: 80) // Set button dimensions
+        }
+    }
 
     private var actionButton: some View {
         Button(action: {
@@ -197,7 +227,7 @@ struct BackScanView: View {
             }
             Button("Cancel", role: .cancel) {}
         }
-        .padding()
+     
     }
 
     private var buttonGroupForDefaultImage: some View {
@@ -477,7 +507,7 @@ struct BackScanView: View {
                 } else {
                     // Fallback in case cropping fails
                     defaultImage = image
-                    viewModel.frontImage = image
+                    viewModel.backImage = image
                 }
             }
         }
