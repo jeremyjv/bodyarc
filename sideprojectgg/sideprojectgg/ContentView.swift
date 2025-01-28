@@ -42,7 +42,7 @@ struct ContentView: View {
                         .tag("ProgressView")
                         
                         RoutineView().tabItem({
-                            Label("Routine", systemImage: "person")
+                            Label("Grow", systemImage: "person")
                         })
                         .tag("RoutineView")
                        

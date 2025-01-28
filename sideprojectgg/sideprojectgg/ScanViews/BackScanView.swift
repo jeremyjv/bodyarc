@@ -77,25 +77,52 @@ struct BackScanView: View {
                         // Switch Camera and Timer HStack
                         HStack {
                             Button(action: {
+                                generator.impactOccurred()
                                 cameraModel.toggleCamera() // Toggle between front/back cameras
                             }) {
-                                Text("Switch Camera")
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.purple)
-                                    .foregroundColor(.white)
+                                ZStack {
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            Color(red: 4 / 255, green: 96 / 255, blue: 255 / 255),
+                                            Color(red: 4 / 255, green: 180 / 255, blue: 255 / 255)
+                                        ]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
                                     .cornerRadius(10)
+                                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+                                    Text("Switch Camera")
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(Color.clear)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(10)
+                                }
                             }
                             
                             Button(action: {
+                                generator.impactOccurred()
                                 isTimerEnabled.toggle()
                             }) {
-                                Text(isTimerEnabled ? "Timer On" : "Timer Off")
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(isTimerEnabled ? Color.green : Color.purple)
-                                    .foregroundColor(.white)
+                                ZStack {
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            Color(red: 4 / 255, green: 96 / 255, blue: 255 / 255),
+                                            Color(red: 4 / 255, green: 180 / 255, blue: 255 / 255)
+                                        ]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
                                     .cornerRadius(10)
+                                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+                                    
+                                    Text(isTimerEnabled ? "5s Timer On" : "5s Timer Off")
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(isTimerEnabled ? Color.green : Color.clear)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(10)
+                                }
                             }
                         }
                         .padding(.bottom, 10) // Space above "Take Picture" button
@@ -134,14 +161,29 @@ struct BackScanView: View {
 
     private var actionButton: some View {
         Button(action: {
+            generator.impactOccurred()
             showOptionsMenu = true
         }) {
-            Text("Upload or take selfie")
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.purple)
-                .foregroundColor(.white)
-                .cornerRadius(10)
+            ZStack {
+                // Background gradient
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color(red: 4 / 255, green: 96 / 255, blue: 255 / 255),
+                        Color(red: 4 / 255, green: 180 / 255, blue: 255 / 255)
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .cornerRadius(10) // Match the corner radius to your original button
+                .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2) // Add shadow for depth
+
+                // Button text
+                Text("Upload or take selfie")
+                    .font(.title2) // Match the font size of the custom button
+                    .fontWeight(.semibold) // Match the font weight
+                    .foregroundColor(.white) // Set text color to white
+            }
+            .frame(maxWidth: .infinity, maxHeight: 80) // Set button dimensions
         }
         .confirmationDialog("Choose an option", isPresented: $showOptionsMenu, titleVisibility: .visible) {
             Button("Take a Selfie") {
@@ -161,14 +203,28 @@ struct BackScanView: View {
     private var buttonGroupForDefaultImage: some View {
         VStack(spacing: 10) {
             Button(action: {
+                generator.impactOccurred()
                 showOptionsMenu = true
             }) {
-                Text("Choose Another")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .foregroundColor(.black)
-                    .cornerRadius(10)
+                ZStack {
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color(red: 4 / 255, green: 96 / 255, blue: 255 / 255),
+                            Color(red: 4 / 255, green: 180 / 255, blue: 255 / 255)
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .cornerRadius(8)
+                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+                    
+                    Text("Choose Another")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.gray.opacity(0.2))
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
             }
             .confirmationDialog("Choose an option", isPresented: $showOptionsMenu, titleVisibility: .visible) {
                 Button("Take a Selfie") {
@@ -184,6 +240,7 @@ struct BackScanView: View {
             }
 
             Button(action: {
+                generator.impactOccurred()
                 //clear path -> call handle scan upload
                 Task {
                     
@@ -256,12 +313,23 @@ struct BackScanView: View {
                 
                 
             }) {
-                Text("Continue")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.purple)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+                ZStack {
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color(red: 4 / 255, green: 96 / 255, blue: 255 / 255),
+                            Color(red: 4 / 255, green: 180 / 255, blue: 255 / 255)
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .cornerRadius(8)
+                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+                    Text("Continue")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
             }
         }
         .padding()
@@ -273,15 +341,36 @@ struct BackScanView: View {
         Button(action: {
             captureWithTimerIfNeeded()
         }) {
-            Text(isCountdownActive ? "Taking Photo..." : "Take Picture")
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(isCountdownActive ? Color.gray : Color.purple)
-                .foregroundColor(.white)
-                .cornerRadius(10)
+            ZStack {
+                if isCountdownActive {
+                    // Gray background when countdown is active
+                    Color.gray
+                        .cornerRadius(10)
+                        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+                } else {
+                    // Gradient background when not in countdown
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color(red: 4 / 255, green: 96 / 255, blue: 255 / 255),
+                            Color(red: 4 / 255, green: 180 / 255, blue: 255 / 255)
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .cornerRadius(10)
+                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+                }
+                
+                // Button text
+                Text(isCountdownActive ? "Taking Photo..." : "Take Picture")
+                    .font(.body)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .padding()
+            }
+            .frame(maxWidth: .infinity, maxHeight: 80) // Ensure consistent button size
         }
         .disabled(isCountdownActive) // Disable button during countdown
-        .padding()
     }
     
     private var countdownOverlay: some View {
