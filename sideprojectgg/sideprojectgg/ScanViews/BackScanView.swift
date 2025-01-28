@@ -242,74 +242,7 @@ struct BackScanView: View {
             Button(action: {
                 generator.impactOccurred()
                 //clear path -> call handle scan upload
-                Task {
-                    
-                    //handle a run where once they pay we automattically run analysis on current front and back images
-                    
-                    //run subscription, instaScan, and lastScan business logic
-                    do {
-                        let customerInfo = try await Purchases.shared.customerInfo()
-                        
-                        //if the (user has Body Arc Gold) And (has instascan available)
-                        if customerInfo.entitlements["MonthlyPremiumA"]?.isActive == true {
-                   
-                            //if they don't have instascan, they wouldn't see this in the first place since it would direct them to insta paywall instead
-                            
-                            //decrement instascan
-                            // Set instaScans to 0 in Firestore
-                            // Firestore operation wrapped in DispatchQueue
-                            DispatchQueue.main.async {
-                            
-                                //only set lastGoldScan if user has no insta scans,.. aka its the regular weekly one
-                                if viewModel.user?.instaScans == 0 {
-                                    setLastGoldScan()
-                                    viewModel.user!.lastGoldScan = Date()
-                                }
-                                
-                                //only decrement instascan when they have one and last weekly scan was less than a week ago
-                                if viewModel.user?.instaScans == 1 {
-                                    //only decrement instascan if user has instaScan
-                                    viewModel.user?.instaScans = 0
-                                    let db = Firestore.firestore()
-                                    if let uid = viewModel.uid {
-                                        let userRef = db.collection("users").document(uid)
-
-                                        userRef.updateData([
-                                            "instaScans": Int64(0)
-                                        ]) { error in
-                                            if let error = error {
-                                                print("Failed to set instaScans to 0: \(error.localizedDescription)")
-                                            } else {
-                                                print("InstaScans set to 0 successfully!")
-                                            }
-                                        }
-                                        
-                                   
-                                    } else {
-                                        print("Error: viewModel.uid is nil")
-                                    }
-                                    
-                                }
-                                
-                                path = NavigationPath()
-                                viewModel.selectedTab = "ProgressView"
-                                
-                             
-                            }
-                            
-                            //handle scan
-                            await viewModel.handleScanUploadAction()
-                            
-                            
-                        
-                        } else {
-                            //append ScanEdgeView to navigationPath
-                            path.append("ScanEdgeView")
-                        }
-                    } catch {
-                        print("error fetching customer info")
-                    }
-                }
+                handleBusinessLogic()
                 
                 
             }) {
@@ -411,6 +344,79 @@ struct BackScanView: View {
                 }
             }
         }
+    }
+    
+    private func handleBusinessLogic() {
+        
+        Task {
+            
+            //handle a run where once they pay we automattically run analysis on current front and back images
+            
+            //run subscription, instaScan, and lastScan business logic
+            do {
+                let customerInfo = try await Purchases.shared.customerInfo()
+                
+                //if the (user has Body Arc Gold) And (has instascan available)
+                if customerInfo.entitlements["MonthlyPremiumA"]?.isActive == true {
+           
+                    //if they don't have instascan, they wouldn't see this in the first place since it would direct them to insta paywall instead
+                    
+                    //decrement instascan
+                    // Set instaScans to 0 in Firestore
+                    // Firestore operation wrapped in DispatchQueue
+                    DispatchQueue.main.async {
+                    
+                        //only set lastGoldScan if user has no insta scans,.. aka its the regular weekly one
+                        if viewModel.user?.instaScans == 0 {
+                            setLastGoldScan()
+                            viewModel.user!.lastGoldScan = Date()
+                        }
+                        
+                        //only decrement instascan when they have one and last weekly scan was less than a week ago
+                        if viewModel.user?.instaScans == 1 {
+                            //only decrement instascan if user has instaScan
+                            viewModel.user?.instaScans = 0
+                            let db = Firestore.firestore()
+                            if let uid = viewModel.uid {
+                                let userRef = db.collection("users").document(uid)
+
+                                userRef.updateData([
+                                    "instaScans": Int64(0)
+                                ]) { error in
+                                    if let error = error {
+                                        print("Failed to set instaScans to 0: \(error.localizedDescription)")
+                                    } else {
+                                        print("InstaScans set to 0 successfully!")
+                                    }
+                                }
+                                
+                           
+                            } else {
+                                print("Error: viewModel.uid is nil")
+                            }
+                            
+                        }
+                        
+                        path = NavigationPath()
+                        viewModel.selectedTab = "ProgressView"
+                        
+                     
+                    }
+                    
+                    //handle scan
+                    await viewModel.handleScanUploadAction()
+                    
+                    
+                
+                } else {
+                    //append ScanEdgeView to navigationPath
+                    path.append("ScanEdgeView")
+                }
+            } catch {
+                print("error fetching customer info")
+            }
+        }
+        
     }
 
     private func captureWithTimerIfNeeded() {
