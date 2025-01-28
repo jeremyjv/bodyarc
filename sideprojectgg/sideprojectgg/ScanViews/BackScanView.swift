@@ -20,7 +20,7 @@ struct BackScanView: View {
     @EnvironmentObject var viewModel: ContentViewModel
     @State private var cameraModel = CameraModel()
     @State private var showCamera: Bool = false
-    @State private var defaultImage: UIImage? = UIImage(named: "backScanImage")!
+    @State private var defaultImage: UIImage? = nil
     @State private var photosPickerItem: PhotosPickerItem?
     @State private var showPicker: Bool = false
     @State private var showOptionsMenu: Bool = false
@@ -66,7 +66,7 @@ struct BackScanView: View {
                         )
                         .transition(.opacity) // Smooth fade-in
                     } else {
-                        DefaultImageView(defaultImage: defaultImage, width: previewWidth, height: previewHeight)
+                        DefaultBackImageView(defaultImage: defaultImage, width: previewWidth, height: previewHeight)
                     }
                 }
                 .frame(width: previewWidth, height: previewHeight) // Consistent dimensions
@@ -426,6 +426,21 @@ struct BackScanView: View {
         
         // Convert cropped CGImage back to UIImage
         return UIImage(cgImage: croppedCGImage, scale: image.scale, orientation: image.imageOrientation)
+    }
+}
+
+struct DefaultBackImageView: View {
+    let defaultImage: UIImage?
+    let width: CGFloat
+    let height: CGFloat
+
+    var body: some View {
+        Image(uiImage: defaultImage ?? UIImage(named: "backScanImage")!)
+            .resizable()
+            .scaledToFill()
+            .frame(width: width, height: height) // Use passed dimensions
+            .cornerRadius(20)
+            .clipped()
     }
 }
 

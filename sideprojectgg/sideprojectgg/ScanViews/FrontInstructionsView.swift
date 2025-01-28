@@ -18,7 +18,7 @@ struct FrontInstructionsView: View {
 
             VStack(spacing: 15) { // Reduced spacing between sections
                 // Title
-                Text("Front Instructions")
+                Text("Scan Instructions")
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundColor(.white)

@@ -61,7 +61,7 @@ struct FrontScanView: View {
                         )
                         .transition(.opacity) // Smooth fade-in
                     } else {
-                        DefaultImageView(defaultImage: defaultImage, width: previewWidth, height: previewHeight)
+                        DefaultFrontImageView(defaultImage: defaultImage, width: previewWidth, height: previewHeight)
                     }
                 }
                 .frame(width: previewWidth, height: previewHeight) // Consistent dimensions
@@ -200,12 +200,25 @@ struct FrontScanView: View {
             Button(action: {
                 showOptionsMenu = true
             }) {
-                Text("Choose Another")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .foregroundColor(.black)
-                    .cornerRadius(10)
+                ZStack {
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color(red: 4 / 255, green: 96 / 255, blue: 255 / 255),
+                            Color(red: 4 / 255, green: 180 / 255, blue: 255 / 255)
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .cornerRadius(8)
+                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+                    
+                    Text("Choose Another")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.gray.opacity(0.2))
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
             }
             .confirmationDialog("Choose an option", isPresented: $showOptionsMenu, titleVisibility: .visible) {
                 Button("Take a Selfie") {
@@ -224,12 +237,23 @@ struct FrontScanView: View {
             Button(action: {
                 path.append("BackInstructionsView")
             }) {
-                Text("Continue")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.purple)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+                ZStack {
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color(red: 4 / 255, green: 96 / 255, blue: 255 / 255),
+                            Color(red: 4 / 255, green: 180 / 255, blue: 255 / 255)
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .cornerRadius(8)
+                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+                    Text("Continue")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                }
             }
         }
         .padding()
@@ -428,7 +452,7 @@ struct CameraView: View {
 
 // MARK: - DefaultImageView Component
 
-struct DefaultImageView: View {
+struct DefaultFrontImageView: View {
     let defaultImage: UIImage?
     let width: CGFloat
     let height: CGFloat
