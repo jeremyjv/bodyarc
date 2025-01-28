@@ -130,21 +130,35 @@ struct FrontScanView: View {
         Button(action: {
             showOptionsMenu = true
         }) {
-            Text("Upload or take selfie")
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color.purple)
-                .foregroundColor(.white)
-                .cornerRadius(10)
+            // Use ZStack to layer the background and text
+            ZStack {
+                // Background gradient
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color(red: 4 / 255, green: 96 / 255, blue: 255 / 255),
+                        Color(red: 4 / 255, green: 180 / 255, blue: 255 / 255)
+                    ]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .cornerRadius(10) // Match the corner radius to your original button
+                .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2) // Add shadow for depth
+
+                // Button text
+                Text("Upload or take selfie")
+                    .font(.title2) // Match the font size of the custom button
+                    .fontWeight(.semibold) // Match the font weight
+                    .foregroundColor(.white) // Set text color to white
+            }
+            .frame(maxWidth: .infinity, maxHeight: 80) // Set button dimensions
+       
         }
         .confirmationDialog("Choose an option", isPresented: $showOptionsMenu, titleVisibility: .visible) {
             Button("Take a Selfie") {
-             
-                    withAnimation {
-                        showCamera = true
-                    }
-                    cameraModel.checkAuthorization()
-
+                withAnimation {
+                    showCamera = true
+                }
+                cameraModel.checkAuthorization()
             }
             Button("Upload from Photo Library") {
                 showPicker = true
