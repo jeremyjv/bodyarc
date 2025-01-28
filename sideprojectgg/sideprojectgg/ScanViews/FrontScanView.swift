@@ -38,86 +38,90 @@ struct FrontScanView: View {
     }
 
     var body: some View {
-        VStack(spacing: 16) {
-            Text("Upload a front selfie")
-                .font(.title2)
-                .bold()
-
-            // Image or Camera View
-            ZStack {
-                if showCamera {
-                    CameraView(
-                        cameraModel: cameraModel,
-                        onPhotoTaken: {
-                            captureWithTimerIfNeeded()
-                        },
-                        isCountdownActive: $isCountdownActive,
-                        countdownValue: $countdownValue,
-                        width: previewWidth,
-                        height: previewHeight
-                    )
-                    .transition(.opacity) // Smooth fade-in
-                } else {
-                    DefaultImageView(defaultImage: defaultImage, width: previewWidth, height: previewHeight)
-                }
-            }
-            .frame(width: previewWidth, height: previewHeight) // Consistent dimensions
-            .cornerRadius(20)
-
-            if showCamera {
-                VStack(spacing: 10) {
-                    // Switch Camera and Timer HStack
-                    HStack {
-                        Button(action: {
-                            cameraModel.toggleCamera() // Toggle between front/back cameras
-                        }) {
-                            Text("Switch Camera")
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.purple)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                        }
-                        
-                        Button(action: {
-                            isTimerEnabled.toggle()
-                        }) {
-                            Text(isTimerEnabled ? "Timer On" : "Timer Off")
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(isTimerEnabled ? Color.green : Color.purple)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                        }
+        ZStack {
+            Color(red: 15/255, green: 15/255, blue: 15/255)
+                .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
+            VStack(spacing: 16) {
+                Text("Upload a front selfie")
+                    .font(.title2)
+                    .bold()
+                
+                // Image or Camera View
+                ZStack {
+                    if showCamera {
+                        CameraView(
+                            cameraModel: cameraModel,
+                            onPhotoTaken: {
+                                captureWithTimerIfNeeded()
+                            },
+                            isCountdownActive: $isCountdownActive,
+                            countdownValue: $countdownValue,
+                            width: previewWidth,
+                            height: previewHeight
+                        )
+                        .transition(.opacity) // Smooth fade-in
+                    } else {
+                        DefaultImageView(defaultImage: defaultImage, width: previewWidth, height: previewHeight)
                     }
-                    .padding(.bottom, 10) // Space above "Take Picture" button
-                    
-                    // Take Picture Button
-                    cameraCaptureButton
                 }
-            } else if let _ = defaultImage {
-                buttonGroupForDefaultImage // "Choose Another" and "Continue"
-            } else {
-                actionButton // "Upload or take selfie"
+                .frame(width: previewWidth, height: previewHeight) // Consistent dimensions
+                .cornerRadius(20)
+                
+                if showCamera {
+                    VStack(spacing: 10) {
+                        // Switch Camera and Timer HStack
+                        HStack {
+                            Button(action: {
+                                cameraModel.toggleCamera() // Toggle between front/back cameras
+                            }) {
+                                Text("Switch Camera")
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.purple)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                            }
+                            
+                            Button(action: {
+                                isTimerEnabled.toggle()
+                            }) {
+                                Text(isTimerEnabled ? "Timer On" : "Timer Off")
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(isTimerEnabled ? Color.green : Color.purple)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
+                            }
+                        }
+                        .padding(.bottom, 10) // Space above "Take Picture" button
+                        
+                        // Take Picture Button
+                        cameraCaptureButton
+                    }
+                } else if let _ = defaultImage {
+                    buttonGroupForDefaultImage // "Choose Another" and "Continue"
+                } else {
+                    actionButton // "Upload or take selfie"
+                }
+                
+                Spacer()
             }
-
-            Spacer()
-        }
-        .padding()
-        .onReceive(cameraModel.$capturedImage) { newImage in
-            if let newImage = newImage {
-                handleCapturedImage(newImage)
+            .padding()
+            .onReceive(cameraModel.$capturedImage) { newImage in
+                if let newImage = newImage {
+                    handleCapturedImage(newImage)
+                }
             }
-        }
-        .onChange(of: photosPickerItem) { _, _ in
-            handlePhotoPicker()
-        }
-        .onDisappear {
-            if showCamera {
-                cameraModel.stopSession()
+            .onChange(of: photosPickerItem) { _, _ in
+                handlePhotoPicker()
             }
+            .onDisappear {
+                if showCamera {
+                    cameraModel.stopSession()
+                }
+            }
+            .photosPicker(isPresented: $showPicker, selection: $photosPickerItem)
         }
-        .photosPicker(isPresented: $showPicker, selection: $photosPickerItem)
     }
 
     // MARK: - Subviews
