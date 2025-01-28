@@ -60,11 +60,7 @@ struct ContentView: View {
                             
                         case "BackScanView":
                             BackScanView(path: $path)
-                            
-                        case "BackInstructionsView":
-                            BackInstructionsView(path: $path)
-                            
-            
+                    
                         case "PaywallView":
                             PaywallView()
                         case "ScanEdgeView":

@@ -155,6 +155,7 @@ struct FrontScanView: View {
 
     private var actionButton: some View {
         Button(action: {
+            generator.impactOccurred()
             showOptionsMenu = true
         }) {
             // Use ZStack to layer the background and text
@@ -198,6 +199,7 @@ struct FrontScanView: View {
     private var buttonGroupForDefaultImage: some View {
         VStack(spacing: 10) {
             Button(action: {
+                generator.impactOccurred()
                 showOptionsMenu = true
             }) {
                 ZStack {
@@ -235,7 +237,8 @@ struct FrontScanView: View {
             }
 
             Button(action: {
-                path.append("BackInstructionsView")
+                generator.impactOccurred()
+                path.append("BackScanView")
             }) {
                 ZStack {
                     LinearGradient(
