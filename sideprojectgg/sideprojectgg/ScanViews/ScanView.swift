@@ -255,7 +255,7 @@ struct CustomScanButton: View {
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
             }
-            .frame(maxWidth: .infinity, maxHeight: 80) // Set button dimensions
+            .frame(maxWidth: 330, maxHeight: 80) // Set button dimensions
             .padding()
         }
     }

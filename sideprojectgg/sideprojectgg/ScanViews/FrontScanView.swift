@@ -72,25 +72,52 @@ struct FrontScanView: View {
                         // Switch Camera and Timer HStack
                         HStack {
                             Button(action: {
+                                generator.impactOccurred()
                                 cameraModel.toggleCamera() // Toggle between front/back cameras
                             }) {
-                                Text("Switch Camera")
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.purple)
-                                    .foregroundColor(.white)
+                                ZStack {
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            Color(red: 4 / 255, green: 96 / 255, blue: 255 / 255),
+                                            Color(red: 4 / 255, green: 180 / 255, blue: 255 / 255)
+                                        ]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
                                     .cornerRadius(10)
+                                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+                                    Text("Switch Camera")
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(Color.clear)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(10)
+                                }
                             }
                             
                             Button(action: {
+                                generator.impactOccurred()
                                 isTimerEnabled.toggle()
                             }) {
-                                Text(isTimerEnabled ? "Timer On" : "Timer Off")
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(isTimerEnabled ? Color.green : Color.purple)
-                                    .foregroundColor(.white)
+                                ZStack {
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            Color(red: 4 / 255, green: 96 / 255, blue: 255 / 255),
+                                            Color(red: 4 / 255, green: 180 / 255, blue: 255 / 255)
+                                        ]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
                                     .cornerRadius(10)
+                                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+                                    
+                                    Text(isTimerEnabled ? "5s Timer On" : "5s Timer Off")
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(isTimerEnabled ? Color.green : Color.clear)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(10)
+                                }
                             }
                         }
                         .padding(.bottom, 10) // Space above "Take Picture" button
@@ -212,15 +239,36 @@ struct FrontScanView: View {
         Button(action: {
             captureWithTimerIfNeeded()
         }) {
-            Text(isCountdownActive ? "Taking Photo..." : "Take Picture")
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(isCountdownActive ? Color.gray : Color.purple)
-                .foregroundColor(.white)
-                .cornerRadius(10)
+            ZStack {
+                if isCountdownActive {
+                    // Gray background when countdown is active
+                    Color.gray
+                        .cornerRadius(10)
+                        .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+                } else {
+                    // Gradient background when not in countdown
+                    LinearGradient(
+                        gradient: Gradient(colors: [
+                            Color(red: 4 / 255, green: 96 / 255, blue: 255 / 255),
+                            Color(red: 4 / 255, green: 180 / 255, blue: 255 / 255)
+                        ]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                    .cornerRadius(10)
+                    .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
+                }
+                
+                // Button text
+                Text(isCountdownActive ? "Taking Photo..." : "Take Picture")
+                    .font(.body)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .padding()
+            }
+            .frame(maxWidth: .infinity, maxHeight: 80) // Ensure consistent button size
         }
         .disabled(isCountdownActive) // Disable button during countdown
-        .padding()
     }
     
     private var countdownOverlay: some View {
