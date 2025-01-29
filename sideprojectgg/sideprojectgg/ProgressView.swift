@@ -15,45 +15,40 @@ struct ProgressView: View {
     @Binding var path: NavigationPath
     @State private var hasLoadedData = false
     @State private var loadingScreen = true
-    
-    //for scan prompt : if viewModel.scans.count == 0 ----> direct them to scan
 
     func loadData() async {
         do {
             scans = try await viewModel.fetchScanObjects()
-            
             guard let fetchedScans = scans else { return }
-            
-            // Sort scans by `createdAt` in descending order (most recent first)
+
             let sortedScans = fetchedScans.sorted { ($0.createdAt ?? Date.distantPast) > ($1.createdAt ?? Date.distantPast) }
-            
+
             DispatchQueue.main.async {
                 self.scans = sortedScans
-                self.retrievedScanImages = Array(repeating: [nil, nil], count: sortedScans.count)
+                self.retrievedScanImages = Array(repeating: [nil], count: sortedScans.count) // Default to front image only
             }
 
             try await withThrowingTaskGroup(of: (Int, [UIImage?]).self) { group in
                 for (index, scan) in sortedScans.enumerated() {
                     group.addTask {
-                        var frontImage: UIImage? = nil
-                        var backImage: UIImage? = nil
+                        var images: [UIImage?] = []
 
                         if let frontImageURL = scan.frontImage {
-                            frontImage = try await viewModel.loadImage(from: frontImageURL)
+                            images.append(try await viewModel.loadImage(from: frontImageURL))
                         }
 
                         if let backImageURL = scan.backImage {
-                            backImage = try await viewModel.loadImage(from: backImageURL)
+                            images.append(try await viewModel.loadImage(from: backImageURL))
                         }
 
-                        return (index, [frontImage, backImage])
+                        return (index, images)
                     }
                 }
 
                 for try await (index, images) in group {
                     DispatchQueue.main.async {
                         self.retrievedScanImages[index] = images
-                        if retrievedScanImages.filter({ $0 != [nil, nil] }).count == sortedScans.count {
+                        if retrievedScanImages.filter({ !$0.isEmpty }).count == sortedScans.count {
                             self.loadingScreen = false
                         }
                     }
@@ -68,70 +63,62 @@ struct ProgressView: View {
     var body: some View {
         ZStack {
             Color(red: 15/255, green: 15/255, blue: 15/255)
-                .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
-                VStack(alignment: .leading) {
-                    
-                    Text("Your Progress")
-                        .font(.largeTitle)
+                .edgesIgnoringSafeArea(.all)
+
+            VStack(alignment: .leading) {
+                Text("Your Progress")
+                    .font(.largeTitle)
+                    .foregroundColor(.white)
+                    .bold()
+                    .padding()
+
+                if loadingScreen {
+                    Text("Loading...")
                         .foregroundColor(.white)
-                        .bold()
-                        .padding()
-                    
-                    
-                    if loadingScreen {
-                        Text("Loading...")
-                            .foregroundColor(.white)
-                    } else if viewModel.isScanProcessing && viewModel.scans!.count == 0 {
-                        // Show the loading card when a scan is in progress
-                        
-                        ScrollView {
-                            LazyVStack(spacing: 20) {
-                                
-                                LoadingCardView(
-                                    frontImage: viewModel.frontImage,
-                                    backImage: viewModel.backImage
-                                )
-                            }
-                        }
-                    } else if viewModel.scans!.count == 0 {
-                        
-                        Text("Scan to get your ratings")
-                            .foregroundColor(.white)
-                    } else {
-                        ScrollView {
-                            LazyVStack(alignment: .leading, spacing: 20) {
-                                
-                                
-                                if viewModel.isScanProcessing {
-                                    LoadingCardView(
-                                        frontImage: viewModel.frontImage,
-                                        backImage: viewModel.backImage
-                                    )
-                                }
-                                
-                                ForEach(retrievedScanImages.indices, id: \.self) { index in
-                                    if let scan = scans?[index] {
-                                        ProgressCardView(
-                                            scan: scan,
-                                            images: retrievedScanImages[index],
-                                            path: $path
-                                        )
-                                    }
-                                }
-                                
-                            }
-                            .padding()
+                } else if viewModel.isScanProcessing && viewModel.scans!.isEmpty {
+                    ScrollView {
+                        LazyVStack(spacing: 20) {
+                            LoadingCardView(
+                                frontImage: viewModel.frontImage,
+                                backImage: viewModel.backImage // Can be nil
+                            )
                         }
                     }
-                }
-                .onAppear {
-                    if !hasLoadedData {
-                        hasLoadedData = true
-                        Task { await loadData() }
+                } else if viewModel.scans!.isEmpty {
+                    Text("Scan to get your ratings")
+                        .foregroundColor(.white)
+                } else {
+                    ScrollView {
+                        LazyVStack(alignment: .leading, spacing: 20) {
+                            if viewModel.isScanProcessing {
+                                LoadingCardView(
+                                    frontImage: viewModel.frontImage,
+                                    backImage: viewModel.backImage // Can be nil
+                                )
+                            }
+
+                            ForEach(retrievedScanImages.indices, id: \.self) { index in
+                                if let scan = scans?[index] {
+                                    ProgressCardView(
+                                        scan: scan,
+                                        images: retrievedScanImages[index],
+                                        path: $path
+                                    )
+                                }
+                            }
+                        }
+                        .padding()
                     }
                 }
             }
+            .onAppear {
+                if !hasLoadedData {
+                    hasLoadedData = true
+                    Task { await loadData() }
+                }
+            }
         }
+    }
 }
     
 struct ProgressCardView: View {
@@ -146,11 +133,10 @@ struct ProgressCardView: View {
             generator.impactOccurred()
         }) {
             HStack(spacing: 10) {
-                // Date and Button (Left Side)
                 VStack(alignment: .leading, spacing: 8) {
                     Text(scan.createdAt?.formattedDateString() ?? "Unknown Date")
                         .font(.headline)
-                        .foregroundColor(.white) // Ensure text is visible on dark background
+                        .foregroundColor(.white)
                     Text("View Results")
                         .font(.subheadline)
                         .foregroundColor(.white)
@@ -159,10 +145,9 @@ struct ProgressCardView: View {
 
                 Spacer()
 
-                // Front and Back Images (Right Side)
                 HStack(spacing: 10) {
                     // Front Image
-                    if let frontImage = images[0] {
+                    if let frontImage = images.first ?? nil {
                         Image(uiImage: frontImage)
                             .resizable()
                             .scaledToFit()
@@ -174,26 +159,22 @@ struct ProgressCardView: View {
                             .cornerRadius(8)
                     }
 
-                    // Back Image
-                    if let backImage = images[1] {
+                    // Back Image (Optional)
+                    if images.count > 1, let backImage = images[1] {
                         Image(uiImage: backImage)
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 80, height: 100)
-                            .cornerRadius(8)
-                    } else {
-                        Color.gray.opacity(0.3)
                             .frame(width: 80, height: 100)
                             .cornerRadius(8)
                     }
                 }
             }
             .padding()
-            .background(Color.gray.opacity(0.2)) // Dark gray background
-            .cornerRadius(12) // Rounded corners
-            .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2) // Optional: Add subtle shadow for depth
+            .background(Color.gray.opacity(0.2))
+            .cornerRadius(12)
+            .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
         }
-        .buttonStyle(PlainButtonStyle()) // Use a plain button style to remove the default button appearance
+        .buttonStyle(PlainButtonStyle())
     }
 }
 
@@ -228,15 +209,11 @@ struct LoadingCardView: View {
                         .cornerRadius(8)
                 }
 
-                // Back Image
+                // Back Image (Optional)
                 if let backImage = backImage {
                     Image(uiImage: backImage)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 80, height: 100)
-                        .cornerRadius(8)
-                } else {
-                    Color.gray.opacity(0.3)
                         .frame(width: 80, height: 100)
                         .cornerRadius(8)
                 }
@@ -248,7 +225,6 @@ struct LoadingCardView: View {
         .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
     }
 }
-
 
 extension Date {
     func formattedDateString() -> String {

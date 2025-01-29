@@ -222,45 +222,43 @@ class ContentViewModel: ObservableObject {
     //we can delegate this server side instead to fix
     @MainActor
     func handleScanUploadAction() async {
-        // Ensure images are not nil
-        guard let frontImage = self.frontImage, let backImage = self.backImage else {
-            print("Images are missing")
+        // Ensure front image is not nil
+        guard let frontImage = self.frontImage else {
+            print("Front image is missing")
             return
         }
         
-        
         isScanProcessing = true // Set processing state
-        // Placeholder scan object with empty fields
- 
-        // Notify ProgressView of a new scan in progress
-       
-
+        
         do {
-            // Compute front and back analysis
+            // Compute front analysis
             try await self.createFrontAnalysis(img: frontImage)
             
-            //only run back analysis if it exists
-            try await self.createBackAnalysis(img: backImage)
-
-            guard let frontAnalysis = self.frontAnalysis, let backAnalysis = self.backAnalysis else {
-                print("Analysis fields are missing")
-                return
+            // Attempt back analysis only if the back image is provided
+            if let backImage = self.backImage {
+                try await self.createBackAnalysis(img: backImage)
             }
 
-            // Compute muscle ranking
-            let muscleRanking = self.rankMuscles(frontAnalysis: frontAnalysis, backAnalysis: backAnalysis)
+            let frontAnalysis = self.frontAnalysis
+            let backAnalysis = self.backImage != nil ? self.backAnalysis : nil
 
-            // Convert and upload images
+            // Compute muscle ranking (handle case where back analysis is missing)
+            let muscleRanking = self.rankMuscles(frontAnalysis: frontAnalysis!, backAnalysis: backAnalysis)
+
+            // Convert and upload front image
             let frontImageData = self.convertToJPEGData(image: frontImage)
             let uuid1 = NSUUID().uuidString
             self.frontImageURL = try await self.uploadFile(data: frontImageData!, path: "/images/\(uuid1).png").absoluteString
 
-            let backImageData = self.convertToJPEGData(image: backImage)
-            let uuid2 = NSUUID().uuidString
-            self.backImageURL = try await self.uploadFile(data: backImageData!, path: "/images/\(uuid2).png").absoluteString
+            var backImageURL: String? = nil
+            if let backImage = self.backImage {
+                let backImageData = self.convertToJPEGData(image: backImage)
+                let uuid2 = NSUUID().uuidString
+                backImageURL = try await self.uploadFile(data: backImageData!, path: "/images/\(uuid2).png").absoluteString
+            }
 
-            guard let frontImageURL = self.frontImageURL, let backImageURL = self.backImageURL else {
-                print("Image URLs are missing")
+            guard let frontImageURL = self.frontImageURL else {
+                print("Front image URL is missing")
                 return
             }
 
@@ -269,22 +267,20 @@ class ContentViewModel: ObservableObject {
                 createdAt: Date(),
                 userUID: self.uid,
                 frontImage: frontImageURL,
-                backImage: backImageURL,
+                backImage: backImageURL, // Can be nil
                 frontAnalysis: frontAnalysis,
-                backAnalysis: backAnalysis,
+                backAnalysis: backAnalysis, // Can be nil
                 muscleRanking: muscleRanking
             )
             
-            //automatically update progress view once we have the scan
+            // Update progress view with scan data
             DispatchQueue.main.async {
-                
                 self.scans!.insert(scan, at: 0) // Insert at the top
-                self.retrievedScanImages.insert([frontImage, backImage], at: 0) // Placeholder images
-                
+                self.retrievedScanImages.insert([frontImage] + (self.backImage != nil ? [self.backImage!] : []), at: 0)
                 self.isScanProcessing = false // Reset processing state
             }
 
-            // Write muscleRanking to User Firestore
+            // Write muscleRanking to Firestore
             DispatchQueue.main.async {
                 let db = Firestore.firestore()
                 let data: [String: Any] = ["muscleRanking": muscleRanking]
@@ -302,22 +298,20 @@ class ContentViewModel: ObservableObject {
             let db = Firestore.firestore()
             try db.collection("scans").addDocument(from: scan)
 
-            // Update the placeholder scan with actual data in ProgressView
+            // Update the scan object in ProgressView
             DispatchQueue.main.async {
-                self.scans![0] = scan // Replace placeholder scan
+                self.scans![0] = scan
                 self.retrievedScanImages[0] = [
-                    UIImage(data: frontImageData!), // Replace with actual front image
-                    UIImage(data: backImageData!)  // Replace with actual back image
-                ]
+                    UIImage(data: frontImageData!)
+                ] + (self.backImage != nil ? [UIImage(data: self.convertToJPEGData(image: self.backImage!)!)] : [])
             }
         } catch let error {
-
             print("Error processing scan: \(error)")
-                    DispatchQueue.main.async {
-                        self.scans!.remove(at: 0)
-                        self.retrievedScanImages.remove(at: 0)
-                        self.isScanProcessing = false // Reset processing state
-                    }
+            DispatchQueue.main.async {
+                self.scans!.remove(at: 0)
+                self.retrievedScanImages.remove(at: 0)
+                self.isScanProcessing = false // Reset processing state
+            }
         }
     }
     
