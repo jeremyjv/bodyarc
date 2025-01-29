@@ -205,7 +205,7 @@ struct ScanEdgeView: View {
                 }
                 .padding(.horizontal)
                 .sheet(isPresented: $showReferral) {
-                    VStack(spacing: 20) {
+                    VStack(spacing: 10) {
                         
                         HStack(spacing: 80) {
                             Text("🎟️")
@@ -274,12 +274,12 @@ struct ScanEdgeView: View {
                                         .padding(.trailing) // Push the image to the right
                                 }
                             }
-                            .frame(maxWidth: .infinity, maxHeight: 80) // Set button size
+                            .frame(maxWidth: .infinity, maxHeight: 60) // Set button size
                             .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
                             .cornerRadius(35) // Rounded corners
                             .padding(.horizontal)
                        
-                            
+                            Spacer().frame(height: 10) // Adjust the height as needed
                         
                             ShareLink(
                                 items: [
@@ -295,7 +295,7 @@ struct ScanEdgeView: View {
                                     .foregroundColor(.white)
                                     .bold()
                                     .padding(.horizontal)
-                                    .frame(maxWidth: .infinity, maxHeight: 80) // Match the referral button size
+                                    .frame(maxWidth: .infinity, maxHeight: 60) // Match the referral button size
                                     .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
                                     .cornerRadius(35) // Rounded corners
                                     .padding(.horizontal)
@@ -308,12 +308,6 @@ struct ScanEdgeView: View {
                                         }
                                     }
                             )
-                    
-                             
-                  
-                            
-
-                            
                         }
                     }
                     .presentationDetents([.fraction(0.40)])
