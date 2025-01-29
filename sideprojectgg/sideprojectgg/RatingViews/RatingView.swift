@@ -13,7 +13,6 @@ import FirebaseFirestore
 
 
 struct RatingView: View {
-    //attach rating to this view
     @EnvironmentObject var viewModel: ContentViewModel
     var scanObject: ScanObject
     @State private var frontImage: UIImage? = nil
@@ -22,130 +21,104 @@ struct RatingView: View {
     
     @State private var currentPage = 0 // Track the current page
     @State private var isLoading = true // State to track loading
-        
-    
 
-    // just do a (while) front image == nil -> loading and you're good
     var body: some View {
         ZStack {
-                    // Background Image
-                    if let image = frontImage {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .overlay(Color.black.opacity(0.9)) // Darkens the image
-                            .edgesIgnoringSafeArea(.all)
-                    } else {
-                        // Placeholder for when the front image is not loaded
-                        Color.black
-                            .edgesIgnoringSafeArea(.all)
+            // Background Image
+            if let image = frontImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .overlay(Color.black.opacity(0.9)) // Darkens the image
+                    .edgesIgnoringSafeArea(.all)
+            } else {
+                Color.black.edgesIgnoringSafeArea(.all)
+            }
+
+            VStack {
+                // TabView Content
+                TabView(selection: $currentPage) {
+                    // Always included slides
+                    FirstRatingView(frontImage: frontImage, scanObject: scanObject).tag(0)
+                    SecondRatingView(frontImage: frontImage, scanObject: scanObject).tag(1)
+                    ThirdRatingView(frontImage: frontImage, scanObject: scanObject).tag(2)
+
+                    // Only include these slides if backAnalysis exists
+                    if scanObject.backAnalysis != nil {
+                        FirstBackRatingView(backImage: backImage, scanObject: scanObject).tag(3)
+                        SecondBackRatingView(backImage: backImage, scanObject: scanObject).tag(4)
                     }
-
-                    // TabView with Custom Dots
-                    VStack {
-                        // TabView Content
-                        TabView(selection: $currentPage) {
-                            // First Slide
-                            FirstRatingView(frontImage: frontImage, scanObject: scanObject)
-                                .tag(0)
-
-                            // Second Slide
-                            SecondRatingView(frontImage: frontImage, scanObject: scanObject)
-                                .tag(1)
-                            
-                            // Second Slide
-                            ThirdRatingView(frontImage: frontImage, scanObject: scanObject)
-                                .tag(2)
-                            
-                            FirstBackRatingView(backImage: backImage, scanObject: scanObject)
-                                .tag(3)
-                            
-                            SecondBackRatingView(backImage: backImage, scanObject: scanObject)
-                                .tag(4)
-                        }
-                        .tabViewStyle(.page(indexDisplayMode: .never))
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top) // Ensures TabView fills the screen
-                        .padding(.bottom, -80)
-                        
-
-                        // Custom Dots
-                        HStack(spacing: 8) {
-                            if backImage != nil {
-                                ForEach(0..<5) { index in // Adjust the number of pages
-                                    Circle()
-                                        .fill(currentPage == index ? Color.white : Color.gray.opacity(0.5))
-                                        .frame(width: 10, height: 10)
-                                }
-                            } else {
-                                ForEach(0..<3) { index in // Adjust the number of pages
-                                    Circle()
-                                        .fill(currentPage == index ? Color.white : Color.gray.opacity(0.5))
-                                        .frame(width: 10, height: 10)
-                                }
-                            }
-                            
-                        }
-                        .padding(.bottom, 50)
-                    }
-                    .edgesIgnoringSafeArea(.all) // Ensures the TabView fills the screen
                 }
-                
-            .onAppear {
-                // Fetch the front image
-                Task {
-                    isLoading = true // Set loading to true at the start
-                    
-                    async let frontImageTask: Void = {
-                        if let frontImageURL = scanObject.frontImage {
-                            do {
-                                let image = try await viewModel.loadImage(from: frontImageURL)
-                                await MainActor.run {
-                                    frontImage = image
-                                }
-                            } catch {
-                                print("Failed to fetch front image: \(error)")
-                            }
-                        }
-                    }()
-                    
-                    async let backImageTask: Void = {
-                        if let backImageURL = scanObject.backImage {
-                            do {
-                                let image = try await viewModel.loadImage(from: backImageURL)
-                                await MainActor.run {
-                                    backImage = image
-                                }
-                            } catch {
-                                print("Failed to fetch back image: \(error)")
-                            }
-                        }
-                    }()
-                    
-                    // Wait for both tasks to complete
-                    await frontImageTask
-                    await backImageTask
-                    
-                    await MainActor.run {
-                        isLoading = false // Set loading to false after all tasks are complete
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .padding(.bottom, -80)
+
+                // Custom Dots
+                HStack(spacing: 8) {
+                    let totalPages = scanObject.backAnalysis != nil ? 5 : 3
+                    ForEach(0..<totalPages, id: \.self) { index in
+                        Circle()
+                            .fill(currentPage == index ? Color.white : Color.gray.opacity(0.5))
+                            .frame(width: 10, height: 10)
                     }
+                }
+                .padding(.bottom, 50)
+            }
+            .edgesIgnoringSafeArea(.all)
+        }
+        .onAppear {
+            // Fetch the front image
+            Task {
+                isLoading = true // Set loading to true at the start
+                
+                async let frontImageTask: Void = {
+                    if let frontImageURL = scanObject.frontImage {
+                        do {
+                            let image = try await viewModel.loadImage(from: frontImageURL)
+                            await MainActor.run {
+                                frontImage = image
+                            }
+                        } catch {
+                            print("Failed to fetch front image: \(error)")
+                        }
+                    }
+                }()
+                
+                async let backImageTask: Void = {
+                    if let backImageURL = scanObject.backImage {
+                        do {
+                            let image = try await viewModel.loadImage(from: backImageURL)
+                            await MainActor.run {
+                                backImage = image
+                            }
+                        } catch {
+                            print("Failed to fetch back image: \(error)")
+                        }
+                    }
+                }()
+                
+                // Wait for both tasks to complete
+                await frontImageTask
+                await backImageTask
+                
+                await MainActor.run {
+                    isLoading = false // Set loading to false after all tasks are complete
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        path.removeLast() // Custom back button action
-                    }) {
-                        HStack {
-                            Image(systemName: "chevron.left") // Custom back button icon
-                        }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    path.removeLast() // Custom back button action
+                }) {
+                    HStack {
+                        Image(systemName: "chevron.left") // Custom back button icon
                     }
                 }
             }
         }
-    
-
-   
+    }
 }
 
 struct ProgressBar: View {
