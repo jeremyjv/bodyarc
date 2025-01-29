@@ -146,28 +146,41 @@ struct ProgressCardView: View {
                 Spacer()
 
                 HStack(spacing: 10) {
-                    // Front Image
-                    if let frontImage = images.first ?? nil {
-                        Image(uiImage: frontImage)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 80, height: 100)
-                            .cornerRadius(8)
-                    } else {
-                        Color.gray.opacity(0.3)
-                            .frame(width: 80, height: 100)
-                            .cornerRadius(8)
-                    }
+                    if images.count == 1 { // Only front image exists
+                        if let frontImage = images.first ?? nil {
+                            Image(uiImage: frontImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 80, height: 100)
+                                .cornerRadius(8)
+                        } else {
+                            Color.gray.opacity(0.3)
+                                .frame(width: 80, height: 100)
+                                .cornerRadius(8)
+                        }
+                    } else { // Both front and back images exist
+                        if let frontImage = images.first ?? nil {
+                            Image(uiImage: frontImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 80, height: 100)
+                                .cornerRadius(8)
+                        } else {
+                            Color.gray.opacity(0.3)
+                                .frame(width: 80, height: 100)
+                                .cornerRadius(8)
+                        }
 
-                    // Back Image (Optional)
-                    if images.count > 1, let backImage = images[1] {
-                        Image(uiImage: backImage)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 80, height: 100)
-                            .cornerRadius(8)
+                        if images.count > 1, let backImage = images[1] {
+                            Image(uiImage: backImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 80, height: 100)
+                                .cornerRadius(8)
+                        }
                     }
                 }
+                .frame(maxWidth: images.count == 1 ? .infinity : nil, alignment: images.count == 1 ? .center : .leading) // Center when single image
             }
             .padding()
             .background(Color.gray.opacity(0.2))
