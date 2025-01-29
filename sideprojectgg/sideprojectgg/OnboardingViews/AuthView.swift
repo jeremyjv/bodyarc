@@ -37,7 +37,22 @@ struct AuthView: View {
             }) {
                 Text("Sign In with Google")
             }
-            Text("Sign In with Apple")
+            Button(action: {
+                Task {
+                    
+                    //pass intake form data to this function and if user created add form to their user model
+                    await viewModel.signInWithApple(intakeForm: intakeForm)
+                    
+                    
+                    //dump the navigation path then navigate to ContentView
+                    
+                    
+                    //pass in intake form to store in created user
+                }
+             
+            }) {
+                Text("Sign In with Apple")
+            }
         }
     }
     
