@@ -180,7 +180,7 @@ struct BackScanView: View {
                 .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2) // Add shadow for depth
 
                 // Button text
-                Text("Skip Back Scan")
+                Text("Skip back scan")
                     .font(.title2) // Match the font size of the custom button
                     .fontWeight(.semibold) // Match the font weight
                     .foregroundColor(.white) // Set text color to white
@@ -253,6 +253,8 @@ struct BackScanView: View {
                         .padding()
                         .background(Color.gray.opacity(0.2))
                         .foregroundColor(.white)
+                        .font(.title2) // Match the font size of the custom button
+                        .fontWeight(.semibold) // Match the font weight
                         .cornerRadius(10)
                 }
             }
@@ -291,11 +293,13 @@ struct BackScanView: View {
                         .frame(maxWidth: .infinity)
                         .padding()
                         .foregroundColor(.white)
+                        .font(.title2) // Match the font size of the custom button
+                        .fontWeight(.semibold) // Match the font weight
                         .cornerRadius(10)
                 }
             }
         }
-        .padding()
+       
         
     }
     

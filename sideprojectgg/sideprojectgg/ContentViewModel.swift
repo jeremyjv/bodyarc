@@ -238,6 +238,8 @@ class ContentViewModel: ObservableObject {
         do {
             // Compute front and back analysis
             try await self.createFrontAnalysis(img: frontImage)
+            
+            //only run back analysis if it exists
             try await self.createBackAnalysis(img: backImage)
 
             guard let frontAnalysis = self.frontAnalysis, let backAnalysis = self.backAnalysis else {

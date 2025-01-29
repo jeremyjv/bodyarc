@@ -219,6 +219,8 @@ struct FrontScanView: View {
                         .padding()
                         .background(Color.gray.opacity(0.2))
                         .foregroundColor(.white)
+                        .font(.title2) // Match the font size of the custom button
+                        .fontWeight(.semibold) // Match the font weight
                         .cornerRadius(10)
                 }
             }
@@ -255,11 +257,13 @@ struct FrontScanView: View {
                         .frame(maxWidth: .infinity)
                         .padding()
                         .foregroundColor(.white)
+                        .font(.title2) // Match the font size of the custom button
+                        .fontWeight(.semibold) // Match the font weight
                         .cornerRadius(10)
                 }
             }
         }
-        .padding()
+
     }
 
     private var cameraCaptureButton: some View {
