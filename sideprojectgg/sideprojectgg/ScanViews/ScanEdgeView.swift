@@ -210,7 +210,7 @@ struct ScanEdgeView: View {
                         HStack(spacing: 80) {
                             Text("🎟️")
                                 .font(.system(size: 90))
-                                .padding()
+                                .padding(.horizontal)
                         
                             
                          
@@ -225,7 +225,7 @@ struct ScanEdgeView: View {
                                     .font(.title)
                                     .foregroundColor(.white)
                                     .bold()
-                                    .padding()
+                                    .padding(.horizontal)
                                     .frame(width: 160, height: 60) // Set button size
                                     .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
                                     .cornerRadius(35) // Rounded corners
@@ -238,7 +238,7 @@ struct ScanEdgeView: View {
                         VStack(alignment: .leading, spacing: 0) {
                             Text("Your Referral Code:")
                                 .bold()
-                                .padding(.horizontal)
+                                .padding()
                        
                                 
                             Button(action: {
@@ -246,7 +246,7 @@ struct ScanEdgeView: View {
                                     generator.impactOccurred()
                                     UIPasteboard.general.string = viewModel.user!.referralCode!
                                     showPopup = true // Show the popup
-                                    
+
                                     // Automatically dismiss the popup after 2 seconds
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                         withAnimation {
@@ -255,58 +255,61 @@ struct ScanEdgeView: View {
                                     }
                                 }
                             }) {
-                                Spacer()
-                                Text("\(viewModel.user!.referralCode!)")
+                                HStack {
+                                    Spacer() // Push everything to center
+                                    Spacer()
+
+                                    Text("\(viewModel.user!.referralCode!)")
+                                        .font(.title)
+                                        .foregroundColor(.white)
+                                        .bold()
+                                        .padding(.horizontal)
+
+                                    Spacer() // Ensure text stays centered
+
+                                    Image(uiImage: UIImage(named: "saveClipboard")!) // Replace with your logo asset
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                        .scaledToFit()
+                                        .padding(.trailing) // Push the image to the right
+                                }
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: 80) // Set button size
+                            .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
+                            .cornerRadius(35) // Rounded corners
+                            .padding(.horizontal)
+                       
+                            
+                        
+                            ShareLink(
+                                items: [
+                                    "https://www.linkedin.com/in/jeremyvillanueva15/",
+                                    "Check out this app and use my code: \(viewModel.user!.referralCode!) to get your physique ratings!"
+                                ],
+                                preview: { _ in
+                                    SharePreview("App Preview")
+                                }
+                            ) {
+                                Text("Share")
                                     .font(.title)
                                     .foregroundColor(.white)
                                     .bold()
-                                    .padding()
-                                Spacer()
-                                Spacer()
-                                
-                                Text("copy")
-                                    .font(.title)
-                                    .foregroundColor(.gray)
-                             
-                            
-                                Image(uiImage: UIImage(named: "saveClipboard")!) // Replace with your logo asset
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                    .foregroundColor(.white)
-                                    .scaledToFit()
-                                Spacer()
+                                    .padding(.horizontal)
+                                    .frame(maxWidth: .infinity, maxHeight: 80) // Match the referral button size
+                                    .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
+                                    .cornerRadius(35) // Rounded corners
+                                    .padding(.horizontal)
                             }
-                            .frame(maxWidth: .infinity, maxHeight: 60) // Set button size
-                            .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
-                            .cornerRadius(35) // Rounded corners
-                            .padding()
-                            
-                        
-                                ShareLink(
-                                    items: [
-                                        "https://www.linkedin.com/in/jeremyvillanueva15/",
-                                        "Check out this app and use my code: \(viewModel.user!.referralCode!) to get your physique ratings!"
-                                    ],
-                                    preview: { _ in
-                                        SharePreview("App Preview")
-                                    }
-                                ) {
-                                    Text("Share")
-                                        .frame(maxWidth: .infinity, maxHeight: 60) // Set button size
-                                        .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
-                                        .cornerRadius(35) // Rounded corners
-                                        .padding()
-                                }
-                                .simultaneousGesture(
-                                    TapGesture()
-                                        .onEnded { _ in
-                                            // Trigger an asynchronous task
-                                            Task {
-                                                generator.impactOccurred()
-                                            }
+                            .simultaneousGesture(
+                                TapGesture()
+                                    .onEnded { _ in
+                                        Task {
+                                            generator.impactOccurred()
                                         }
-                                )
-                                .padding()
+                                    }
+                            )
+                    
+                             
                   
                             
 
