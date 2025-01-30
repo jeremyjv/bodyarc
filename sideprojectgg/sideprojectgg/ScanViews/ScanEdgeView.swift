@@ -236,6 +236,10 @@ struct ScanEdgeView: View {
                         }
                    
                         VStack(alignment: .leading, spacing: 0) {
+                            Text("Invite 3 friends to get your results")
+                                .foregroundColor(.gray)
+
+                                .padding()
                             Text("Your Referral Code:")
                                 .bold()
                                 .padding()
@@ -310,7 +314,7 @@ struct ScanEdgeView: View {
                             )
                         }
                     }
-                    .presentationDetents([.fraction(0.40)])
+                    .presentationDetents([.fraction(0.50)])
                     .presentationDragIndicator(.visible)
                 }
             }

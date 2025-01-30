@@ -113,7 +113,7 @@ struct InstaScanPaywallView: View {
                 }
                 Spacer()
                 
-                Text("We have a small fee because our scans are expensive for us, thank you for understanding 🫡")
+                Text("We have a small fee because our AI scans are expensive for us, thank you for understanding 🫡")
                     .font(.body)
                     .foregroundColor(.gray)
                     .multilineTextAlignment(.center) // Centers the text across multiple lines
