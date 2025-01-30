@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D525D1AE2D4AE8E8003E7357 /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = D525D1AD2D4AE8E8003E7357 /* JWTDecode */; };
 		D55363282D0338F7007D6000 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = D55363272D0338F7007D6000 /* FirebaseAnalytics */; };
 		D553632A2D0338F7007D6000 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = D55363292D0338F7007D6000 /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		D55363302D034152007D6000 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = D553632F2D034152007D6000 /* FirebaseFunctions */; };
@@ -90,6 +91,7 @@
 				D55363282D0338F7007D6000 /* FirebaseAnalytics in Frameworks */,
 				D5BABECB2D2589BA00F2F59F /* GoogleSignIn in Frameworks */,
 				D553633F2D04E862007D6000 /* FirebaseCore in Frameworks */,
+				D525D1AE2D4AE8E8003E7357 /* JWTDecode in Frameworks */,
 				D5BABECF2D258A7000F2F59F /* FirebaseAuthCombine-Community in Frameworks */,
 				D553633B2D03FD43007D6000 /* FirebaseFirestore in Frameworks */,
 				D5E684192D3CD0C400DE2ACB /* RevenueCat in Frameworks */,
@@ -178,6 +180,7 @@
 				D5BABECE2D258A7000F2F59F /* FirebaseAuthCombine-Community */,
 				D5E684182D3CD0C400DE2ACB /* RevenueCat */,
 				D5E6841A2D3CD0C400DE2ACB /* RevenueCatUI */,
+				D525D1AD2D4AE8E8003E7357 /* JWTDecode */,
 			);
 			productName = sideprojectgg;
 			productReference = D55362DE2CFE5630007D6000 /* sideprojectgg.app */;
@@ -267,6 +270,7 @@
 				D55363242D033605007D6000 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				D5BABEC92D2587B400F2F59F /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				D5E684172D3CD0C400DE2ACB /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
+				D525D1AC2D4AE8AD003E7357 /* XCRemoteSwiftPackageReference "JWTDecode" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D55362DF2CFE5630007D6000 /* Products */;
@@ -670,6 +674,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D525D1AC2D4AE8AD003E7357 /* XCRemoteSwiftPackageReference "JWTDecode" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/auth0/JWTDecode.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.0;
+			};
+		};
 		D553631C2D02C985007D6000 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
@@ -713,6 +725,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D525D1AD2D4AE8E8003E7357 /* JWTDecode */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D525D1AC2D4AE8AD003E7357 /* XCRemoteSwiftPackageReference "JWTDecode" */;
+			productName = JWTDecode;
+		};
 		D55363272D0338F7007D6000 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D55363242D033605007D6000 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

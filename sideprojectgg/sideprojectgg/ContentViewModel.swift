@@ -16,6 +16,7 @@ import GoogleSignIn
 import RevenueCat
 import AuthenticationServices
 import CryptoKit
+import JWTDecode
 
 
 @MainActor
@@ -219,14 +220,12 @@ class ContentViewModel: ObservableObject {
     
 
 
+    
     func signInWithApple(intakeForm: IntakeForm) async -> Bool {
-        
-        let nonce = randomNonceString() // Generate a cryptographically secure nonce
-        let appleIDProvider = ASAuthorizationAppleIDProvider()
-        let request = appleIDProvider.createRequest()
+        let provider = ASAuthorizationAppleIDProvider()
+        let request = provider.createRequest()
         request.requestedScopes = [.fullName, .email]
-        request.nonce = sha256(nonce) // Pass the hashed nonce
-
+        
         let authorizationController = ASAuthorizationController(authorizationRequests: [request])
         
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
@@ -236,41 +235,42 @@ class ContentViewModel: ObservableObject {
             return false
         }
         
-        let delegate = AppleSignInDelegate(nonce: nonce) // Pass the raw nonce
+        let delegate = SignInWithAppleDelegate()
         authorizationController.delegate = delegate
         authorizationController.presentationContextProvider = delegate
         
         do {
-            let credential = try await delegate.signIn()
+            let credential = try await delegate.performSignIn()
             
-            guard let appleIDToken = credential.identityToken,
-                  let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                print("Error retrieving Apple ID Token")
+            guard let appleIDToken = credential.identityToken else {
+                print("Apple ID Token is missing")
                 return false
             }
             
-            let firebaseCredential = OAuthProvider.credential(
-                providerID: AuthProviderID.apple, // Correct way to reference Apple provider
-                idToken: idTokenString,
-                rawNonce: nonce
-            )
+            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                return false
+            }
+            
+            let firebaseCredential = OAuthProvider.credential(providerID: AuthProviderID.apple, idToken: idTokenString, rawNonce: delegate.currentNonce!)
             
             let result = try await Auth.auth().signIn(with: firebaseCredential)
-            
             let firebaseUser = result.user
             
             let db = Firestore.firestore()
+            
             let userInFireStore = try await checkIfUserExists(uid: firebaseUser.uid)
             
             if userInFireStore == false {
-                
                 if let referralCode = intakeForm.referralCode {
                     do {
                         let querySnapshot = try await db.collection("users")
                             .whereField("referralCode", isEqualTo: referralCode)
                             .getDocuments()
                         
-                        if !querySnapshot.documents.isEmpty {
+                        if querySnapshot.documents.isEmpty {
+                            print("No users found with referralCode \(referralCode).")
+                        } else {
                             for document in querySnapshot.documents {
                                 let userID = document.documentID
                                 
@@ -279,7 +279,7 @@ class ContentViewModel: ObservableObject {
                                         "referralAmount": FieldValue.increment(Int64(1))
                                     ]) { error in
                                         if let error = error {
-                                            print("Error updating referral count for user \(userID): \(error.localizedDescription)")
+                                            print("Error updating user \(userID): \(error.localizedDescription)")
                                         } else {
                                             print("Successfully incremented referral amount for user with ID: \(userID)")
                                         }
@@ -294,11 +294,14 @@ class ContentViewModel: ObservableObject {
                 
                 let randomNumber = String(Int.random(in: 10...99))
                 let uidString = "\(firebaseUser.uid)"
+                
                 let startIndex = uidString.index(uidString.startIndex, offsetBy: 0)
                 let middleIndex = uidString.index(uidString.startIndex, offsetBy: 3)
                 let endIndex = uidString.index(uidString.startIndex, offsetBy: 5)
+                
                 let firstPart = uidString[startIndex..<middleIndex]
                 let lastChar = uidString[endIndex]
+                
                 let referralCode = "\(firstPart)\(randomNumber)\(lastChar)"
                 
                 let userModel = User(email: firebaseUser.email, uid: firebaseUser.uid, intake: intakeForm, referralCode: referralCode, referralAmount: 0)
@@ -313,11 +316,12 @@ class ContentViewModel: ObservableObject {
             
             self.uid = firebaseUser.uid
             isLoggedIn = true
-            print("User \(firebaseUser.uid) signed in with Apple")
+            
+            print("User \(firebaseUser.uid) signed in with \(firebaseUser.email ?? "unknown")")
             
             return true
         } catch {
-            print("Error signing in with Apple: \(error.localizedDescription)")
+            print(error.localizedDescription)
             return false
         }
     }
@@ -621,97 +625,90 @@ class ContentViewModel: ObservableObject {
                 }
             }
         }
-    
-    /// Generates a random nonce string for Apple Sign-In (prevents replay attacks)
-    func randomNonceString(length: Int = 32) -> String {
-        precondition(length > 0)
-        let charset: [Character] =
-            Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
-        var result = ""
-        var remainingLength = length
-
-        while remainingLength > 0 {
-            var randoms = [UInt8](repeating: 0, count: 16)
-            let status = SecRandomCopyBytes(kSecRandomDefault, randoms.count, &randoms)
-
-            if status == errSecSuccess {
-                randoms.forEach { random in
-                    if remainingLength == 0 {
-                        return
-                    }
-
-                    if random < charset.count {
-                        result.append(charset[Int(random)])
-                        remainingLength -= 1
-                    }
-                }
-            } else {
-                fatalError("Unable to generate nonce.")
-            }
-        }
-
-        return result
-    }
-
-    /// Hashes the nonce using SHA256 (Apple requires a hashed nonce)
-    func sha256(_ input: String) -> String {
-        let inputData = Data(input.utf8)
-        let hashedData = SHA256.hash(data: inputData)
-        return hashedData.map { String(format: "%02x", $0) }.joined()
-    }
-    
-    
-    
-    
-    
 }
 
-class AppleSignInDelegate: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
-    
-    private var continuation: CheckedContinuation<ASAuthorizationAppleIDCredential, Error>?
-    private var currentNonce: String?
 
-    /// Initialize with nonce
-    init(nonce: String?) {
-        self.currentNonce = nonce
-    }
+
+class SignInWithAppleDelegate: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     
-    func signIn() async throws -> ASAuthorizationAppleIDCredential {
+    var currentNonce: String?
+    private var continuation: CheckedContinuation<ASAuthorizationAppleIDCredential, Error>?
+    
+    func performSignIn() async throws -> ASAuthorizationAppleIDCredential {
         return try await withCheckedThrowingContinuation { continuation in
             self.continuation = continuation
             
-            let appleIDProvider = ASAuthorizationAppleIDProvider()
-            let request = appleIDProvider.createRequest()
+            let provider = ASAuthorizationAppleIDProvider()
+            let request = provider.createRequest()
             request.requestedScopes = [.fullName, .email]
-            request.nonce = currentNonce // Ensure nonce is set
             
-            let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-            authorizationController.delegate = self
-            authorizationController.presentationContextProvider = self
+            let nonce = generateNonce()
+            self.currentNonce = nonce
+            request.nonce = sha256(nonce) // Hashing nonce before sending
             
-            DispatchQueue.main.async { // Ensure UI updates happen on main thread
-                authorizationController.performRequests() // 🚀 Starts Apple Sign-In
-            }
+            let controller = ASAuthorizationController(authorizationRequests: [request])
+            controller.delegate = self
+            controller.presentationContextProvider = self
+            controller.performRequests()
         }
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
             continuation?.resume(returning: appleIDCredential)
-        } else {
-            continuation?.resume(throwing: NSError(domain: "SignInWithApple", code: -1, userInfo: nil))
+            continuation = nil
         }
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         continuation?.resume(throwing: error)
+        continuation = nil
+        print("Sign in with Apple error: \(error.localizedDescription)")
     }
     
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first else {
-            fatalError("No active window scene found.")
+        guard let window = UIApplication.shared.connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .flatMap({ $0.windows })
+            .first(where: { $0.isKeyWindow }) else {
+                fatalError("No valid window found")
         }
         return window
+    }
+    
+    /// Generates a secure random nonce
+    private func generateNonce(length: Int = 32) -> String {
+        let charset: [Character] =
+            Array("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-._")
+        var result = ""
+        var remainingLength = length
+        
+        while remainingLength > 0 {
+            let randoms: [UInt8] = (0..<16).map { _ in
+                var random: UInt8 = 0
+                _ = SecRandomCopyBytes(kSecRandomDefault, 1, &random)
+                return random
+            }
+            
+            randoms.forEach { random in
+                if remainingLength == 0 {
+                    return
+                }
+                
+                if random < charset.count {
+                    result.append(charset[Int(random)])
+                    remainingLength -= 1
+                }
+            }
+        }
+        
+        return result
+    }
+    
+    /// Hashes the nonce using SHA256
+    private func sha256(_ input: String) -> String {
+        let inputData = Data(input.utf8)
+        let hashedData = SHA256.hash(data: inputData)
+        return hashedData.compactMap { String(format: "%02x", $0) }.joined()
     }
 }
