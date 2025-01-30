@@ -14,71 +14,67 @@ struct ReferralView: View {
     @State private var referralInput: String = "" // Local state for the text input
     @State private var showError: Bool = false // Track if an error should be shown
     
-    
     var body: some View {
         
-        //set intakeForm.referralCode equal to input
-        
         VStack {
+            Spacer()
             Text("Enter Referral Code")
-                .font(.largeTitle) // Make font larger
-                .fontWeight(.bold) // Make text bold
-                .foregroundColor(.white) // Text color
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
                 .frame(maxWidth: 350, alignment: .leading)
             
-            Spacer().frame(height: 60)
-            // TextField for referral code
-            TextField("Enter your referral code", text: $referralInput)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .textInputAutocapitalization(.characters) // Force uppercase input
-                .padding()
-                .frame(maxWidth: 350)
-                .onChange(of: referralInput) { newValue, _ in
-                    // Trim the input to 6 characters
-                    if newValue.count > 6 {
-                        referralInput = String(newValue.prefix(6))
-                    }
-                    // Validate if length is exactly 6
-                    showError = referralInput.count != 6 && referralInput.count != 0
-                }
-            
-            Text("Or Continue and Skip")
-                .foregroundColor(.gray)
-                .font(.footnote)
-                .frame(maxWidth: 350, alignment: .leading)
-                .padding(.top, 5)
 
-            // Error message
-            if showError {
-                Text("Referral codes are 6 characters.")
-                    .foregroundColor(.red)
+            VStack(spacing: 5) { // Reduce spacing
+                // Error message
+                if showError {
+                    Text("Referral codes are 6 characters.")
+                        .foregroundColor(.red)
+                        .font(.footnote)
+                        .frame(maxWidth: 350, alignment: .leading)
+                        .padding(.top, 5)
+                }
+                TextField("Enter your referral code", text: $referralInput)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .textInputAutocapitalization(.characters)
+                    .padding(.horizontal)
+                    .frame(maxWidth: 350, minHeight: 100) // Increase height here
+                    .onChange(of: referralInput) { newValue, _ in
+                        if newValue.count > 6 {
+                            referralInput = String(newValue.prefix(6))
+                        }
+                        showError = referralInput.count != 6 && referralInput.count != 0
+                    }
+                
+                // "Or Continue and Skip" directly below input box
+                Text("Or continue and skip")
+                    .foregroundColor(.gray)
                     .font(.footnote)
-                    .frame(maxWidth: 350, alignment: .leading)
-                    .padding(.top, 5)
+                    .frame(maxWidth: 350, alignment: .trailing)
             }
-            
-       
+
+
             Button(action: {
-                intakeForm.referralCode = referralInput.uppercased() // Assign the input value to referralCode and always make sure it is uppercased
+                intakeForm.referralCode = referralInput.uppercased()
                 path.append("AuthView")
                 generator.impactOccurred()
-            }){
+            }) {
                 CustomButton(title: "Continue")
             }
+            Spacer()
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    path.removeLast() // Custom back button action
+                    path.removeLast()
                     generator.impactOccurred()
                 }) {
                     HStack {
-                        Image(systemName: "chevron.left") // Custom back button icon
+                        Image(systemName: "chevron.left")
                     }
                 }
             }
         }
-        
     }
 }

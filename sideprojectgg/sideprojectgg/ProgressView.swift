@@ -214,11 +214,11 @@ struct LoadingCardView: View {
                     Image(uiImage: frontImage)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 80, height: 100)
+                        .frame(width: 100, height: 125)
                         .cornerRadius(8)
                 } else {
                     Color.gray.opacity(0.3)
-                        .frame(width: 80, height: 100)
+                        .frame(width: 100, height: 125)
                         .cornerRadius(8)
                 }
 
@@ -227,7 +227,7 @@ struct LoadingCardView: View {
                     Image(uiImage: backImage)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 80, height: 100)
+                        .frame(width: 90, height: 110)
                         .cornerRadius(8)
                 }
             }
