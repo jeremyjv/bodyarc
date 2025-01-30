@@ -78,6 +78,9 @@ struct ProgressView: View {
                 } else if viewModel.isScanProcessing && viewModel.scans!.isEmpty {
                     ScrollView {
                         LazyVStack(spacing: 20) {
+                            Text("Please do not close the app, you may risk losing your scan")
+                                .font(.headline)
+                                .foregroundColor(.blue)
                             LoadingCardView(
                                 frontImage: viewModel.frontImage,
                                 backImage: viewModel.backImage // Can be nil
@@ -91,6 +94,9 @@ struct ProgressView: View {
                     ScrollView {
                         LazyVStack(alignment: .leading, spacing: 20) {
                             if viewModel.isScanProcessing {
+                                Text("Please do not close the app, you may risk losing your scan")
+                                    .font(.headline)
+                                    .foregroundColor(.blue)
                                 LoadingCardView(
                                     frontImage: viewModel.frontImage,
                                     backImage: viewModel.backImage // Can be nil
@@ -214,11 +220,11 @@ struct LoadingCardView: View {
                     Image(uiImage: frontImage)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 100, height: 125)
+                        .frame(width: 90, height: 110)
                         .cornerRadius(8)
                 } else {
                     Color.gray.opacity(0.3)
-                        .frame(width: 100, height: 125)
+                        .frame(width: 90, height: 110)
                         .cornerRadius(8)
                 }
 
