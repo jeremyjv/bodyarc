@@ -151,11 +151,11 @@ struct ProgressCardView: View {
                             Image(uiImage: frontImage)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 80, height: 100)
+                                .frame(width: 90, height: 110)
                                 .cornerRadius(8)
                         } else {
                             Color.gray.opacity(0.3)
-                                .frame(width: 80, height: 100)
+                                .frame(width: 90, height: 110)
                                 .cornerRadius(8)
                         }
                     } else { // Both front and back images exist
@@ -163,11 +163,11 @@ struct ProgressCardView: View {
                             Image(uiImage: frontImage)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 80, height: 100)
+                                .frame(width: 90, height: 110)
                                 .cornerRadius(8)
                         } else {
                             Color.gray.opacity(0.3)
-                                .frame(width: 80, height: 100)
+                                .frame(width: 90, height: 110)
                                 .cornerRadius(8)
                         }
 
@@ -175,7 +175,7 @@ struct ProgressCardView: View {
                             Image(uiImage: backImage)
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 80, height: 100)
+                                .frame(width: 90, height: 110)
                                 .cornerRadius(8)
                         }
                     }
@@ -183,7 +183,7 @@ struct ProgressCardView: View {
                 .frame(maxWidth: images.count == 1 ? .infinity : nil, alignment: images.count == 1 ? .center : .leading) // Center when single image
             }
             .padding()
-            .background(Color.gray.opacity(0.2))
+            .background(Color.gray.opacity(0.1))
             .cornerRadius(12)
             .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
         }

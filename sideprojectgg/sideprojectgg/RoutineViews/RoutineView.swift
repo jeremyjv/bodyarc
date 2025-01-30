@@ -18,6 +18,8 @@ struct RoutineView: View {
 
     @State private var selectedMuscle: MuscleGroup? = nil // Track selected muscle group
     
+    let generator = UIImpactFeedbackGenerator(style: .heavy)
+    
     
     func loadData() async {
         Task {
@@ -66,7 +68,7 @@ struct RoutineView: View {
                         .foregroundColor(.white)
                     
                     Rectangle()
-                        .fill(Color.gray.opacity(0.3))
+                        .fill(Color.gray.opacity(0.1))
                         .frame(height: 100)
                         .cornerRadius(10)
                         .padding(.horizontal)
@@ -80,6 +82,7 @@ struct RoutineView: View {
                     ForEach(viewModel.muscleRankings!, id: \.self) { muscleName in
                         if let muscle = MuscleGroup(rawValue: muscleName) {
                             Button(action: {
+                                generator.impactOccurred()
                                 selectedMuscle = muscle
                             }) {
                                 HStack {
@@ -91,7 +94,7 @@ struct RoutineView: View {
                                         .foregroundColor(.white)
                                 }
                                 .padding()
-                                .background(Color.gray.opacity(0.3))
+                                .background(Color.gray.opacity(0.1))
                                 .cornerRadius(10)
                             }
                             .padding(.horizontal)
