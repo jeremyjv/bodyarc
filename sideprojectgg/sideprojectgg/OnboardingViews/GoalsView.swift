@@ -17,54 +17,59 @@ struct GoalsView: View {
     
     var body: some View {
         
-        VStack {
-            Text("Fitness goals over the next 3 months?")
-                .font(.largeTitle) // Make font larger
-                .fontWeight(.bold) // Make text bold
-                .foregroundColor(.white) // Text color
-                .frame(maxWidth: 350, alignment: .leading)
+        ZStack {
+            Color(red: 15/255, green: 15/255, blue: 15/255)
+                .edgesIgnoringSafeArea(.all)
             
-            Spacer().frame(height: 60)
-            
-            Button(action: {
-                path.append("ReferralView")
-                intakeForm.goal = "loseFat"
-                generator.impactOccurred()
-            }){
-                CustomButton(title: "Lose Fat", emoji: "🔥")
-            }
-            Button(action: {
-                path.append("ReferralView")
-                intakeForm.goal = "buildMuscle"
-                generator.impactOccurred()
-            }){
-             
-                CustomButton(title: "Build Muscle", emoji: "💪")
-            }
-            Button(action: {
-                path.append("ReferralView")
-                intakeForm.goal = "bodyRecomp"
-                generator.impactOccurred()
-            }){
-                CustomButton(title: "Lose Fat + Build Muscle", emoji: "😈")
-            }
-            Button(action: {
-                path.append("ReferralView")
-                intakeForm.goal = "healthierHabits"
-                generator.impactOccurred()
-            }){
-                CustomButton(title: "Build Healthier Habits", emoji: "🍃")
-            }
-        }
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
+            VStack {
+                Text("Fitness goals over the next 3 months?")
+                    .font(.largeTitle) // Make font larger
+                    .fontWeight(.bold) // Make text bold
+                    .foregroundColor(.white) // Text color
+                    .frame(maxWidth: 350, alignment: .leading)
+                
+                Spacer().frame(height: 60)
+                
                 Button(action: {
-                    path.removeLast() // Custom back button action
+                    path.append("ReferralView")
+                    intakeForm.goal = "loseFat"
                     generator.impactOccurred()
-                }) {
-                    HStack {
-                        Image(systemName: "chevron.left") // Custom back button icon
+                }){
+                    CustomButton(title: "Lose Fat", emoji: "🔥")
+                }
+                Button(action: {
+                    path.append("ReferralView")
+                    intakeForm.goal = "buildMuscle"
+                    generator.impactOccurred()
+                }){
+                    
+                    CustomButton(title: "Build Muscle", emoji: "💪")
+                }
+                Button(action: {
+                    path.append("ReferralView")
+                    intakeForm.goal = "bodyRecomp"
+                    generator.impactOccurred()
+                }){
+                    CustomButton(title: "Lose Fat + Build Muscle", emoji: "😈")
+                }
+                Button(action: {
+                    path.append("ReferralView")
+                    intakeForm.goal = "healthierHabits"
+                    generator.impactOccurred()
+                }){
+                    CustomButton(title: "Build Healthier Habits", emoji: "🍃")
+                }
+            }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        path.removeLast() // Custom back button action
+                        generator.impactOccurred()
+                    }) {
+                        HStack {
+                            Image(systemName: "chevron.left") // Custom back button icon
+                        }
                     }
                 }
             }

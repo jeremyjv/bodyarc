@@ -19,56 +19,62 @@ struct GenderView: View {
         
         NavigationStack(path: $path) {
             
-            VStack {
-                // "Select Gender" text
-                Spacer()
-                Text("Select Gender")
-                    .font(.largeTitle) // Make font larger
-                    .fontWeight(.bold) // Make text bold
-                    .foregroundColor(.white) // Text color
-                    .frame(maxWidth: 350, alignment: .leading)
+            ZStack {
+                Color(red: 15/255, green: 15/255, blue: 15/255)
+                    .edgesIgnoringSafeArea(.all)
                 
-                Spacer().frame(height: 60)
-                
-                // Buttons
-                VStack(spacing: 25) { // Add spacing between buttons
-                    Button(action: {
-                        path.append("GoalsView")
-                        intakeForm.gender = "male"
-                        generator.impactOccurred()
-                    }) {
-                        CustomButton(title: "Male")
-                    }
+                VStack {
+                    // "Select Gender" text
+                    Spacer()
+                    Text("Select Gender")
+                        .font(.largeTitle) // Make font larger
+                        .fontWeight(.bold) // Make text bold
+                        .foregroundColor(.white) // Text color
+                        .frame(maxWidth: 350, alignment: .leading)
                     
-                    Button(action: {
-                        path.append("GoalsView")
-                        intakeForm.gender = "female"
-                        generator.impactOccurred()
-                    }) {
-                        CustomButton(title: "Female")
+                    Spacer().frame(height: 60)
+                    
+                    // Buttons
+                    VStack(spacing: 25) { // Add spacing between buttons
+                        Button(action: {
+                            path.append("GoalsView")
+                            intakeForm.gender = "male"
+                            generator.impactOccurred()
+                        }) {
+                            CustomButton(title: "Male")
+                        }
+                        
+                        Button(action: {
+                            path.append("GoalsView")
+                            intakeForm.gender = "female"
+                            generator.impactOccurred()
+                        }) {
+                            CustomButton(title: "Female")
+                        }
                     }
+                    Spacer() // Add spacer below the buttons
                 }
-                Spacer() // Add spacer below the buttons
-                    }
-            .navigationDestination(for: String.self) { destination in
-                switch destination {
+                .navigationDestination(for: String.self) { destination in
+                    switch destination {
                     case "GoalsView":
                         GoalsView(intakeForm: $intakeForm, path: $path)
-                    
+                        
                     case "AuthView":
                         AuthView(intakeForm: $intakeForm, path: $path)
-                    
+                        
                     case "ReferralView":
                         ReferralView(intakeForm: $intakeForm, path: $path)
-                    
+                        
                         
                     default:
                         GenderView()
                     }
-                
+                    
+                }
             }
             
         }
+            
         
     }
 }
