@@ -33,28 +33,29 @@ give me:
 
 
 export const backAnalysis = `
-This is my current physique. For the muscles that you see in the image, if the muscle is completely not shown in the image leave the rating and description as null. Even if you see a small portion of the muscle in the image, still include it in the analysis. A muscle must be completely covered in clothing to be dismissed from the analysis. The glute muscle is the only exception to still give a rating even when it is covered with clothing.  
+This is my current physique. For the muscles that you see in an image, I'm going to ask you to rate each muscle based on its development. 
 In the following JSON Format:
 {
-    "traps": Int,
-    "lats": Int,
-    "rearDelts": Int,
-    "lowerBack": Int,
-    "latInsertion": String,
-    "density": String,
-    "width": String
-    
+   "traps": Int,
+   "lats": Int,
+   "rearDelts": Int,
+   "lowerBack": Int,
+   "latInsertion": String,
+   "density": String,
+   "width": String
+  
 
 }
 give me:
 
- 1) A Rating on a scale of 1-100 for the trapezius development. Developed traps should make the neck appear thicker, and contribute to the density of the back. And attach a description of why you gave the specific rating.
- 2) A Rating on a scale of 1-100 for the latissimus dorsi. Developed lats should contribute to the width of the back and contribute to the V shape of the body. And attach a description of why you gave the specific rating.
- 3) A Rating on a scale of 1-100 for the rearDelts. 
- 4) A Rating on a scale of 1-100 for the lowerBack.
- 5) A Rating from the list [High, Low] for the lat muscle insertion on the back
- 6) A Rating from the list [Shallow, Moderate, Thick] for the density of the back
- 7) A Rating from the list [Narrow, Medium, Wide] for the width of the back
+1) A Rating on a scale of 1-100 for the trapezius development. Developed traps should make the neck appear thicker, and contribute to the density of the back. The traps should also contribute to the aesthetic of the back by having well defined traps that “pop” out that contribute to the lines of the back. 
+2) A Rating on a scale of 1-100 for the latissimus dorsi. Developed lats should contribute to the width of the back and contribute to the V shape of the body. The lats also contribute to the aesthetic of the back when it is well defined you can see the striations of the muscles which add more lines to the back giving it a more aesthetic look
+3) A Rating on a scale of 1-100 for the rear delts. Developed rear delts are important because it makes the upper back look less flat. Developed rear delts should pop and have visible separation from the traps and lats. It should look like the rear delt muscle is wrapping around the shoulder and back. 
+4) A Rating on a scale of 1-100 for the lowerBack. A developed lower back includes thick spinal erectors. This will be more visible on leaner individuals that have high overall back development
+5) A Rating from the list [High, Low] for the lat muscle insertion on the back. A high lat insertion means that the taper of the back starts higher than usual because the lat muscle is attached higher on the back. (this will be more common with individuals that have a visible narrow waist from the back view). A low lat insertion means that the taper starts lower on the back because the lat muscle is attached lower on the back, this will be more common for individuals that have a wider waist appearance from the back view
+6) A Rating from the list [Shallow, Moderate, Thick] for the density of the back. A shallow back means that there is little to no muscle development in the muscle overall, often meaning there are no lines and the back appears flat. A moderate back means that there is some development but there is some improvement in growth to be made. A thick back means that the muscles of the back pop out and do not appear flat. This is apparent when the traps, spinal erectors, and rear delts pop out (This will be most common for individuals that have a wider and 3D look to their back)
+7) A Rating from the list [Narrow, Medium, Wide] for the width of the back. A narrow back indicates little to no back development and the back has no taper from the upper body to the waist. A medium width back indicated some development in definition and size but there is more potential in growth to be made. A wide back means that there is significant taper from the upper torso the the lower torso (this will be most common in fit individuals that have a well defined back and overall back development)
+
 
 
 `
