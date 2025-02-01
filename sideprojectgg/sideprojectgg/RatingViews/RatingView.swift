@@ -41,13 +41,13 @@ struct RatingView: View {
                 TabView(selection: $currentPage) {
                     // Always included slides
                     FirstRatingView(frontImage: frontImage, scanObject: scanObject, saveAction: saveScreenshot).tag(0)
-                    SecondRatingView(frontImage: frontImage, scanObject: scanObject).tag(1)
-                    ThirdRatingView(frontImage: frontImage, scanObject: scanObject).tag(2)
+                    SecondRatingView(frontImage: frontImage, scanObject: scanObject, saveAction: saveScreenshot).tag(1)
+                    ThirdRatingView(frontImage: frontImage, scanObject: scanObject, saveAction: saveScreenshot).tag(2)
 
                     // Only include these slides if backAnalysis exists
                     if scanObject.backAnalysis != nil {
-                        FirstBackRatingView(backImage: backImage, scanObject: scanObject).tag(3)
-                        SecondBackRatingView(backImage: backImage, scanObject: scanObject).tag(4)
+                        FirstBackRatingView(backImage: backImage, scanObject: scanObject, saveAction: saveScreenshot).tag(3)
+                        SecondBackRatingView(backImage: backImage, scanObject: scanObject, saveAction: saveScreenshot).tag(4)
                     }
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
@@ -136,32 +136,46 @@ struct RatingView: View {
 
             VStack {
                 if currentPage == 0 {
-                    FirstRatingView(frontImage: frontImage, scanObject: scanObject, saveAction: {})
+                    FirstRatingView(frontImage: frontImage, scanObject: scanObject, saveAction: saveScreenshot)
                 } else if currentPage == 1 {
-                    SecondRatingView(frontImage: frontImage, scanObject: scanObject)
+                    SecondRatingView(frontImage: frontImage, scanObject: scanObject, saveAction: saveScreenshot)
                 } else if currentPage == 2 {
-                    ThirdRatingView(frontImage: frontImage, scanObject: scanObject)
+                    ThirdRatingView(frontImage: frontImage, scanObject: scanObject, saveAction: saveScreenshot)
+                } else if currentPage == 3 {
+                    FirstBackRatingView(frontImage: frontImage, scanObject: scanObject, saveAction: saveScreenshot)
+                } else if currentPage == 4 {
+                    FirstBackRatingView(frontImage: frontImage, scanObject: scanObject, saveAction: saveScreenshot)
                 }
                 // Add extra pages if needed
             }
         }
     }
     
-    func saveScreenshot() {
+    func saveScreenshot(action: String) {
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
               let window = windowScene.windows.first else {
             print("Unable to capture screenshot: No active window found")
             return
         }
 
-        // Delay the screenshot to allow UI updates
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        // Delay the screenshot to ensure UI updates
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             let renderer = UIGraphicsImageRenderer(size: window.bounds.size)
             let image = renderer.image { _ in
                 window.drawHierarchy(in: window.bounds, afterScreenUpdates: true) // Ensures UI redraw
             }
 
-            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil) // Save to Photos
+            if action == "save" {
+                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil) // Save to Photos
+                print("Screenshot saved to Photos!")
+            } else if action == "share" {
+                let activityViewController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+                
+                // Get the root view controller to present the share sheet
+                if let rootVC = window.rootViewController {
+                    rootVC.present(activityViewController, animated: true)
+                }
+            }
         }
     }
 }

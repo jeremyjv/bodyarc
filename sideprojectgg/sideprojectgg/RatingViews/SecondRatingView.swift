@@ -12,6 +12,8 @@ struct SecondRatingView: View {
     var frontImage: UIImage?
     var backImage: UIImage?
     var scanObject: ScanObject
+    var saveAction: (String) -> Void
+    let generator = UIImpactFeedbackGenerator(style: .heavy)
     
    
     
@@ -19,13 +21,14 @@ struct SecondRatingView: View {
     
     var body: some View {
 
-        VStack(spacing: 20) {
+        VStack(spacing: 10) {
             
             Text("Front Ratings")
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
                 .padding(.top, -50)
+                .offset(y: 20)
            
             ZStack {
                 
@@ -109,11 +112,13 @@ struct SecondRatingView: View {
                 }
                 
             }
+            .offset(y: 20)
 
             // Buttons
             HStack(spacing: 25) {
                 Button(action: {
-                    print("Save tapped")
+                    generator.impactOccurred()
+                    saveAction("save")
                 }) {
                     HStack {
                         Text("Save")
@@ -129,7 +134,8 @@ struct SecondRatingView: View {
                 .frame(width: 160, height: 60) // Explicit frame size for the button
                 
                 Button(action: {
-                    print("Share tapped")
+                    generator.impactOccurred()
+                    saveAction("share")
                 }) {
                     HStack {
                         Text("Share")
