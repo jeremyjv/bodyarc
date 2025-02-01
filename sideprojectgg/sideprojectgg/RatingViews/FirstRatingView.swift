@@ -12,11 +12,8 @@ struct FirstRatingView: View {
     var frontImage: UIImage?
     var backImage: UIImage?
     var scanObject: ScanObject
-    
-   
-    
-    
-    
+    var saveAction: () -> Void
+    let generator = UIImpactFeedbackGenerator(style: .heavy)
     var body: some View {
 
         VStack(spacing: 20) {
@@ -113,7 +110,8 @@ struct FirstRatingView: View {
             // Buttons
             HStack(spacing: 25) {
                 Button(action: {
-                    print("Save tapped")
+                    generator.impactOccurred()
+                    saveAction()
                 }) {
                     HStack {
                         Text("Save")

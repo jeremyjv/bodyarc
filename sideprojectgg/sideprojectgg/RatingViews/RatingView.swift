@@ -40,7 +40,7 @@ struct RatingView: View {
                 // TabView Content
                 TabView(selection: $currentPage) {
                     // Always included slides
-                    FirstRatingView(frontImage: frontImage, scanObject: scanObject).tag(0)
+                    FirstRatingView(frontImage: frontImage, scanObject: scanObject, saveAction: saveScreenshot).tag(0)
                     SecondRatingView(frontImage: frontImage, scanObject: scanObject).tag(1)
                     ThirdRatingView(frontImage: frontImage, scanObject: scanObject).tag(2)
 
@@ -119,7 +119,53 @@ struct RatingView: View {
             }
         }
     }
+    
+    //captures current view
+    var save: some View {
+        ZStack {
+            if let image = frontImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .overlay(Color.black.opacity(0.9))
+                    .edgesIgnoringSafeArea(.all)
+            } else {
+                Color.black.edgesIgnoringSafeArea(.all)
+            }
+
+            VStack {
+                if currentPage == 0 {
+                    FirstRatingView(frontImage: frontImage, scanObject: scanObject, saveAction: {})
+                } else if currentPage == 1 {
+                    SecondRatingView(frontImage: frontImage, scanObject: scanObject)
+                } else if currentPage == 2 {
+                    ThirdRatingView(frontImage: frontImage, scanObject: scanObject)
+                }
+                // Add extra pages if needed
+            }
+        }
+    }
+    
+    func saveScreenshot() {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first else {
+            print("Unable to capture screenshot: No active window found")
+            return
+        }
+
+        // Delay the screenshot to allow UI updates
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            let renderer = UIGraphicsImageRenderer(size: window.bounds.size)
+            let image = renderer.image { _ in
+                window.drawHierarchy(in: window.bounds, afterScreenUpdates: true) // Ensures UI redraw
+            }
+
+            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil) // Save to Photos
+        }
+    }
 }
+
 
 struct ProgressBar: View {
     var score: Int
