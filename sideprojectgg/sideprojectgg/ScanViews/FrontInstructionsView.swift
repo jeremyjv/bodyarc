@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FrontInstructionsView: View {
     @Binding var path: NavigationPath
+    let generator = UIImpactFeedbackGenerator(style: .heavy)
 
     var body: some View {
         ZStack {
@@ -156,6 +157,20 @@ struct FrontInstructionsView: View {
                 CustomScanButton(title: "Continue", path: $path, dest: "FrontScanView")
             }
             .padding(.horizontal) // Remove extra padding from the outer VStack
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        path.removeLast()
+                        generator.impactOccurred()
+                    }) {
+                        HStack {
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.gray) // Set the color to gray
+                        }
+                    }
+                }
+            }
         }
     }
 }

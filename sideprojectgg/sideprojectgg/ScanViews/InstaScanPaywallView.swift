@@ -189,6 +189,20 @@ struct InstaScanPaywallView: View {
                 showDotsAnimation = false
             }
         }
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    path.removeLast()
+                    generator.impactOccurred()
+                }) {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.gray) // Set the color to gray
+                    }
+                }
+            }
+        }
     }
 
     private func handlePurchase() {

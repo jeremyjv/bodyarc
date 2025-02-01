@@ -148,6 +148,20 @@ struct FrontScanView: View {
                 }
             }
             .photosPicker(isPresented: $showPicker, selection: $photosPickerItem)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        path.removeLast()
+                        generator.impactOccurred()
+                    }) {
+                        HStack {
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.gray) // Set the color to gray
+                        }
+                    }
+                }
+            }
         }
     }
 

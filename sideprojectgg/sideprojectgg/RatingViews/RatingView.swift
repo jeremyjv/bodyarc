@@ -21,6 +21,7 @@ struct RatingView: View {
     
     @State private var currentPage = 0 // Track the current page
     @State private var isLoading = true // State to track loading
+    let generator = UIImpactFeedbackGenerator(style: .heavy)
 
     var body: some View {
         ZStack {
@@ -111,9 +112,11 @@ struct RatingView: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
                     path.removeLast() // Custom back button action
+                    generator.impactOccurred()
                 }) {
                     HStack {
-                        Image(systemName: "chevron.left") // Custom back button icon
+                        Image(systemName: "xmark") // Replacing chevron with "X"
+                            .foregroundColor(.gray) // Set color to gray
                     }
                 }
             }
