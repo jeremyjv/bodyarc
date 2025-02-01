@@ -363,20 +363,28 @@ struct FrontScanView: View {
             // Flip the image horizontally only if using the front-facing camera
             let finalImage: UIImage?
             if cameraModel.isUsingFrontCamera {
-                finalImage = croppedImage?.flippedHorizontally() ?? croppedImage ?? image
+                finalImage = croppedImage?.flippedHorizontally() 
             } else {
-                finalImage = croppedImage ?? image
+                finalImage = croppedImage
             }
 
             // Update the default image and view model with the processed image
             defaultImage = finalImage
-            viewModel.frontImage = finalImage
+            
+            
+            // Crop the image to match the preview dimensions
+            if let finalImage = cropImageToPreviewDimensions(image: finalImage!, previewWidth: previewWidth, previewHeight: previewHeight) {
+                viewModel.frontImage = finalImage
+            }
 
             // Stop the camera session and close the camera view
             cameraModel.stopSession()
             showCamera = false
         }
     }
+    
+
+
 
     private func handlePhotoPicker() {
         Task {
