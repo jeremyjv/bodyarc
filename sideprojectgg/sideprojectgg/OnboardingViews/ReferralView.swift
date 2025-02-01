@@ -93,6 +93,7 @@ struct ReferralView: View {
                     }) {
                         HStack {
                             Image(systemName: "chevron.left")
+                                .foregroundColor(.gray) // Set the color to gray
                         }
                     }
                 }

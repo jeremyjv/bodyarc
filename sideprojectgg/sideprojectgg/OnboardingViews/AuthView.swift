@@ -89,6 +89,20 @@ struct AuthView: View {
                 }
             }
             .padding()
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        path.removeLast() // Custom back button action
+                        generator.impactOccurred()
+                    }) {
+                        HStack {
+                            Image(systemName: "chevron.left") // Custom back button icon
+                                .foregroundColor(.gray) // Set the color to gray
+                        }
+                    }
+                }
+            }
         }
     }
 }

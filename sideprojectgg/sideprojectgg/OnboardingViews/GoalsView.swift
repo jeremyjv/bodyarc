@@ -69,6 +69,7 @@ struct GoalsView: View {
                     }) {
                         HStack {
                             Image(systemName: "chevron.left") // Custom back button icon
+                                .foregroundColor(.gray) // Set the color to gray
                         }
                     }
                 }
