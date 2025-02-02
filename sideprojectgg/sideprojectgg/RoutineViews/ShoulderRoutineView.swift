@@ -68,7 +68,7 @@ struct ShoulderRoutineView: View {
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                            Text("Growth of the shoulders will primarily come from any compound pressing and pulling movement of the upper body. With compound movements we can overload with heavier weight -- creating the needed stimulus for growth.")
+                            Text("Growth of the shoulders will primarily come from any compound pressing and pulling movement of the upper body. With compound movements we can overload with heavier weight – creating the needed stimulus for growth.")
                                 .font(.body)
                                 .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -252,6 +252,8 @@ struct ShoulderRoutineView: View {
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(Color.gray, lineWidth: 2)
                         )
+                        
+                        
                     }
                     .padding()
                     .frame(maxWidth: geometry.size.width * 0.9)
