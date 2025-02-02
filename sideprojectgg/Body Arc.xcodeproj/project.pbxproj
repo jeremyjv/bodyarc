@@ -42,18 +42,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D55362DE2CFE5630007D6000 /* sideprojectgg.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sideprojectgg.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D55362EF2CFE5632007D6000 /* sideprojectggTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = sideprojectggTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D55362F92CFE5632007D6000 /* sideprojectggUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = sideprojectggUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D55362DE2CFE5630007D6000 /* Body Arc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Body Arc.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D55362EF2CFE5632007D6000 /* Body ArcTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Body ArcTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D55362F92CFE5632007D6000 /* Body ArcUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Body ArcUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		D55B23842D0B8F1F00D8F9EC /* Exceptions for "sideprojectgg" folder in "sideprojectgg" target */ = {
+		D55B23842D0B8F1F00D8F9EC /* Exceptions for "sideprojectgg" folder in "Body Arc" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = D55362DD2CFE5630007D6000 /* sideprojectgg */;
+			target = D55362DD2CFE5630007D6000 /* Body Arc */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -61,7 +61,7 @@
 		D55362E02CFE5630007D6000 /* sideprojectgg */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				D55B23842D0B8F1F00D8F9EC /* Exceptions for "sideprojectgg" folder in "sideprojectgg" target */,
+				D55B23842D0B8F1F00D8F9EC /* Exceptions for "sideprojectgg" folder in "Body Arc" target */,
 			);
 			path = sideprojectgg;
 			sourceTree = "<group>";
@@ -132,9 +132,9 @@
 		D55362DF2CFE5630007D6000 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D55362DE2CFE5630007D6000 /* sideprojectgg.app */,
-				D55362EF2CFE5632007D6000 /* sideprojectggTests.xctest */,
-				D55362F92CFE5632007D6000 /* sideprojectggUITests.xctest */,
+				D55362DE2CFE5630007D6000 /* Body Arc.app */,
+				D55362EF2CFE5632007D6000 /* Body ArcTests.xctest */,
+				D55362F92CFE5632007D6000 /* Body ArcUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -149,9 +149,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D55362DD2CFE5630007D6000 /* sideprojectgg */ = {
+		D55362DD2CFE5630007D6000 /* Body Arc */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D55363032CFE5632007D6000 /* Build configuration list for PBXNativeTarget "sideprojectgg" */;
+			buildConfigurationList = D55363032CFE5632007D6000 /* Build configuration list for PBXNativeTarget "Body Arc" */;
 			buildPhases = (
 				D55362DA2CFE5630007D6000 /* Sources */,
 				D55362DB2CFE5630007D6000 /* Frameworks */,
@@ -164,7 +164,7 @@
 			fileSystemSynchronizedGroups = (
 				D55362E02CFE5630007D6000 /* sideprojectgg */,
 			);
-			name = sideprojectgg;
+			name = "Body Arc";
 			packageProductDependencies = (
 				D55363272D0338F7007D6000 /* FirebaseAnalytics */,
 				D55363292D0338F7007D6000 /* FirebaseAnalyticsWithoutAdIdSupport */,
@@ -183,12 +183,12 @@
 				D525D1AD2D4AE8E8003E7357 /* JWTDecode */,
 			);
 			productName = sideprojectgg;
-			productReference = D55362DE2CFE5630007D6000 /* sideprojectgg.app */;
+			productReference = D55362DE2CFE5630007D6000 /* Body Arc.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D55362EE2CFE5632007D6000 /* sideprojectggTests */ = {
+		D55362EE2CFE5632007D6000 /* Body ArcTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D55363062CFE5632007D6000 /* Build configuration list for PBXNativeTarget "sideprojectggTests" */;
+			buildConfigurationList = D55363062CFE5632007D6000 /* Build configuration list for PBXNativeTarget "Body ArcTests" */;
 			buildPhases = (
 				D55362EB2CFE5632007D6000 /* Sources */,
 				D55362EC2CFE5632007D6000 /* Frameworks */,
@@ -202,16 +202,16 @@
 			fileSystemSynchronizedGroups = (
 				D55362F22CFE5632007D6000 /* sideprojectggTests */,
 			);
-			name = sideprojectggTests;
+			name = "Body ArcTests";
 			packageProductDependencies = (
 			);
 			productName = sideprojectggTests;
-			productReference = D55362EF2CFE5632007D6000 /* sideprojectggTests.xctest */;
+			productReference = D55362EF2CFE5632007D6000 /* Body ArcTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		D55362F82CFE5632007D6000 /* sideprojectggUITests */ = {
+		D55362F82CFE5632007D6000 /* Body ArcUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D55363092CFE5632007D6000 /* Build configuration list for PBXNativeTarget "sideprojectggUITests" */;
+			buildConfigurationList = D55363092CFE5632007D6000 /* Build configuration list for PBXNativeTarget "Body ArcUITests" */;
 			buildPhases = (
 				D55362F52CFE5632007D6000 /* Sources */,
 				D55362F62CFE5632007D6000 /* Frameworks */,
@@ -225,11 +225,11 @@
 			fileSystemSynchronizedGroups = (
 				D55362FC2CFE5632007D6000 /* sideprojectggUITests */,
 			);
-			name = sideprojectggUITests;
+			name = "Body ArcUITests";
 			packageProductDependencies = (
 			);
 			productName = sideprojectggUITests;
-			productReference = D55362F92CFE5632007D6000 /* sideprojectggUITests.xctest */;
+			productReference = D55362F92CFE5632007D6000 /* Body ArcUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -255,7 +255,7 @@
 					};
 				};
 			};
-			buildConfigurationList = D55362D92CFE5630007D6000 /* Build configuration list for PBXProject "sideprojectgg" */;
+			buildConfigurationList = D55362D92CFE5630007D6000 /* Build configuration list for PBXProject "Body Arc" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -277,9 +277,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D55362DD2CFE5630007D6000 /* sideprojectgg */,
-				D55362EE2CFE5632007D6000 /* sideprojectggTests */,
-				D55362F82CFE5632007D6000 /* sideprojectggUITests */,
+				D55362DD2CFE5630007D6000 /* Body Arc */,
+				D55362EE2CFE5632007D6000 /* Body ArcTests */,
+				D55362F82CFE5632007D6000 /* Body ArcUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -335,12 +335,12 @@
 /* Begin PBXTargetDependency section */
 		D55362F12CFE5632007D6000 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D55362DD2CFE5630007D6000 /* sideprojectgg */;
+			target = D55362DD2CFE5630007D6000 /* Body Arc */;
 			targetProxy = D55362F02CFE5632007D6000 /* PBXContainerItemProxy */;
 		};
 		D55362FB2CFE5632007D6000 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D55362DD2CFE5630007D6000 /* sideprojectgg */;
+			target = D55362DD2CFE5630007D6000 /* Body Arc */;
 			targetProxy = D55362FA2CFE5632007D6000 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -563,7 +563,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/sideprojectgg.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/sideprojectgg";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Body Arc.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Body Arc";
 				XROS_DEPLOYMENT_TARGET = 2.1;
 			};
 			name = Debug;
@@ -585,7 +585,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/sideprojectgg.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/sideprojectgg";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Body Arc.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Body Arc";
 				XROS_DEPLOYMENT_TARGET = 2.1;
 			};
 			name = Release;
@@ -635,7 +635,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D55362D92CFE5630007D6000 /* Build configuration list for PBXProject "sideprojectgg" */ = {
+		D55362D92CFE5630007D6000 /* Build configuration list for PBXProject "Body Arc" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D55363012CFE5632007D6000 /* Debug */,
@@ -644,7 +644,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D55363032CFE5632007D6000 /* Build configuration list for PBXNativeTarget "sideprojectgg" */ = {
+		D55363032CFE5632007D6000 /* Build configuration list for PBXNativeTarget "Body Arc" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D55363042CFE5632007D6000 /* Debug */,
@@ -653,7 +653,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D55363062CFE5632007D6000 /* Build configuration list for PBXNativeTarget "sideprojectggTests" */ = {
+		D55363062CFE5632007D6000 /* Build configuration list for PBXNativeTarget "Body ArcTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D55363072CFE5632007D6000 /* Debug */,
@@ -662,7 +662,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D55363092CFE5632007D6000 /* Build configuration list for PBXNativeTarget "sideprojectggUITests" */ = {
+		D55363092CFE5632007D6000 /* Build configuration list for PBXNativeTarget "Body ArcUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D553630A2CFE5632007D6000 /* Debug */,

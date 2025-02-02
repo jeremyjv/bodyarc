@@ -27,7 +27,7 @@ struct ShoulderRoutineView: View {
                         Text("Goal")
                             .font(.title)
                             .foregroundColor(.white)
-                            .fontWeight(.bold)
+                            .fontWeight(.bold)    
                             .frame(maxWidth: .infinity, alignment: .center)
 
                         Text("Train shoulders with higher volume and intensity to grow the width of the upper body. (Adjust weight and volume accordingly). The key is to progressively overload by adding weight and/or reps each push workout.")
