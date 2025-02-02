@@ -54,7 +54,7 @@ struct RoutineView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
                     // Nutrition Section
-                    Text("Your Strategy")
+                    Text("Growth Strategies")
                         .font(.largeTitle)
                         .bold()
                         .padding(.horizontal)
@@ -74,7 +74,7 @@ struct RoutineView: View {
                         .padding(.horizontal)
                     
                     // Training Styles Section
-                    Text("Training Strategies for Growth")
+                    Text("Training")
                         .font(.headline)
                         .padding(.horizontal)
                         .foregroundColor(.white)

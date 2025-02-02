@@ -30,7 +30,17 @@ struct ShoulderRoutineView: View {
                             .fontWeight(.bold)    
                             .frame(maxWidth: .infinity, alignment: .center)
 
-                        Text("Train shoulders with higher volume and intensity to grow the width of the upper body. (Adjust weight and volume accordingly). The key is to progressively overload by adding weight and/or reps each push workout.")
+                        Text("Train shoulders with higher volume and intensity to grow the width of the upper body. The key is to progressively overload by adding weight and/or reps each push workout.")
+                            .font(.body)
+                            .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        Text("To increase volume, specialize shoulders and add 2-4 more sets of shoulder exercises per week. To increase training intensity, use the style of sets and reps noted below ")
+                            .font(.body)
+                            .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        Text("*Always control the weight to maximize growth and focus on squeezing the muscle. Never use momentum")
                             .font(.body)
                             .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -77,16 +87,20 @@ struct ShoulderRoutineView: View {
                                 .fontWeight(.bold) // Bold subsection title
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-
-                            Text("5×5 reps (Heavier Weight)\nStrength Focus")
+                            
+                            Text("Strength Focus\n") // Previously gray, now white
                                 .font(.body)
-                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
-                                .frame(maxWidth: .infinity, alignment: .leading)
-
-                            Text("3×(8-12) reps (Moderate Weight)\nHypertrophy Focus")
+                                .fontWeight(.bold)
+                                .foregroundColor(.white) +
+                            Text("5×5 reps (Heavier Weight)")
+                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8)) // Previously white, now gray
+                            
+                            Text("Hypertrophy Focus\n") // Previously gray, now white
                                 .font(.body)
-                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white) +
+                            Text("3×(8-16) reps (Moderate Weight)")
+                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8)) // Previously white, now gray
 
                             Text("*Try different styles when you hit plateaus")
                                 .font(.body)
@@ -122,11 +136,6 @@ struct ShoulderRoutineView: View {
                                 .font(.body)
                                 .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
                                 .frame(maxWidth: .infinity, alignment: .leading)
-
-                            Text("*Always control the weight to maximize growth and focus on squeezing the muscle. Never use momentum")
-                                .font(.body)
-                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
-                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .padding()
                         .frame(maxWidth: geometry.size.width * 0.9)
@@ -158,7 +167,7 @@ struct ShoulderRoutineView: View {
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                            Text("Utilize Accessory movements to isolate and drive blood flow into the shoulder muscle. Train Hard.")
+                            Text("Utilize accessory movements to isolate and drive blood flow into the shoulder muscles. Train Hard.")
                                 .font(.body)
                                 .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -174,23 +183,41 @@ struct ShoulderRoutineView: View {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Accessory Training Styles")
                                 .font(.title2)
-                                .fontWeight(.bold) // Bold subsection title
-                                .foregroundColor(.white)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white) // Inverted: was white, now gray
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                            Text("Straight Sets (Normal Sets)\nX Reps → Rest 3 Min")
+                            Text("Straight Sets (Normal Sets)\n") // Previously gray, now white
                                 .font(.body)
-                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white) +
+                            Text("X Reps → Rest 3 Min")
+                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8)) // Previously white, now gray
 
-                            Text("Rest Pause Sets\nX Reps → 10s Rest → 0.5X Reps")
+                            Text("Rest Pause Sets\n") // Previously gray, now white
                                 .font(.body)
-                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white) +
+                            Text("X Reps → 10s Rest → 0.5X Reps")
+                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8)) // Previously white, now gray
 
-                            Text("Drop Sets\nX Reps at Y Weight → Rest")
+                            Text("Drop Sets\n") // Previously gray, now white
                                 .font(.body)
-                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
+                                .fontWeight(.bold)
+                                .foregroundColor(.white) +
+                            Text("X Reps at Y Weight → Rest\nX Reps at 0.75Y Weight → Rest\nX Reps at 0.5Y Weight → Rest")
+                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8)) // Previously white, now gray
+
+                            Text("Partial Reps\n") // Previously gray, now white
+                                .font(.body)
+                                .fontWeight(.bold)
+                                .foregroundColor(.white) +
+                            Text("Full ROM to failure →\nHalf ROM to failure")
+                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8)) // Previously white, now gray
+
+                            Text("*ROM = Range of Motion")
+                                .font(.body)
+                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8)) // Previously gray, now white
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .padding()
@@ -218,10 +245,6 @@ struct ShoulderRoutineView: View {
                                 .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                            Text("*Always control the weight to maximize growth and focus on squeezing the muscle. Never use momentum")
-                                .font(.body)
-                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
-                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .padding()
                         .frame(maxWidth: geometry.size.width * 0.9)
