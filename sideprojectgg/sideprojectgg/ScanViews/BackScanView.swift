@@ -490,20 +490,35 @@ struct BackScanView: View {
 
     private func handleCapturedImage(_ image: UIImage?) {
         if let image = image, let previewLayer = cameraModel.previewLayer {
+            
+            
+            let aspectRatio = image.size.width / image.size.height
+                    print("Captured Image Aspect Ratio: \(aspectRatio)")
+            
             // Crop the image to match the preview's visible area
             let croppedImage = image.cropToMatchPreview(previewLayer: previewLayer)
             
             // Flip the image horizontally only if using the front-facing camera
-            let finalImage: UIImage?
+            var finalImage: UIImage?
             if cameraModel.isUsingFrontCamera {
-                finalImage = croppedImage?.flippedHorizontally() ?? croppedImage ?? image
+                finalImage = croppedImage?.flippedHorizontally()
             } else {
-                finalImage = croppedImage ?? image
+                finalImage = croppedImage
             }
 
             // Update the default image and view model with the processed image
             defaultImage = finalImage
-            viewModel.backImage = finalImage
+            
+            if !cameraModel.isUsingFrontCamera {
+                finalImage = finalImage?.flippedHorizontally()!.flippedHorizontally()
+            }
+            
+            
+            // Crop the image to match the preview dimensions
+            if let finishedImage = cropImageToPreviewDimensions(image: finalImage!, previewWidth: previewWidth, previewHeight: previewHeight) {
+                viewModel.frontImage = finishedImage
+        
+            }
 
             // Stop the camera session and close the camera view
             cameraModel.stopSession()
