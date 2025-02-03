@@ -133,7 +133,7 @@ struct RoutineView: View {
                     .presentationDragIndicator(.visible) // Shows drag indicator
             }
             .sheet(isPresented: $isNutritionViewPresented) {
-                Text("NutritionView")
+                NutritionRoutineView()
                     .presentationDetents([.fraction(0.95)]) // Custom detents
                     .presentationDragIndicator(.visible) // Shows drag indicator
             }
