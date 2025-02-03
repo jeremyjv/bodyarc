@@ -28,7 +28,7 @@ struct ArmsRoutineView: View {
                             .fontWeight(.bold)
                             .frame(maxWidth: .infinity, alignment: .center)
 
-                        Text("Since the arms are smaller muscles compared to other muscle groups, they recover much faster, which allows us to train them with more volume. We want to take advantage of stretched positions of the biceps and triceps to stimulate growth.")
+                        Text("Since the arms are smaller muscles compared to other muscle groups, they recover much faster, which allows us to train them with more volume. We want to take advantage of stretched positions of the biceps and triceps during exercises to stimulate growth.")
                             .font(.body)
                             .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
                             .frame(maxWidth: .infinity, alignment: .leading)

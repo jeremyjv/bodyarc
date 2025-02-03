@@ -150,11 +150,11 @@ enum MuscleGroup: String, CaseIterable, Identifiable {
         case .arms:
             return AnyView(ArmsRoutineView())
         case .abs:
-            return AnyView(ShoulderRoutineView())
+            return AnyView(AbsRoutineView())
         case .traps:
-            return AnyView(ShoulderRoutineView())
+            return AnyView(TrapsRoutineView())
         case .lats:
-            return AnyView(ShoulderRoutineView())
+            return AnyView(LatsRoutineView())
         case .lowerBack:
             return AnyView(ShoulderRoutineView())
             
