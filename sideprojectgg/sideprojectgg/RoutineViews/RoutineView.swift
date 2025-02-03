@@ -98,12 +98,6 @@ struct RoutineView: View {
                                 .cornerRadius(10)
                             }
                             .padding(.horizontal)
-                        } else {
-                            // Handle invalid muscle names gracefully
-                            Text("Invalid Muscle: \(muscleName)")
-                                .font(.caption)
-                                .foregroundColor(.red)
-                                .padding(.horizontal)
                         }
                     }
                 }
@@ -135,7 +129,7 @@ enum MuscleGroup: String, CaseIterable, Identifiable {
     case abs = "Abs"
     case traps = "Traps"
     case lats = "Lats"
-    case lowerBack = "Lower Back"
+
     
     
     var id: String { rawValue } // Conform to Identifiable
@@ -155,9 +149,7 @@ enum MuscleGroup: String, CaseIterable, Identifiable {
             return AnyView(TrapsRoutineView())
         case .lats:
             return AnyView(LatsRoutineView())
-        case .lowerBack:
-            return AnyView(ShoulderRoutineView())
-            
+       
         }
     }
 }
