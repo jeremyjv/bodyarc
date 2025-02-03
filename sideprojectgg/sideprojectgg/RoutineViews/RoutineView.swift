@@ -15,15 +15,13 @@ struct RoutineView: View {
     @EnvironmentObject var viewModel: ContentViewModel
     @State private var hasLoadedData = false
     
-
     @State private var selectedMuscle: MuscleGroup? = nil // Track selected muscle group
+    @State private var isNutritionViewPresented = false // Track if NutritionView is presented
     
     let generator = UIImpactFeedbackGenerator(style: .heavy)
     
-    
     func loadData() async {
         Task {
-            
             do {
                 let db = Firestore.firestore()
                 let docRef = db.collection("users").document(viewModel.uid!)
@@ -60,22 +58,40 @@ struct RoutineView: View {
                         .padding(.horizontal)
                         .foregroundColor(.white)
                     
-                    
-                    //this is based on intake form
-                    Text("Nutrition")
-                        .font(.headline)
+                    // Nutrition Section with Button
+                    Text("Nutrition 🍗")
+                        .font(.title3)
+                        .fontWeight(.bold)
                         .padding(.horizontal)
                         .foregroundColor(.white)
                     
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.1))
-                        .frame(height: 100)
-                        .cornerRadius(10)
-                        .padding(.horizontal)
+                    Button(action: {
+                        generator.impactOccurred()
+                        isNutritionViewPresented = true
+                    }) {
+                        Rectangle()
+                            .fill(Color.gray.opacity(0.1))
+                            .frame(height: 100)
+                            .cornerRadius(10)
+                            .overlay(
+                                HStack {
+                                    Text("Calories + Macros")
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(.white)
+                                }
+                                .padding()
+                               
+                            )
+                    }
+                    .padding(.horizontal)
                     
                     // Training Styles Section
-                    Text("Training")
-                        .font(.headline)
+                    Text("Training 🏋🏽")
+                        .font(.title3)
+                        .fontWeight(.bold)
                         .padding(.horizontal)
                         .foregroundColor(.white)
                     
@@ -116,9 +132,13 @@ struct RoutineView: View {
                     .presentationDetents([.fraction(0.95)]) // Custom detents
                     .presentationDragIndicator(.visible) // Shows drag indicator
             }
+            .sheet(isPresented: $isNutritionViewPresented) {
+                Text("NutritionView")
+                    .presentationDetents([.fraction(0.95)]) // Custom detents
+                    .presentationDragIndicator(.visible) // Shows drag indicator
+            }
         }
     }
-
 }
 
 // Enum for muscle groups with associated views
@@ -130,8 +150,6 @@ enum MuscleGroup: String, CaseIterable, Identifiable {
     case traps = "Traps"
     case lats = "Lats"
 
-    
-    
     var id: String { rawValue } // Conform to Identifiable
     
     // Return the corresponding view for each muscle group
@@ -149,10 +167,10 @@ enum MuscleGroup: String, CaseIterable, Identifiable {
             return AnyView(TrapsRoutineView())
         case .lats:
             return AnyView(LatsRoutineView())
-       
         }
     }
 }
+
 
 #Preview {
 
