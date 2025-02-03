@@ -67,56 +67,79 @@ struct ProgressView: View {
             Color(red: 15/255, green: 15/255, blue: 15/255)
                 .edgesIgnoringSafeArea(.all)
 
-            VStack(alignment: .leading) {
-                Text("Your Progress")
-                    .font(.largeTitle)
-                    .foregroundColor(.white)
-                    .bold()
-                    .padding()
+            VStack(alignment: .leading, spacing: 0) { // Ensure spacing is zero to keep structure intact
+                // Keep the title pinned to the top
+                VStack(alignment: .leading) {
+                    Text("Your Progress")
+                        .font(.largeTitle)
+                        .foregroundColor(.white)
+                        .bold()
+                        .padding()
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Ensures background matches
 
-                if loadingScreen {
-                    Text("Loading...")
-                        .foregroundColor(.white)
-                } else if viewModel.isScanProcessing && viewModel.scans!.isEmpty {
-                    ScrollView {
-                        LazyVStack(spacing: 20) {
-                            Text("Please do not close the app, you may risk losing your scan")
-                                .font(.headline)
-                                .foregroundColor(.blue)
-                            LoadingCardView(
-                                frontImage: viewModel.frontImage,
-                                backImage: viewModel.backImage // Can be nil
-                            )
-                        }
-                    }
-                } else if viewModel.scans!.isEmpty {
-                    //if user has no scans put "Scan to get your ratings"
-                    Text("Scan to get your ratings")
-                        .foregroundColor(.white)
-                } else {
-                    ScrollView {
-                        LazyVStack(alignment: .leading, spacing: 20) {
-                            if viewModel.isScanProcessing {
+                // Scrollable content
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 20) {
+                        if loadingScreen {
+                            VStack {
+                               Spacer() // Pushes text downward
+                               Text("Loading...")
+                                   .foregroundColor(.white)
+                                   .font(.title2)
+                                   .bold()
+                                   .multilineTextAlignment(.center)
+                               Spacer() // Pushes text upward
+                           }
+                           .frame(maxWidth: .infinity, minHeight: 400) // Ensures a minimum height for centering
+                        } else if viewModel.isScanProcessing && viewModel.scans!.isEmpty {
+                            VStack(spacing: 20) {
                                 Text("Please do not close the app, you may risk losing your scan")
                                     .font(.headline)
                                     .foregroundColor(.blue)
                                 LoadingCardView(
                                     frontImage: viewModel.frontImage,
-                                    backImage: viewModel.backImage // Can be nil
+                                    backImage: viewModel.backImage
                                 )
                             }
-
-                            ForEach(retrievedScanImages.indices, id: \.self) { index in
-                                if let scan = scans?[index] {
-                                    ProgressCardView(
-                                        scan: scan,
-                                        images: retrievedScanImages[index],
-                                        path: $path
+                            .padding()
+                        } else if viewModel.scans!.isEmpty {
+                            VStack {
+                               Spacer() // Pushes text downward
+                               Text("Scan to get your ratings")
+                                   .foregroundColor(.white)
+                                   .font(.title2)
+                                   .bold()
+                                   .multilineTextAlignment(.center)
+                               Spacer() // Pushes text upward
+                           }
+                           .frame(maxWidth: .infinity, minHeight: 400) // Ensures a minimum height for centering
+                        } else {
+                            LazyVStack(alignment: .leading, spacing: 20) {
+                                if viewModel.isScanProcessing {
+                                    Text("Please do not close the app, you may risk losing your scan")
+                                        .font(.headline)
+                                        .foregroundColor(.blue)
+                                        .padding(.bottom, 10)
+                                    LoadingCardView(
+                                        frontImage: viewModel.frontImage,
+                                        backImage: viewModel.backImage
                                     )
                                 }
+
+                                ForEach(retrievedScanImages.indices, id: \.self) { index in
+                                    if let scan = scans?[index] {
+                                        ProgressCardView(
+                                            scan: scan,
+                                            images: retrievedScanImages[index],
+                                            path: $path
+                                        )
+                                    }
+                                }
                             }
+                            .padding()
                         }
-                        .padding()
                     }
                 }
             }

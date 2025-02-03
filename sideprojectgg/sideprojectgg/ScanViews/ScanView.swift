@@ -78,8 +78,16 @@ struct ScanView: View {
                 
                 
                 if loading {
-                    Text("Loading Data")
-                        .foregroundColor(.white)
+                    VStack {
+                       Spacer() // Pushes text downward
+                       Text("Loading...")
+                           .foregroundColor(.white)
+                           .font(.title2)
+                           .bold()
+                           .multilineTextAlignment(.center)
+                       Spacer() // Pushes text upward
+                   }
+                   .frame(maxWidth: .infinity, minHeight: 400) // Ensures a minimum height for centering
                 } else {
                     
                     
