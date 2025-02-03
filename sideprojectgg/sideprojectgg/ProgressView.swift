@@ -15,6 +15,8 @@ struct ProgressView: View {
     @Binding var path: NavigationPath
     @State private var hasLoadedData = false
     @State private var loadingScreen = true
+    
+
 
     func loadData() async {
         do {
@@ -88,6 +90,7 @@ struct ProgressView: View {
                         }
                     }
                 } else if viewModel.scans!.isEmpty {
+                    //if user has no scans put "Scan to get your ratings"
                     Text("Scan to get your ratings")
                         .foregroundColor(.white)
                 } else {

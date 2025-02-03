@@ -20,6 +20,7 @@ struct RoutineView: View {
     
     let generator = UIImpactFeedbackGenerator(style: .heavy)
     
+    //if user has no scans put "Scan to get Growth Strategies"
     
 
     var body: some View {
