@@ -14,36 +14,13 @@ struct RoutineView: View {
     
     @EnvironmentObject var viewModel: ContentViewModel
     @State private var hasLoadedData = false
-    
+    var muscleRankings = ["Shoulders", "Chest", "Traps", "Lats", "Arms", "Abs"]
     @State private var selectedMuscle: MuscleGroup? = nil // Track selected muscle group
     @State private var isNutritionViewPresented = false // Track if NutritionView is presented
     
     let generator = UIImpactFeedbackGenerator(style: .heavy)
     
-    func loadData() async {
-        Task {
-            do {
-                let db = Firestore.firestore()
-                let docRef = db.collection("users").document(viewModel.uid!)
-                
-                // Fetch the document using the async alternative
-                let document = try await docRef.getDocument()
-                
-                // Check if the document exists
-                if let documentData = document.data(),
-                   let ranking = documentData["muscleRanking"] as? [String] {
-                    DispatchQueue.main.async {
-                        viewModel.muscleRankings = ranking
-                        print("fetched muscle rankings from user and mounted to routineView")
-                    }
-                } else {
-                    print("muscleRanking field not found or not an array of strings.")
-                }
-            } catch {
-                print("Error fetching muscleRanking: \(error.localizedDescription)")
-            }
-        }
-    }
+    
 
     var body: some View {
         ZStack {
@@ -95,7 +72,7 @@ struct RoutineView: View {
                         .padding(.horizontal)
                         .foregroundColor(.white)
                     
-                    ForEach(viewModel.muscleRankings!, id: \.self) { muscleName in
+                    ForEach(muscleRankings, id: \.self) { muscleName in
                         if let muscle = MuscleGroup(rawValue: muscleName) {
                             Button(action: {
                                 generator.impactOccurred()
@@ -118,14 +95,6 @@ struct RoutineView: View {
                     }
                 }
                 .padding(.vertical)
-            }
-            .onAppear {
-                if !hasLoadedData {
-                    hasLoadedData = true
-                    Task {
-                        await loadData()
-                    }
-                }
             }
             .sheet(item: $selectedMuscle) { muscle in
                 muscle.view
