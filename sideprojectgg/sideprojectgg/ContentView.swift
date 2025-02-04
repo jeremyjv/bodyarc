@@ -31,19 +31,31 @@ struct ContentView: View {
                     
                     ScanView(path: $path)
                         .tabItem {
-                            Label("Scan", systemImage: "magnifyingglass")
+                            VStack {
+                                Image("scan") // Reference the asset name
+                                    .renderingMode(.template) // Ensure it adopts the foreground color
+                                Text("Scan")
+                            }
                         }
                         .tag("ScanView")
 
                     ProgressView(retrievedScanImages: $viewModel.retrievedScanImages, scans: $viewModel.scans, path: $path)
                         .tabItem {
-                            Label("Progress", systemImage: "chart.bar.fill")
+                            VStack {
+                                Image("chart-no-axes-combined") // Replace with your asset name
+                                    .renderingMode(.template)
+                                Text("Progress")
+                            }
                         }
                         .tag("ProgressView")
 
                     RoutineView(path: $path)
                         .tabItem {
-                            Label("Grow", systemImage: "leaf.fill")
+                            VStack {
+                                Image("dumbbell") // Replace with your asset name
+                                    .renderingMode(.template)
+                                Text("Grow")
+                            }
                         }
                         .tag("RoutineView")
                 }
