@@ -36,19 +36,19 @@ struct FrontInstructionsView: View {
                     // Centered Images in HStack
                     HStack() {
                         Spacer()
-                        Image("scanImage") // Replace with your image asset
+                        Image("frontgood1") // Replace with your image asset
                             .resizable()
                             .scaledToFill()
                             .frame(width: 70, height: 110)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                         Spacer()
-                        Image("scanImage")
+                        Image("frontgood2")
                             .resizable()
                             .scaledToFill()
                             .frame(width: 70, height: 110)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                         Spacer()
-                        Image("scanImage")
+                        Image("backgood1")
                             .resizable()
                             .scaledToFill()
                             .frame(width: 70, height: 110)
@@ -69,7 +69,7 @@ struct FrontInstructionsView: View {
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundColor(.green)
                                 .font(.system(size: 16)) // Smaller icon size
-                            Text("Selfie taken at arm's length")
+                            Text("Torso completely visible")
                                 .font(.system(size: 18)) // Text size remains the same
                         }
                         HStack {
@@ -100,19 +100,19 @@ struct FrontInstructionsView: View {
                     // Centered Images in HStack
                     HStack() {
                         Spacer()
-                        Image("scanImage") // Replace with your image asset
+                        Image("frontbad1") // Replace with your image asset
                             .resizable()
                             .scaledToFill()
                             .frame(width: 70, height: 110)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                         Spacer()
-                        Image("scanImage")
+                        Image("frontbad2")
                             .resizable()
                             .scaledToFill()
                             .frame(width: 70, height: 110)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                         Spacer()
-                        Image("scanImage")
+                        Image("backbad1")
                             .resizable()
                             .scaledToFill()
                             .frame(width: 70, height: 110)
@@ -126,7 +126,7 @@ struct FrontInstructionsView: View {
                             Image(systemName: "xmark.circle.fill")
                                 .foregroundColor(.red)
                                 .font(.system(size: 16)) // Smaller icon size
-                            Text("Pixelated or blurry face")
+                            Text("Pixelated or blurry")
                                 .font(.system(size: 18)) // Text size remains the same
                         }
                         HStack {
@@ -140,7 +140,7 @@ struct FrontInstructionsView: View {
                             Image(systemName: "xmark.circle.fill")
                                 .foregroundColor(.red)
                                 .font(.system(size: 16)) // Smaller icon size
-                            Text("Photos with heavy editing")
+                            Text("Lighting too dark")
                                 .font(.system(size: 18)) // Text size remains the same
                         }
                     }
