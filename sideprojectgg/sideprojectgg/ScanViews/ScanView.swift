@@ -16,17 +16,6 @@ import RevenueCat
 import RevenueCatUI
 
 
-
-struct RectangleComponent: View {
-    var body: some View {
-        RoundedRectangle(cornerRadius: 10)
-            .fill(Color.gray.opacity(0.3)) // Adjust color and opacity
-    }
-}
-
-
-
-
 struct ScanView: View {
     @EnvironmentObject var viewModel: ContentViewModel
     @Binding var path: NavigationPath
@@ -40,6 +29,8 @@ struct ScanView: View {
     @State private var loaded = false
     @State private var nextScan = 0
     
+    @State private var isSheetPresented = false
+    
 
     
     @State var isGold: Bool?
@@ -52,105 +43,93 @@ struct ScanView: View {
             Color(red: 15/255, green: 15/255, blue: 15/255)
             .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
             VStack(spacing: 10) {
-                
-                Spacer()
-                HStack {
-                    Text("Physique Analysis")
-                        .font(.title)
-                        .foregroundColor(.white)
-                        .lineLimit(1)
-                        .bold()
-                        .padding()
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        viewModel.signOut()
-                    }) {
-                        Image(systemName: "gear")
-                            .resizable()                // Makes the icon resizable
-                            .scaledToFit()              // Ensures it maintains aspect ratio
-                            .frame(width: 30, height: 30) // Sets the size
-                            .foregroundColor(.gray)     // Sets the color of the icon
-                            .padding()
-                    }
-                }
-                Spacer()
-                
-                
-                if loading {
-                    VStack {
-                       Spacer() // Pushes text downward
-                       Text("Loading...")
-                           .foregroundColor(.white)
-                           .font(.title2)
-                           .bold()
-                           .multilineTextAlignment(.center)
-                       Spacer() // Pushes text upward
-                   }
-                   .frame(maxWidth: .infinity, minHeight: 400) // Ensures a minimum height for centering
-                } else {
-                    
-                    
-                    ZStack {
-                        Image(uiImage: UIImage(named: "scanImage")!)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(maxWidth: 330, maxHeight: 500)
-                            .cornerRadius(30)
-                            .overlay(
-                                // Gradient overlay at the bottom
-                                LinearGradient(
-                                    gradient: Gradient(stops: [
-                                        .init(color: Color.clear, location: 0.65), // Transition starts 70% down
-                                        .init(color: Color.black, location: 0.85) // Fully black at the bottom
-                                    ]),
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                )
-                                .cornerRadius(30)
-                            )
-                        
-                        // if user's last scan less than 7 days ago, display instascan button
-                        
-                        
-                        
-                        if let user = viewModel.user,
-                           let lastGoldScan = user.lastGoldScan,
-                           let isGold = viewModel.isGold, // Safely unwrap `isGold`
-                           Calendar.current.date(byAdding: .day, value: -7, to: Date())! < lastGoldScan && isGold {
-                            //if user is not a gold member // never display this
+                        Spacer()
+                        HStack {
+                            Text("Physique Analysis")
+                                .font(.title)
+                                .foregroundColor(.white)
+                                .lineLimit(1)
+                                .bold()
+                                .padding()
                             
-                            //only redirect to paywall if they don't have instascans
-                            if let instascan = user.instaScans, instascan > 0 {
-                                CustomScanButton(title: "Insta Scan Now", path: $path, dest: "FrontInstructionsView")
-                                    .offset(y: 210)
-                                
-                            } else {
-                                CustomScanButton(title: "Insta Scan Now", path: $path, dest: "InstaScanPaywallView")
-                                    .offset(y: 210)
+                            Spacer()
+                            
+                            Button(action: {
+                                isSheetPresented.toggle() // Open the settings sheet
+                            }) {
+                                Image(systemName: "gear")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.gray)
+                                    .padding()
                             }
-                            
-                        } else {
-                            
-                            CustomScanButton(title: "Begin Scan", path: $path, dest: "FrontInstructionsView")
-                                .offset(y: 210)
+                            .sheet(isPresented: $isSheetPresented) {
+                                SettingsSheet(isPresented: $isSheetPresented)
+                                    .presentationDetents([.fraction(0.50)])
+                                    .presentationDragIndicator(.visible)
+                            }
                         }
+                        Spacer()
                         
+                        if loading {
+                            VStack {
+                                Spacer()
+                                Text("Loading...")
+                                    .foregroundColor(.white)
+                                    .font(.title2)
+                                    .bold()
+                                    .multilineTextAlignment(.center)
+                                Spacer()
+                            }
+                            .frame(maxWidth: .infinity, minHeight: 400)
+                        } else {
+                            ZStack {
+                                Image(uiImage: UIImage(named: "scanImage")!)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(maxWidth: 330, maxHeight: 500)
+                                    .cornerRadius(30)
+                                    .overlay(
+                                        LinearGradient(
+                                            gradient: Gradient(stops: [
+                                                .init(color: Color.clear, location: 0.65),
+                                                .init(color: Color.black, location: 0.85)
+                                            ]),
+                                            startPoint: .top,
+                                            endPoint: .bottom
+                                        )
+                                        .cornerRadius(30)
+                                    )
+                                
+                                if let user = viewModel.user,
+                                   let lastGoldScan = user.lastGoldScan,
+                                   let isGold = viewModel.isGold,
+                                   Calendar.current.date(byAdding: .day, value: -7, to: Date())! < lastGoldScan && isGold {
+                                    
+                                    if let instascan = user.instaScans, instascan > 0 {
+                                        CustomScanButton(title: "Insta Scan Now", path: $path, dest: "FrontInstructionsView")
+                                            .offset(y: 210)
+                                    } else {
+                                        CustomScanButton(title: "Insta Scan Now", path: $path, dest: "InstaScanPaywallView")
+                                            .offset(y: 210)
+                                    }
+                                } else {
+                                    CustomScanButton(title: "Begin Scan", path: $path, dest: "FrontInstructionsView")
+                                        .offset(y: 210)
+                                }
+                            }
+                        }
+                        Spacer()
+                        if let lastScan = viewModel.user?.lastGoldScan {
+                            if nextScan != 0 && isLessThanSevenDaysAgo(from: lastScan) {
+                                Text("Next Scan in \(daysUntilSevenDaysAfter(from: lastScan)) days")
+                                    .fontWeight(.bold)
+                            }
+                        }
+                        Spacer()
                     }
                 }
-                Spacer()
-                if let lastScan = viewModel.user?.lastGoldScan {
-                    if nextScan != 0 && isLessThanSevenDaysAgo(from: lastScan) {
-                        Text("Next Scan in \(daysUntilSevenDaysAfter(from: lastScan)) days")
-                            .fontWeight(.bold)
-                    }
-                }
-                Spacer()
-            }
-            
-            
-        }
         .onAppear {
             if !loaded {
                 Task {
@@ -268,6 +247,37 @@ struct ScanView: View {
     }
     
   
+}
+
+struct SettingsSheet: View {
+    @EnvironmentObject var viewModel: ContentViewModel
+    @Binding var isPresented: Bool
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Settings")
+                .font(.title)
+                .bold()
+                .padding(.top, 20)
+            
+            Button(action: {
+                viewModel.signOut()
+                isPresented = false // Dismiss the sheet after signing out
+            }) {
+                Text("Sign Out")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.red)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                    .padding(.horizontal, 20)
+            }
+            
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemBackground))
+    }
 }
 
 struct CustomScanButton: View {
