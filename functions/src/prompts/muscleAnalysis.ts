@@ -1,6 +1,6 @@
 
 export const frontAnalysis = `
-This is my current physique. For the muscles that you see in an image, I'm going to ask you to rate each muscle based on its development. 
+This is my current physique. For the muscles that you see in an image, I'm going to ask you to rate each muscle based on its development. If you can't see a muscle rate it as 0, but it's unlikely you won't be able to see it. 
 In the following JSON Format:
 {
 "bodyFatPercentage": Int,
@@ -16,7 +16,7 @@ In the following JSON Format:
 "bodyType": String,
 }
 give me:
-1) A Rating on a scale of 1-100 for the Body Fat Percentage where 100 indicates the most lean and a lower rating indicates a fatter body. A softer look in the body indicates a higher body fat percentage and a more defined look where you can see muscle definition indicates a lower body fat percentage:
+1) A Rating on a scale of 1-100 for the Body Fat Percentage where 100 indicates the most lean and a lower rating indicates a fatter body. A softer look in the body indicates a higher body fat percentage and a more defined look where you can see muscle definition indicates a lower body fat percentage. Remember don't give me the actual body fat percentage, but a rating of 1-100. 
 2) A Rating on a scale of 1-100 for the shoulder development. Developed shoulders should contribute to the width of the upper body and be well defined. A should is well defined if there is clear separation between the deltoid muscles and the arm muscles
 3) A Rating on a scale of 1-100 for the chest development. A developed chest should appear full and round, not flat. The upper chest should show visible fullness and not appear flat for a higher score. The lower chest should not appear flat, and should be well defined and rounded.
 4) A Rating on a scale of 1-100 for the Ab development. Developed abs should have multiple lines and appear to be sticking out. A softer look in the abs indicates a higher body fat percentage and therefore lower score. 
@@ -33,7 +33,7 @@ give me:
 
 
 export const backAnalysis = `
-This is my current physique. For the muscles that you see in an image, I'm going to ask you to rate each muscle based on its development. 
+This is my current physique. For the muscles that you see in an image, I'm going to ask you to rate each muscle based on its development. If you can't see a muscle rate it as 0, but it's unlikely you won't be able to see it. 
 In the following JSON Format:
 {
    "traps": Int,
