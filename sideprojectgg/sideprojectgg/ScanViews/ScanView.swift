@@ -140,9 +140,11 @@ struct ScanView: View {
                     }
                 }
                 Spacer()
-                if nextScan != 0 {
-                    Text("Next Scan in \(daysUntilSevenDaysAfter(from: viewModel.user?.lastGoldScan ?? Date())) days")
-                        .fontWeight(.bold)
+                if let lastScan = viewModel.user?.lastGoldScan {
+                    if nextScan != 0 && isLessThanSevenDaysAgo(from: lastScan) {
+                        Text("Next Scan in \(daysUntilSevenDaysAfter(from: lastScan)) days")
+                            .fontWeight(.bold)
+                    }
                 }
                 Spacer()
             }
@@ -192,6 +194,19 @@ struct ScanView: View {
         
         return max(daysRemaining, 0) // Ensure it doesn't return a negative value
     }
+    
+    func isLessThanSevenDaysAgo(from date: Date) -> Bool {
+        let calendar = Calendar.current
+        
+        // Get the date 7 days ago from today
+        guard let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: Date()) else {
+            return false
+        }
+        
+        // Compare the input date with sevenDaysAgo
+        return date > sevenDaysAgo
+    }
+
     // Fetch user data from Firestore
     func fetchUserDataAndConfigurePurchase() async {
         let db = Firestore.firestore()
