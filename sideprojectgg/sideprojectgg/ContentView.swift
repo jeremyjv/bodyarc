@@ -41,7 +41,7 @@ struct ContentView: View {
                         })
                         .tag("ProgressView")
                         
-                        RoutineView().tabItem({
+                    RoutineView(path: $path).tabItem({
                             Label("Grow", systemImage: "person")
                         })
                         .tag("RoutineView")

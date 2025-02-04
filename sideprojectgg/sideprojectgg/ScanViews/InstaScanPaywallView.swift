@@ -214,7 +214,7 @@ struct InstaScanPaywallView: View {
                         isProcessing = false
                         viewModel.user?.instaScans = 1
                         path = NavigationPath()
-                        path.append("FrontScanView")
+                        path.append("FrontInstructionsView")
 
                         // Update Firestore
                         let db = Firestore.firestore()

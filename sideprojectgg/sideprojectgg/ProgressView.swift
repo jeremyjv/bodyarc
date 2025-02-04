@@ -16,6 +16,8 @@ struct ProgressView: View {
     @State private var hasLoadedData = false
     @State private var loadingScreen = true
     
+    let generator = UIImpactFeedbackGenerator(style: .heavy)
+    
 
 
     func loadData() async {
@@ -106,15 +108,37 @@ struct ProgressView: View {
                             .padding()
                         } else if viewModel.scans!.isEmpty {
                             VStack {
-                               Spacer() // Pushes text downward
-                               Text("Scan to get your ratings")
-                                   .foregroundColor(.white)
-                                   .font(.title2)
-                                   .bold()
-                                   .multilineTextAlignment(.center)
-                               Spacer() // Pushes text upward
-                           }
-                           .frame(maxWidth: .infinity, minHeight: 400) // Ensures a minimum height for centering
+                                Spacer()
+
+                                Button(action: {
+                                    generator.impactOccurred() // Haptic feedback
+                                    path.append("FrontInstructionsView") // Navigate to FrontInstructionsView
+                                }) {
+                                    HStack {
+                                        Spacer()
+                                        VStack(alignment: .leading, spacing: 8) {
+                                            Text("Scan to get your ratings")
+                                                .font(.headline)
+                                                .foregroundColor(.white)
+                                                .bold()
+                            
+                                        }
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .foregroundColor(.white)
+                                    }
+                                    .padding()
+                                    .frame(height: 100)
+                                    .background(Color.gray.opacity(0.1))
+                                    .cornerRadius(12)
+                                    .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                .padding(.horizontal)
+
+                                Spacer()
+                            }
+                            .frame(maxWidth: .infinity, minHeight: 400)
                         } else {
                             LazyVStack(alignment: .leading, spacing: 20) {
                                 if viewModel.isScanProcessing {
