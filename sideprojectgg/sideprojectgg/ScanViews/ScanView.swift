@@ -38,6 +38,7 @@ struct ScanView: View {
     @State private var user: User? // User model to hold Firestore data
     @State private var loading = true // Loading state for Firestore fetch
     @State private var loaded = false
+    @State private var nextScan = 0
     
 
     
@@ -139,6 +140,10 @@ struct ScanView: View {
                     }
                 }
                 Spacer()
+                if nextScan != 0 {
+                    Text("Next Scan in \(daysUntilSevenDaysAfter(from: viewModel.user?.lastGoldScan ?? Date())) days")
+                        .fontWeight(.bold)
+                }
                 Spacer()
             }
             
@@ -148,6 +153,12 @@ struct ScanView: View {
             if !loaded {
                 Task {
                     await fetchUserDataAndConfigurePurchase()
+                    
+                    //only show this if user has a lastGoldScan
+                    if let lastScan = viewModel.user!.lastGoldScan {
+                        self.nextScan = daysUntilSevenDaysAfter(from: lastScan)
+                    }
+                    
                 }
                 
             }
@@ -168,7 +179,19 @@ struct ScanView: View {
             loading = true
             loaded = false
         }
-    
+    func daysUntilSevenDaysAfter(from date: Date) -> Int {
+        let calendar = Calendar.current
+        
+        // Calculate the target date (7 days after the input date)
+        guard let targetDate = calendar.date(byAdding: .day, value: 7, to: date) else {
+            return 0 // Fallback in case of an error
+        }
+        
+        // Get the difference in days from today to the target date
+        let daysRemaining = calendar.dateComponents([.day], from: Date(), to: targetDate).day ?? 0
+        
+        return max(daysRemaining, 0) // Ensure it doesn't return a negative value
+    }
     // Fetch user data from Firestore
     func fetchUserDataAndConfigurePurchase() async {
         let db = Firestore.firestore()
