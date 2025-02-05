@@ -38,9 +38,9 @@ struct PaywallView: View {
                 Spacer()
                 
                 // Logo Section
-                Image(uiImage: UIImage(named: "BodyArc3")!) // Replace with your logo asset
+                Image(uiImage: UIImage(named: "clearBodyArc")!) // Replace with your logo asset
                     .resizable()
-                    .frame(width: 80, height: 80)
+                    .frame(width: 100, height: 100)
                     .scaledToFit()
                 
                 // Title Section

@@ -160,6 +160,7 @@ struct ScanView: View {
             loading = true
             loaded = false
         }
+    
     func daysUntilSevenDaysAfter(from date: Date) -> Int {
         let calendar = Calendar.current
         
@@ -168,8 +169,9 @@ struct ScanView: View {
             return 0 // Fallback in case of an error
         }
         
-        // Get the difference in days from today to the target date
-        let daysRemaining = calendar.dateComponents([.day], from: Date(), to: targetDate).day ?? 0
+        // Get the difference in seconds and convert to days (rounding up)
+        let timeInterval = targetDate.timeIntervalSinceNow
+        let daysRemaining = Int(ceil(timeInterval / 86400)) // 86400 seconds in a day
         
         return max(daysRemaining, 0) // Ensure it doesn't return a negative value
     }
