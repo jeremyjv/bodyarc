@@ -125,12 +125,7 @@ struct LatsRoutineView: View {
                                 .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                            Text("3. Lat Pull Downs")
-                                .font(.body)
-                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
-                                .frame(maxWidth: .infinity, alignment: .leading)
-
-                            Text("4. Weighted Pull Ups")
+                            Text("3. Weighted Pull Ups")
                                 .font(.body)
                                 .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -214,12 +209,12 @@ struct LatsRoutineView: View {
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                            Text("1. Barbell / Dumbbell Shrugs")
+                            Text("1. Lat Pull Downs")
                                 .font(.body)
                                 .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                            Text("2. Cable Face Pulls")
+                            Text("2. Cable Lat Pullover")
                                 .font(.body)
                                 .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
                                 .frame(maxWidth: .infinity, alignment: .leading)

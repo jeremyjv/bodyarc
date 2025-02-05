@@ -117,12 +117,17 @@ struct AbsRoutineView: View {
                                 .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                            Text("2. Crunches")
+                            Text("2. Body Weight Crunches")
+                                .font(.body)
+                                .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            Text("3. Cable Crunches")
                                 .font(.body)
                                 .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                            Text("3. Medicine Ball Twists")
+                            Text("4. Medicine Ball Twists")
                                 .font(.body)
                                 .foregroundColor(Color(red: 0.8, green: 0.8, blue: 0.8))
                                 .frame(maxWidth: .infinity, alignment: .leading)
