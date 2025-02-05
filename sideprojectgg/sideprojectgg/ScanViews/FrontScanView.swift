@@ -43,6 +43,7 @@ struct FrontScanView: View {
                 .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
             VStack(spacing: 16) {
                 Text("Upload a front selfie")
+                    .foregroundColor(.white)
                     .font(.title2)
                     .bold()
                 

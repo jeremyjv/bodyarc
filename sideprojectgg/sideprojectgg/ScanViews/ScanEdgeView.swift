@@ -53,6 +53,7 @@ struct ScanEdgeView: View {
             
             VStack(spacing: 15) {
                 Text("👀Unlock your ratings")
+                    .foregroundColor(.white)
                     .font(.largeTitle)
                     .padding(.horizontal)
                 Text("Invite 3 friends or get BodyArc Gold to see your physique ratings")
@@ -205,117 +206,122 @@ struct ScanEdgeView: View {
                 }
                 .padding(.horizontal)
                 .sheet(isPresented: $showReferral) {
-                    VStack(spacing: 10) {
-                        
-                        HStack(spacing: 80) {
-                            Text("🎟️")
-                                .font(.system(size: 90))
-                                .padding(.horizontal)
-                        
+                    ZStack {
+                        Color(red: 28/255, green: 28/255, blue: 30/255)
+                            .edgesIgnoringSafeArea(.all)
+                        VStack(spacing: 10) {
                             
-                         
-                            
-                            Button(action: {
-                                Task {
-                                    generator.impactOccurred()
-                                    fetchUserReferrals()
-                                }
-                            }) {
-                                Text("Redeem")
-                                    .font(.title)
-                                    .foregroundColor(.white)
-                                    .bold()
+                            HStack(spacing: 80) {
+                                Text("🎟️")
+                                    .font(.system(size: 90))
                                     .padding(.horizontal)
-                                    .frame(width: 160, height: 60) // Set button size
-                                    .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
-                                    .cornerRadius(35) // Rounded corners
                                 
-                            }
-                            
-                            
-                        }
-                   
-                        VStack(alignment: .leading, spacing: 0) {
-                            Text("Invite 3 friends to get your results")
-                                .foregroundColor(.gray)
-
-                                .padding()
-                            Text("Your Referral Code:")
-                                .bold()
-                                .padding()
-                       
                                 
-                            Button(action: {
-                                Task {
-                                    generator.impactOccurred()
-                                    UIPasteboard.general.string = viewModel.user!.referralCode!
-                                    showPopup = true // Show the popup
-
-                                    // Automatically dismiss the popup after 2 seconds
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                        withAnimation {
-                                            showPopup = false
-                                        }
+                                
+                                
+                                Button(action: {
+                                    Task {
+                                        generator.impactOccurred()
+                                        fetchUserReferrals()
                                     }
-                                }
-                            }) {
-                                HStack {
-                                    Spacer() // Push everything to center
-                                    Spacer()
-
-                                    Text("\(viewModel.user!.referralCode!)")
+                                }) {
+                                    Text("Redeem")
                                         .font(.title)
                                         .foregroundColor(.white)
                                         .bold()
                                         .padding(.horizontal)
-
-                                    Spacer() // Ensure text stays centered
-
-                                    Image(uiImage: UIImage(named: "saveClipboard")!) // Replace with your logo asset
-                                        .resizable()
-                                        .frame(width: 30, height: 30)
-                                        .scaledToFit()
-                                        .padding(.trailing) // Push the image to the right
+                                        .frame(width: 160, height: 60) // Set button size
+                                        .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
+                                        .cornerRadius(35) // Rounded corners
+                                    
                                 }
+                                
+                                
                             }
-                            .frame(maxWidth: .infinity, maxHeight: 60) // Set button size
-                            .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
-                            .cornerRadius(35) // Rounded corners
-                            .padding(.horizontal)
-                       
-                            Spacer().frame(height: 10) // Adjust the height as needed
-                        
-                            ShareLink(
-                                items: [
-                                    "https://www.linkedin.com/in/jeremyvillanueva15/",
-                                    "Check out this app and use my code: \(viewModel.user!.referralCode!) to get your physique ratings!"
-                                ],
-                                preview: { _ in
-                                    SharePreview("App Preview")
-                                }
-                            ) {
-                                Text("Share")
-                                    .font(.title)
+                            
+                            VStack(alignment: .leading, spacing: 0) {
+                                Text("Invite 3 friends to get your results")
+                                    .foregroundColor(.gray)
+                                
+                                    .padding()
+                                Text("Your Referral Code:")
                                     .foregroundColor(.white)
                                     .bold()
-                                    .padding(.horizontal)
-                                    .frame(maxWidth: .infinity, maxHeight: 60) // Match the referral button size
-                                    .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
-                                    .cornerRadius(35) // Rounded corners
-                                    .padding(.horizontal)
-                            }
-                            .simultaneousGesture(
-                                TapGesture()
-                                    .onEnded { _ in
-                                        Task {
-                                            generator.impactOccurred()
+                                    .padding()
+                                
+                                
+                                Button(action: {
+                                    Task {
+                                        generator.impactOccurred()
+                                        UIPasteboard.general.string = viewModel.user!.referralCode!
+                                        showPopup = true // Show the popup
+                                        
+                                        // Automatically dismiss the popup after 2 seconds
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                            withAnimation {
+                                                showPopup = false
+                                            }
                                         }
                                     }
-                            )
+                                }) {
+                                    HStack {
+                                        Spacer() // Push everything to center
+                                        Spacer()
+                                        
+                                        Text("\(viewModel.user!.referralCode!)")
+                                            .font(.title)
+                                            .foregroundColor(.white)
+                                            .bold()
+                                            .padding(.horizontal)
+                                        
+                                        Spacer() // Ensure text stays centered
+                                        
+                                        Image(uiImage: UIImage(named: "saveClipboard")!) // Replace with your logo asset
+                                            .resizable()
+                                            .frame(width: 30, height: 30)
+                                            .scaledToFit()
+                                            .padding(.trailing) // Push the image to the right
+                                    }
+                                }
+                                .frame(maxWidth: .infinity, maxHeight: 60) // Set button size
+                                .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
+                                .cornerRadius(35) // Rounded corners
+                                .padding(.horizontal)
+                                
+                                Spacer().frame(height: 10) // Adjust the height as needed
+                                
+                                ShareLink(
+                                    items: [
+                                        "https://www.linkedin.com/in/jeremyvillanueva15/",
+                                        "Check out this app and use my code: \(viewModel.user!.referralCode!) to get your physique ratings!"
+                                    ],
+                                    preview: { _ in
+                                        SharePreview("App Preview")
+                                    }
+                                ) {
+                                    Text("Share")
+                                        .font(.title)
+                                        .foregroundColor(.white)
+                                        .bold()
+                                        .padding(.horizontal)
+                                        .frame(maxWidth: .infinity, maxHeight: 60) // Match the referral button size
+                                        .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
+                                        .cornerRadius(35) // Rounded corners
+                                        .padding(.horizontal)
+                                }
+                                .simultaneousGesture(
+                                    TapGesture()
+                                        .onEnded { _ in
+                                            Task {
+                                                generator.impactOccurred()
+                                            }
+                                        }
+                                )
+                            }
                         }
+                        .presentationDetents([.fraction(0.50)])
+                        .presentationDragIndicator(.visible)
                     }
-                    .presentationDetents([.fraction(0.50)])
-                    .presentationDragIndicator(.visible)
                 }
             }
             

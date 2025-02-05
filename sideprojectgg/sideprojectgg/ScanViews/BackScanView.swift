@@ -48,6 +48,7 @@ struct BackScanView: View {
                 .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
             VStack(spacing: 16) {
                 Text("Upload a back selfie")
+                    .foregroundColor(.white)
                     .font(.title2)
                     .bold()
                 

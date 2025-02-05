@@ -254,30 +254,35 @@ struct SettingsSheet: View {
     @Binding var isPresented: Bool
 
     var body: some View {
-        VStack(spacing: 20) {
-            Text("Settings")
-                .font(.title)
-                .bold()
-                .padding(.top, 20)
-            
-            Button(action: {
-                viewModel.signOut()
-                isPresented = false // Dismiss the sheet after signing out
-            }) {
-                Text("Sign Out")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.red)
+        ZStack {
+            Color(red: 28/255, green: 28/255, blue: 30/255)
+                .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
+            VStack(spacing: 20) {
+                Text("Settings")
+                    .font(.title)
                     .foregroundColor(.white)
-                    .cornerRadius(10)
-                    .padding(.horizontal, 20)
+                    .bold()
+                    .padding(.top, 20)
+                
+                Button(action: {
+                    viewModel.signOut()
+                    isPresented = false // Dismiss the sheet after signing out
+                }) {
+                    Text("Sign Out")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.red)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                        .padding(.horizontal, 20)
+                }
+                
+                Spacer()
             }
-            
-            Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemBackground))
     }
+        
 }
 
 struct CustomScanButton: View {
