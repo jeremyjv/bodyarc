@@ -404,18 +404,38 @@ struct FrontScanView: View {
                let image = UIImage(data: data) {
                 
                 defaultImage = image
+
+                // Get image dimensions
+                let imageWidth = image.size.width
+                let imageHeight = image.size.height
+                let aspectRatio = imageHeight / imageWidth
                 
-                // Crop the image to match the preview dimensions
-                if let croppedImage = cropImageToPreviewDimensions(image: image, previewWidth: previewWidth, previewHeight: previewHeight) {
-                    viewModel.frontImage = croppedImage
+                print(imageWidth, imageHeight, aspectRatio)
+
+                let aspectRatio16_9: CGFloat = 16.0 / 9.0
+                let aspectRatio4_3: CGFloat = 4.0 / 3.0
+
+                // Allow a small margin of error for 4:3 aspect ratio check
+                let tolerance: CGFloat = 0.05
+                
+                if abs(aspectRatio - aspectRatio4_3) < tolerance {
+                    // Use original image if it's close to 4:3 aspect ratio
+                    viewModel.frontImage = image
+                } else if aspectRatio >= aspectRatio16_9 {
+                    // Crop only if the aspect ratio is close to 16:9
+                    if let croppedImage = cropImageToPreviewDimensions(image: image, previewWidth: previewWidth, previewHeight: previewHeight) {
+                        viewModel.frontImage = croppedImage
+                    } else {
+                        viewModel.frontImage = image
+                    }
                 } else {
-                    // Fallback in case cropping fails
-                    defaultImage = image
+                    // Default to original image if it's neither 4:3 nor greater than 16:9
                     viewModel.frontImage = image
                 }
             }
         }
     }
+
     
     private func cropImageToPreviewDimensions(image: UIImage, previewWidth: CGFloat, previewHeight: CGFloat) -> UIImage? {
         // Calculate the target aspect ratio (4:3 in this case)
