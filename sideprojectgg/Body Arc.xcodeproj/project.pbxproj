@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D525D1AE2D4AE8E8003E7357 /* JWTDecode in Frameworks */ = {isa = PBXBuildFile; productRef = D525D1AD2D4AE8E8003E7357 /* JWTDecode */; };
+		D525D2172D54612B003E7357 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D525D2162D54612B003E7357 /* StoreKit.framework */; };
 		D55363282D0338F7007D6000 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = D55363272D0338F7007D6000 /* FirebaseAnalytics */; };
 		D553632A2D0338F7007D6000 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = D55363292D0338F7007D6000 /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		D55363302D034152007D6000 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = D553632F2D034152007D6000 /* FirebaseFunctions */; };
@@ -42,6 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D525D2162D54612B003E7357 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		D55362DE2CFE5630007D6000 /* Body Arc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Body Arc.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D55362EF2CFE5632007D6000 /* Body ArcTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Body ArcTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D55362F92CFE5632007D6000 /* Body ArcUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Body ArcUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -86,6 +88,7 @@
 				D55363322D03416F007D6000 /* FirebaseAppCheck in Frameworks */,
 				D553633D2D04E85E007D6000 /* FirebaseAuth in Frameworks */,
 				D5E6841B2D3CD0C400DE2ACB /* RevenueCatUI in Frameworks */,
+				D525D2172D54612B003E7357 /* StoreKit.framework in Frameworks */,
 				D5D423992D22474F0062496B /* FirebaseStorage in Frameworks */,
 				D55363302D034152007D6000 /* FirebaseFunctions in Frameworks */,
 				D55363282D0338F7007D6000 /* FirebaseAnalytics in Frameworks */,
@@ -142,6 +145,7 @@
 		D553632E2D034152007D6000 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D525D2162D54612B003E7357 /* StoreKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

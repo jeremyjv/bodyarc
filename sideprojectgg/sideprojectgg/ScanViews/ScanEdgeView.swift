@@ -292,7 +292,7 @@ struct ScanEdgeView: View {
                                 
                                 ShareLink(
                                     items: [
-                                        "https://www.linkedin.com/in/jeremyvillanueva15/",
+                                        "https://www.instagram.com/bodyarc.app/",
                                         "Check out this app and use my code: \(viewModel.user!.referralCode!) to get your physique ratings!"
                                     ],
                                     preview: { _ in

@@ -125,6 +125,7 @@ struct ScanView: View {
                             if nextScan != 0 && isLessThanSevenDaysAgo(from: lastScan) {
                                 Text("Next Scan in \(daysUntilSevenDaysAfter(from: lastScan)) days")
                                     .fontWeight(.bold)
+                                    .foregroundColor(.white)
                             }
                         }
                         Spacer()
