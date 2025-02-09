@@ -137,7 +137,7 @@ struct ScanView: View {
                     await fetchUserDataAndConfigurePurchase()
                     
                     //only show this if user has a lastGoldScan
-                    if let lastScan = viewModel.user!.lastGoldScan {
+                    if let lastScan = viewModel.user?.lastGoldScan {
                         self.nextScan = daysUntilSevenDaysAfter(from: lastScan)
                     }
                     
@@ -201,8 +201,8 @@ struct ScanView: View {
             // Step 1: Fetch Customer Info from RevenueCat
             // Configure Purchases with the custom App User ID
             Purchases.shared.logIn(uid) { (customerInfo, created, error) in
-                print("customer is gold", customerInfo!.entitlements["MonthlyPremiumA"]?.isActive == true)
-                viewModel.isGold = customerInfo!.entitlements["MonthlyPremiumA"]?.isActive == true
+                print("customer is gold", customerInfo?.entitlements["MonthlyPremiumA"]?.isActive == true)
+                viewModel.isGold = customerInfo?.entitlements["MonthlyPremiumA"]?.isActive == true
             }
             
      
