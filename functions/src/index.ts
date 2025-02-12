@@ -52,6 +52,55 @@ export const returnBackAnalysis = onRequest(async (request, response) => {
 
 
 
+export const deleteUserAccount = onRequest(async (request, response) => {
+  logger.info("Starting user account deletion process", { structuredData: true });
+
+  // Check for Authorization header
+  const authHeader = request.headers.authorization;
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      logger.error("Unauthorized request: No valid token provided");
+      response.status(401).json({ error: "Unauthorized request: No valid token provided" });
+      return;
+  }
+
+  try {
+      // Verify Firebase ID token
+      const idToken = authHeader.split("Bearer ")[1];
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      const uid = decodedToken.uid;
+
+      logger.info(`Deleting account for UID: ${uid}`);
+
+      // Delete Firestore user document (Check if it exists first)
+      const userDocRef = admin.firestore().collection("users").doc(uid);
+      const docSnapshot = await userDocRef.get();
+      if (docSnapshot.exists) {
+          await userDocRef.delete();
+          logger.info(`Firestore document deleted for UID: ${uid}`);
+      } else {
+          logger.warn(`No Firestore document found for UID: ${uid}`);
+      }
+
+      // Delete Firebase Authentication user
+      await admin.auth().deleteUser(uid);
+      logger.info(`Firebase Auth account deleted for UID: ${uid}`);
+
+      response.json({ success: true, message: "User account deleted successfully" });
+  } catch (error) {
+      let errorMessage = "Internal Server Error: Unable to delete user account";
+
+      // Convert error to a readable message
+      if (error instanceof Error) {
+          errorMessage = error.message;
+          logger.error(`Error deleting user account: ${error.message}`, error);
+      } else {
+          logger.error("Unknown error occurred:", error);
+      }
+
+      response.status(500).json({ error: errorMessage });
+  }
+});
+
 
 
 
