@@ -1,6 +1,6 @@
 
 export const frontAnalysis = `
-This is my current physique. For the muscles that you see in an image, I'm going to ask you to rate each muscle based on its development. If you can't see a muscle rate it as 0, but it's unlikely you won't be able to see it. 
+This is my current physique. For the muscles that you see in an image, I'm going to ask you to rate each muscle based on its development. If you can't see a muscle rate it as 0, but it's unlikely you won't be able to see it. And if the rating is of type string, just default to the first value if you can't see any muscle
 In the following JSON Format:
 {
 "bodyFatPercentage": Int,
@@ -33,7 +33,7 @@ give me:
 
 
 export const backAnalysis = `
-This is my current physique. For the muscles that you see in an image, I'm going to ask you to rate each muscle based on its development. If you can't see a muscle rate it as 0, but it's unlikely you won't be able to see it. 
+This is my current physique. For the muscles that you see in an image, I'm going to ask you to rate each muscle based on its development. If you can't see a muscle rate it as 0, but it's unlikely you won't be able to see it. And if the rating is of type string, just default to the first value if you can't see any muscle 
 In the following JSON Format:
 {
    "traps": Int,
