@@ -14,6 +14,7 @@ import PhotosUI
 import FirebaseFirestore
 import RevenueCat
 import RevenueCatUI
+import FirebaseAuth
 
 
 struct ScanView: View {
@@ -255,6 +256,10 @@ struct ScanView: View {
 struct SettingsSheet: View {
     @EnvironmentObject var viewModel: ContentViewModel
     @Binding var isPresented: Bool
+    let generator = UIImpactFeedbackGenerator(style: .heavy)
+    
+    // State variable to control the alert presentation
+    @State private var showDeleteConfirmation = false
 
     var body: some View {
         ZStack {
@@ -267,11 +272,14 @@ struct SettingsSheet: View {
                     .bold()
                     .padding(.top, 20)
                 
+            
+                
+                // Button to show delete confirmation
                 Button(action: {
-                    viewModel.signOut()
-                    isPresented = false // Dismiss the sheet after signing out
+                    generator.impactOccurred()
+                    showDeleteConfirmation = true // Show the confirmation alert
                 }) {
-                    Text("Sign Out")
+                    Text("Delete Account")
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Color.red)
@@ -279,13 +287,66 @@ struct SettingsSheet: View {
                         .cornerRadius(10)
                         .padding(.horizontal, 20)
                 }
+                .alert(isPresented: $showDeleteConfirmation) {
+                    Alert(
+                        title: Text("Confirm Deletion"),
+                        message: Text("Are you sure you want to delete your account? This action cannot be undone."),
+                        primaryButton: .destructive(Text("Delete")) {
+                            deleteAccount() // Call the delete function if confirmed
+                        },
+                        secondaryButton: .cancel()
+                    )
+                }
                 
                 Spacer()
+     
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
+    private func deleteAccount() {
+        guard let user = Auth.auth().currentUser else {
+            print("No authenticated user found.")
+            return
+        }
         
+        viewModel.signOut()
+        isPresented = false // Dismiss the sheet after signing out
+
+        user.getIDToken { token, error in
+            guard let token = token, error == nil else {
+                print("Error getting ID token: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+
+            let url = URL(string: "https://us-central1-sideprojectgg-80bce.cloudfunctions.net/deleteUserAccount")!
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    print("Error deleting user account: \(error.localizedDescription)")
+                    return
+                }
+
+                if let httpResponse = response as? HTTPURLResponse {
+                    if httpResponse.statusCode == 200 {
+                        print("User account deleted successfully")
+                        DispatchQueue.main.async {
+                            isPresented = false
+                        }
+                    } else {
+                        print("Error: Server returned status code \(httpResponse.statusCode)")
+                    }
+                }
+
+                if let data = data, let responseMessage = String(data: data, encoding: .utf8) {
+                    print("Server Response: \(responseMessage)")
+                }
+            }.resume()
+        }
+    }
 }
 
 struct CustomScanButton: View {
