@@ -37,12 +37,13 @@ struct InstaScanPaywallView: View {
             }
             .edgesIgnoringSafeArea(.top)
             // Main Paywall Content
-            VStack(spacing: 30) {
+            VStack(spacing: 10) {
                 
                 Text("Insta Scan")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                 
+                Spacer()
                 Spacer()
                 
                 ZStack {
@@ -111,13 +112,20 @@ struct InstaScanPaywallView: View {
                     .padding()
               
                 }
-                Spacer()
+        
                 
                 Text("We have a small fee because our AI scans are expensive for us, thank you for understanding 🫡")
                     .font(.body)
                     .foregroundColor(.gray)
                     .multilineTextAlignment(.center) // Centers the text across multiple lines
+                    .padding(.horizontal)
+                Spacer()
                 
+                // Price per unit
+                Text("$2.99 one time")
+                    .font(.body)
+                    .foregroundColor(.gray)
+
                 Button(action: {
                     generator.impactOccurred()
                     isProcessing = true
@@ -134,6 +142,14 @@ struct InstaScanPaywallView: View {
                         .background(Color(red: 0.0627, green: 0.4745, blue: 0.6980))
                         .cornerRadius(35)
                 }
+                // Terms and Privacy Links
+                HStack {
+                    Link("Terms and conditions", destination: URL(string: "https://www.bodyarcapp.com/terms-of-service")!)
+                    Text("•")
+                    Link("Privacy policy", destination: URL(string: "https://www.bodyarcapp.com/privacy")!)
+                }
+                .font(.footnote)
+                .foregroundColor(.white)
             }
             .padding()
 
