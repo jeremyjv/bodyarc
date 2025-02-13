@@ -134,9 +134,14 @@ struct BackScanView: View {
                 } else if let _ = defaultImage {
                     buttonGroupForDefaultImage // "Choose Another" and "Continue"
                 } else {
-                    actionButton // "Upload or take selfie"
-                    skipButton // "skip back scan" button
+                    VStack(spacing: 10) {
+                        actionButton // "Upload or take selfie"
+                        skipButton // "skip back scan" button
+                    }
                 }
+                Spacer()
+                Spacer()
+  
                 
     
             }
@@ -200,7 +205,7 @@ struct BackScanView: View {
                     .fontWeight(.semibold) // Match the font weight
                     .foregroundColor(.white) // Set text color to white
             }
-            .frame(maxWidth: .infinity, maxHeight: 80) // Set button dimensions
+            .frame(maxWidth: .infinity, minHeight: 60, maxHeight: 80) // Set button dimensions
         }
     }
 
@@ -228,7 +233,7 @@ struct BackScanView: View {
                     .fontWeight(.semibold) // Match the font weight
                     .foregroundColor(.white) // Set text color to white
             }
-            .frame(maxWidth: .infinity, maxHeight: 80) // Set button dimensions
+            .frame(maxWidth: .infinity, minHeight: 60, maxHeight: 80) // Set button dimensions
         }
         .confirmationDialog("Choose an option", isPresented: $showOptionsMenu, titleVisibility: .visible) {
             Button("Take a Selfie") {
