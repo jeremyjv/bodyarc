@@ -89,7 +89,7 @@ struct ScanView: View {
                                 Image(uiImage: UIImage(named: "scanImage")!)
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(maxWidth: 330, maxHeight: 500)
+                                    .frame(minWidth: 320, maxWidth: 360)
                                     .cornerRadius(30)
                                     .overlay(
                                         LinearGradient(
@@ -102,23 +102,26 @@ struct ScanView: View {
                                         )
                                         .cornerRadius(30)
                                     )
+                                    .padding()
                                 
-                                if let user = viewModel.user,
-                                   let lastGoldScan = user.lastGoldScan,
-                                   let isGold = viewModel.isGold,
-                                   Calendar.current.date(byAdding: .day, value: -7, to: Date())! < lastGoldScan && isGold {
-                                    
-                                    if let instascan = user.instaScans, instascan > 0 {
-                                        CustomScanButton(title: "Insta Scan Now", path: $path, dest: "FrontInstructionsView")
-                                            .offset(y: 210)
-                                    } else {
-                                        CustomScanButton(title: "Insta Scan Now", path: $path, dest: "InstaScanPaywallView")
-                                            .offset(y: 210)
-                                    }
-                                } else {
-                                    CustomScanButton(title: "Begin Scan", path: $path, dest: "FrontInstructionsView")
-                                        .offset(y: 210)
-                                }
+                                VStack {
+                                   Spacer() // Pushes button to bottom
+                                   
+                                   if let user = viewModel.user,
+                                      let lastGoldScan = user.lastGoldScan,
+                                      let isGold = viewModel.isGold,
+                                      Calendar.current.date(byAdding: .day, value: -7, to: Date())! < lastGoldScan && isGold {
+                                       
+                                       if let instascan = user.instaScans, instascan > 0 {
+                                           CustomScanButton(title: "Insta Scan Now", path: $path, dest: "FrontInstructionsView")
+                                       } else {
+                                           CustomScanButton(title: "Insta Scan Now", path: $path, dest: "InstaScanPaywallView")
+                                       }
+                                   } else {
+                                       CustomScanButton(title: "Begin Scan", path: $path, dest: "FrontInstructionsView")
+                                   }
+                               }
+                               .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom) // Forces VStack to take full space and align button at bottom
                             }
                         }
                         Spacer()
@@ -380,7 +383,7 @@ struct CustomScanButton: View {
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
             }
-            .frame(maxWidth: 330, maxHeight: 80) // Set button dimensions
+            .frame(minWidth: 320, maxWidth: 360, minHeight: 70, maxHeight: 80) // Set button dimensions
             .padding()
         }
     }
