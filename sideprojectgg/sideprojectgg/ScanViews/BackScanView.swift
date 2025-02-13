@@ -556,13 +556,14 @@ struct BackScanView: View {
                 if abs(aspectRatio - aspectRatio4_3) < tolerance {
                     // Use original image if it's close to 4:3 aspect ratio
                     viewModel.backImage = image
-                } else if aspectRatio >= aspectRatio16_9 {
+                } else if aspectRatio >= aspectRatio16_9 || aspectRatio < aspectRatio4_3 {
                     // Crop only if the aspect ratio is close to 16:9
                     if let croppedImage = cropImageToPreviewDimensions(image: image, previewWidth: previewWidth, previewHeight: previewHeight) {
                         viewModel.backImage = croppedImage
                     } else {
                         viewModel.backImage = image
                     }
+                    
                 } else {
                     // Default to original image if it's neither 4:3 nor greater than 16:9
                     viewModel.backImage = image

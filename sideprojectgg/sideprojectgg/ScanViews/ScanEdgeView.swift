@@ -51,7 +51,7 @@ struct ScanEdgeView: View {
             // Main Content
             
             
-            VStack(spacing: 15) {
+            VStack(spacing: 5) {
                 Text("👀Unlock your ratings")
                     .foregroundColor(.white)
                     .font(.largeTitle)
@@ -62,25 +62,28 @@ struct ScanEdgeView: View {
                     .multilineTextAlignment(.center) // Centers text within its own frame
                     .padding(.horizontal)
                 //add blurred ratings
-                Spacer()
+          
                 ZStack {
                     // Black background for ratings
-                    Rectangle()
-                        .fill(Color(red: 0.05, green: 0.05, blue: 0.05))
-                        .cornerRadius(20)
-                        .frame(width: 320, height: 300) // Adjust height as needed
                     
-                   
-                    Image(uiImage: viewModel.frontImage!)
-                        .resizable()
-                        .scaledToFit()
-                        .cornerRadius(20)
-                        .frame(width: 250, height: 250) // Adjust dimensions as needed
-                        .offset(y: -210)
+                    VStack {
+                        Spacer()
+                        Rectangle()
+                            .fill(Color(red: 0.05, green: 0.05, blue: 0.05))
+                            .cornerRadius(20)
+                            .frame(maxWidth: 320, maxHeight: 300) // Adjust height as needed
+                    }
+                    
                     
                     
                     // Ratings
                     VStack(spacing: 5) {
+                        Image(uiImage: viewModel.frontImage!)
+                            .resizable()
+                            .scaledToFit()
+                            .cornerRadius(20)
+                            .frame(minWidth: 200, maxWidth: 250, minHeight: 200, maxHeight: 250) // Adjust dimensions as needed
+                         
                         HStack(spacing: 35) {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("V-Taper")
@@ -134,8 +137,8 @@ struct ScanEdgeView: View {
                 
             
                     }
-                    .padding()
-                    .offset(y: 20)
+                    .padding(.horizontal)
+                    
                 }
                 
                 Button(action: {
@@ -324,6 +327,7 @@ struct ScanEdgeView: View {
                     }
                 }
             }
+            Spacer()
             
             // Popup View
             if showPopup {
