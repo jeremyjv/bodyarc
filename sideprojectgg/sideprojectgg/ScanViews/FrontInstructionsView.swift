@@ -24,6 +24,7 @@ struct FrontInstructionsView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                     .padding(.horizontal, 10) // Minimal padding for the title
+                
 
                 // Good Photos Section
                 VStack(alignment: .leading, spacing: 10) {
@@ -155,8 +156,12 @@ struct FrontInstructionsView: View {
 
                 // Continue Button
                 CustomScanButton(title: "Continue", path: $path, dest: "FrontScanView")
+                Spacer()
+                Spacer()
+               
             }
             .padding(.horizontal) // Remove extra padding from the outer VStack
+            .frame(maxHeight: .infinity) // Moves everything up
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

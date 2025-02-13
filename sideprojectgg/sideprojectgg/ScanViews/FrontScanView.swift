@@ -133,6 +133,7 @@ struct FrontScanView: View {
                 }
                 
                 Spacer()
+                Spacer()
             }
             .padding()
             .onReceive(cameraModel.$capturedImage) { newImage in
@@ -193,7 +194,7 @@ struct FrontScanView: View {
                     .fontWeight(.semibold) // Match the font weight
                     .foregroundColor(.white) // Set text color to white
             }
-            .frame(maxWidth: .infinity, maxHeight: 80) // Set button dimensions
+            .frame(maxWidth: .infinity, minHeight: 70, maxHeight: 80) // Set button dimensions
        
         }
         .confirmationDialog("Choose an option", isPresented: $showOptionsMenu, titleVisibility: .visible) {
