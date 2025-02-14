@@ -47,6 +47,7 @@ struct PaywallView: View {
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                 Spacer()
+                
              
                 
             
@@ -64,6 +65,7 @@ struct PaywallView: View {
                 .padding(.bottom, 120)
                 
                 
+                Spacer()
                 Spacer()
                 Spacer()
            
