@@ -157,25 +157,7 @@ struct ScanEdgeView: View {
                 .fullScreenCover(isPresented: $showPaywall) {
                     NavigationStack {
                         PaywallView()
-                            .paywallFooter(condensed: true)
-                            .onPurchaseCompleted({ customerInfo in
-                                
-                                print(customerInfo)
-                                
-                                //handle after payment scan logic here
-                                DispatchQueue.main.async {
-                                    viewModel.isGold = true
-                                    viewModel.user!.lastGoldScan = Date()
-                                    setLastGoldScan()
-                                    path = NavigationPath()
-                                    viewModel.selectedTab = "ProgressView"
-                                }
-                                
-                                //redirect to Progress View
-                                Task {
-                                    await viewModel.handleScanUploadAction()
-                                }
-                            })
+    
                             .toolbar {
                                 ToolbarItem(placement: .navigationBarLeading) {
                                     Button(action: {
@@ -191,6 +173,25 @@ struct ScanEdgeView: View {
                                 }
                             }
                     }
+                    .paywallFooter(condensed: true)
+                    .onPurchaseCompleted({ customerInfo in
+                        
+                        print(customerInfo)
+                        
+                        //handle after payment scan logic here
+                        DispatchQueue.main.async {
+                            viewModel.isGold = true
+                            viewModel.user!.lastGoldScan = Date()
+                            setLastGoldScan()
+                            path = NavigationPath()
+                            viewModel.selectedTab = "ProgressView"
+                        }
+                        
+                        //redirect to Progress View
+                        Task {
+                            await viewModel.handleScanUploadAction()
+                        }
+                    })
                             
                 }
                 

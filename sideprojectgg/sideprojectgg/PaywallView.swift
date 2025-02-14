@@ -34,13 +34,11 @@ struct PaywallView: View {
                 // Header Section
             
                 
-                
-                Spacer()
-                
+
                 // Logo Section
                 Image(uiImage: UIImage(named: "clearBodyArc")!) // Replace with your logo asset
                     .resizable()
-                    .frame(width: 100, height: 100)
+                    .frame(minWidth: 75, maxWidth: 100, minHeight: 75, maxHeight: 100)
                     .scaledToFit()
                 
                 // Title Section
@@ -48,19 +46,27 @@ struct PaywallView: View {
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
+                Spacer()
+             
                 
-                Spacer()
-                Spacer()
+            
+            
                 
                 // Features Section
-                VStack(alignment: .leading, spacing: 50) {
+                VStack(alignment: .leading, spacing: 30) {
                     FeatureRow(title: "See Your Ratings 👤", description: "View your results and share your ratings with friends")
+                  
                     FeatureRow(title: "Start Your Aesthetics Plan 💪", description: "Full Access to Body Building Style Reps, Sets, and Progressions for Growth")
+                
                     FeatureRow(title: "Scan Weekly 📸", description: "One scan per week to document your physique progress")
                 }
-                .padding(.horizontal, 20)
+                .padding()
+                .padding(.bottom, 120)
+                
                 
                 Spacer()
+                Spacer()
+           
             }
         }
     }
