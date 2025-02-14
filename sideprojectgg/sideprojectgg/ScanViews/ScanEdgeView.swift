@@ -219,6 +219,7 @@ struct ScanEdgeView: View {
                                 Text("🎟️")
                                     .font(.system(size: 90))
                                     .padding(.horizontal)
+                                    
                                 
                                 
                                 
@@ -243,15 +244,18 @@ struct ScanEdgeView: View {
                                 
                             }
                             
+                            
                             VStack(alignment: .leading, spacing: 0) {
                                 Text("Invite 3 friends to get your results")
                                     .foregroundColor(.gray)
+                                    .padding(.horizontal)
+                                    .padding(.bottom, 5)
                                 
-                                    .padding()
                                 Text("Your Referral Code:")
                                     .foregroundColor(.white)
                                     .bold()
-                                    .padding()
+                                    .padding(.horizontal)
+                                    .padding(.bottom, 5)
                                 
                                 
                                 Button(action: {
@@ -287,7 +291,7 @@ struct ScanEdgeView: View {
                                             .padding(.trailing) // Push the image to the right
                                     }
                                 }
-                                .frame(maxWidth: .infinity, maxHeight: 60) // Set button size
+                                .frame(maxWidth: .infinity, minHeight: 60) // Set button size
                                 .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
                                 .cornerRadius(35) // Rounded corners
                                 .padding(.horizontal)
@@ -308,7 +312,7 @@ struct ScanEdgeView: View {
                                         .foregroundColor(.white)
                                         .bold()
                                         .padding(.horizontal)
-                                        .frame(maxWidth: .infinity, maxHeight: 60) // Match the referral button size
+                                        .frame(maxWidth: .infinity, minHeight: 60) // Match the referral button size
                                         .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Gray background
                                         .cornerRadius(35) // Rounded corners
                                         .padding(.horizontal)
@@ -321,7 +325,9 @@ struct ScanEdgeView: View {
                                             }
                                         }
                                 )
+                                Spacer()
                             }
+                            
                         }
                         .presentationDetents([.fraction(0.50)])
                         .presentationDragIndicator(.visible)
@@ -329,6 +335,7 @@ struct ScanEdgeView: View {
                 }
             }
             Spacer()
+          
             
             // Popup View
             if showPopup {
