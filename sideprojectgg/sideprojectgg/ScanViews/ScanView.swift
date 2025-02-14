@@ -105,6 +105,7 @@ struct ScanView: View {
                                     .padding()
                                 
                                 VStack {
+                                  
                                    Spacer() // Pushes button to bottom
                                    
                                    if let user = viewModel.user,

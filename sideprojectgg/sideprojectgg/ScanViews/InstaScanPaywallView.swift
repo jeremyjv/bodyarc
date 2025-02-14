@@ -21,6 +21,8 @@ struct InstaScanPaywallView: View {
 
     var body: some View {
         ZStack {
+            Color(.black)
+            .edgesIgnoringSafeArea(.all) // Ensures it covers the entire screen
             
             VStack {
                 LinearGradient(
@@ -42,6 +44,7 @@ struct InstaScanPaywallView: View {
                 Text("Insta Scan")
                     .font(.largeTitle)
                     .fontWeight(.bold)
+                    .foregroundColor(.white)
                 
                 Spacer()
                 Spacer()
