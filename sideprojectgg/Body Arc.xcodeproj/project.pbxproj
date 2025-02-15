@@ -481,7 +481,7 @@
 				INFOPLIST_FILE = sideprojectgg/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Body Arc";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
-				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to capture photos and videos.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Allow Body Arc to access your camera for scans.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This app saves captured photos to your photo library.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -525,7 +525,7 @@
 				INFOPLIST_FILE = sideprojectgg/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Body Arc";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
-				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to capture photos and videos.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Allow Body Arc to access your camera for scans.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This app saves captured photos to your photo library.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
