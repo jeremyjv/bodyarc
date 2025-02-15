@@ -121,7 +121,7 @@ struct FrontScanView: View {
                                 }
                             }
                         }
-                        .padding(.bottom, 10) // Space above "Take Picture" button
+              
                         
                         // Take Picture Button
                         cameraCaptureButton
