@@ -14,40 +14,55 @@ struct SecondBackRatingView: View {
     var scanObject: ScanObject
     var saveAction: (String) -> Void
     let generator = UIImpactFeedbackGenerator(style: .heavy)
-   
-    
-    
-    
     var body: some View {
 
-        VStack(spacing: 10) {
+        VStack() {
             
-            Text("Back Ratings")
-                .font(.title)
-                .fontWeight(.bold)
-                .foregroundColor(.white)
-                .padding(.top, -50)
-                .offset(y: 20)
-           
+            // Ratings Section with Background
             ZStack {
+                // Black background for ratings
                 
-                
-                
-                // Ratings Section with Background
-                ZStack {
-                    // Black background for ratings
+                VStack {
+                    
+                    Spacer()
                     Rectangle()
                         .fill(Color(red: 0.05, green: 0.05, blue: 0.05))
                         .cornerRadius(20)
-                        .frame(width: 320, height: 300) // Adjust height as needed
+                        .frame(minWidth: 320, maxWidth: 320, minHeight: 250, maxHeight: 300) // Adjust height as needed
                     
+                }
+       
+                
+                
+                // Ratings
+                VStack(spacing: 20) {
+                    Text("Back Ratings")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                    
+                    if let image = backImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                            .cornerRadius(20)
+                        //.frame(width: 300, height: 300) // Adjust dimensions as needed
+                            .frame(minWidth: 200, maxWidth: 300, minHeight: 200, maxHeight: 300) // Adjust dimensions as needed
+                        
+                    } else {
+                        Rectangle()
+                            .fill(Color.gray.opacity(0.3))
+                            .cornerRadius(20)
+                            .frame(minWidth: 200, maxWidth: 300, minHeight: 200, maxHeight: 300) // Adjust dimensions as needed
+                            .overlay(Text("Loading Image...").foregroundColor(.gray))
+                    }
                     
                     // Ratings
-                    VStack(spacing: 10) {
+                    VStack(spacing: 20) {
                         HStack(spacing: 35) {
                             VStack {
                                 Text("🌲")
-                                    .font(.system(size: 45))
+                                    .font(.system(size: 30))
                                     .foregroundColor(.white)
                                 Text("Lat Insertion")
                                     .font(.system(size: 15))
@@ -56,12 +71,12 @@ struct SecondBackRatingView: View {
                                     .font(.system(size: 30, weight: .bold)) // Adjust size and weight here
                                     .foregroundColor(.white)
                             }
-                
+                            
                         }
                         HStack(spacing: 45) {
                             VStack {
                                 Text("🐢")
-                                    .font(.system(size: 45))
+                                    .font(.system(size: 30))
                                     .foregroundColor(.white)
                                 Text("Back Density")
                                     .font(.system(size: 15))
@@ -74,7 +89,7 @@ struct SecondBackRatingView: View {
                                 Image(uiImage: UIImage(named: "barn")!)
                                     .resizable() // Make the image resizable
                                     .scaledToFit() // Maintain the aspect ratio
-                                    .frame(width: 45, height: 45) // Match the emoji size
+                                    .frame(width: 30, height: 30) // Match the emoji size
                                     .offset(y: 2)
                                 Text("Back Width")
                                     .font(.system(size: 15))
@@ -86,33 +101,18 @@ struct SecondBackRatingView: View {
                             .offset(y: 1)
                         }
                         Text("bodyarc")
-                                    .font(.footnote) // Small font size
-                                    .foregroundColor(.white.opacity(0.3)) // Faint white text
-                                    .fontWeight(.bold)
+                            .font(.footnote) // Small font size
+                            .foregroundColor(.white.opacity(0.3)) // Faint white text
+                            .fontWeight(.bold)
                     }
+                 
+                }
+                .padding()
         
-                    .offset(y: 16)
-                }
-                .offset(y: 250)
-                
-                // Image
-                if let image = backImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .cornerRadius(20)
-                        .frame(width: 300, height: 300) // Adjust dimensions as needed
-                        .offset(y: -20)
-                } else {
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.3))
-                        .cornerRadius(20)
-                        .frame(width: 320, height: 270)
-                        .overlay(Text("Loading Image...").foregroundColor(.gray))
-                }
-                
+     
             }
-            .offset(y: 20)
+                
+    
 
             // Buttons
             HStack(spacing: 25) {
@@ -150,15 +150,20 @@ struct SecondBackRatingView: View {
                 }
                 .frame(width: 160, height: 60) // Explicit frame size for the button
             }
-            .offset(y: 265)
+  
 
-            Spacer()
+
+   
+
+
         }
-        .padding()
         .navigationBarBackButtonHidden(true)
+        .offset(y: -35)
         
            
     }
 }
+
+
 
 

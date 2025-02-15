@@ -53,7 +53,7 @@ struct FirstRatingView: View {
                         Rectangle()
                             .fill(Color.gray.opacity(0.3))
                             .cornerRadius(20)
-                            .frame(width: 320, height: 270)
+                            .frame(minWidth: 200, maxWidth: 300, minHeight: 200, maxHeight: 300) // Adjust dimensions as needed
                             .overlay(Text("Loading Image...").foregroundColor(.gray))
                     }
                     HStack(spacing: 35) {
