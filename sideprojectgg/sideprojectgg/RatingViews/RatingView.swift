@@ -53,7 +53,9 @@ struct RatingView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                .padding(.bottom, -80)
+                .edgesIgnoringSafeArea(.all)
+                
+   
 
                 // Custom Dots
                 HStack(spacing: 8) {
@@ -64,8 +66,9 @@ struct RatingView: View {
                             .frame(width: 10, height: 10)
                     }
                 }
-                .padding(.bottom, 50)
+                .padding(.bottom, 25)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .edgesIgnoringSafeArea(.all)
         }
         .onAppear {

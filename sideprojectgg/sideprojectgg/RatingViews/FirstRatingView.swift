@@ -16,98 +16,98 @@ struct FirstRatingView: View {
     let generator = UIImpactFeedbackGenerator(style: .heavy)
     var body: some View {
 
-        VStack(spacing: 10) {
+        VStack() {
             
-            Text("Front Ratings")
-                .font(.title)
-                .fontWeight(.bold)
-                .foregroundColor(.white)
-                .padding(.top, -50)
-                .offset(y: 20)
-           
+            // Ratings Section with Background
             ZStack {
+                // Black background for ratings
                 
-                
-                
-                // Ratings Section with Background
-                ZStack {
-                    // Black background for ratings
+                VStack {
+                    
+                    Spacer()
                     Rectangle()
                         .fill(Color(red: 0.05, green: 0.05, blue: 0.05))
                         .cornerRadius(20)
-                        .frame(width: 320, height: 300) // Adjust height as needed
+                        .frame(minWidth: 320, maxWidth: 320, minHeight: 250, maxHeight: 300) // Adjust height as needed
                     
-                    
-                    // Ratings
-                    VStack(spacing: 20) {
-                        HStack(spacing: 35) {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("V-Taper")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                Text("\(scanObject.frontAnalysis!.vTaper)")
-                                    .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
-                                    .foregroundColor(.white)
-                                ProgressBar(score: scanObject.frontAnalysis!.vTaper)
-                            }
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Leanness")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                Text("\(scanObject.frontAnalysis!.bodyFatPercentage)")
-                                    .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
-                                    .foregroundColor(.white)
-                                ProgressBar(score: scanObject.frontAnalysis!.bodyFatPercentage)
-                            }
-                        }
-                        HStack(spacing: 35) {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Overall")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                Text("\(scanObject.frontAnalysis!.overall)")
-                                    .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
-                                    .foregroundColor(.white)
-                                ProgressBar(score: scanObject.frontAnalysis!.overall)
-                            }
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Potential")
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                Text("\(scanObject.frontAnalysis!.potential)")
-                                    .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
-                                    .foregroundColor(.white)
-                                ProgressBar(score: scanObject.frontAnalysis!.potential)
-                            }
-                        }
-                        Text("bodyarc")
-                                    .font(.footnote) // Small font size
-                                    .foregroundColor(.white.opacity(0.3)) // Faint white text
-                                    .fontWeight(.bold)
+                }
+       
+                
+                
+                // Ratings
+                VStack(spacing: 20) {
+                    Text("Front Ratings")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        
+                    if let image = frontImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                            .cornerRadius(20)
+                            //.frame(width: 300, height: 300) // Adjust dimensions as needed
+                            .frame(minWidth: 200, maxWidth: 300, minHeight: 200, maxHeight: 300) // Adjust dimensions as needed
+                          
+                    } else {
+                        Rectangle()
+                            .fill(Color.gray.opacity(0.3))
+                            .cornerRadius(20)
+                            .frame(width: 320, height: 270)
+                            .overlay(Text("Loading Image...").foregroundColor(.gray))
                     }
-                    .padding()
-                    .offset(y: 20)
+                    HStack(spacing: 35) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("V-Taper")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                            Text("\(scanObject.frontAnalysis!.vTaper)")
+                                .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
+                                .foregroundColor(.white)
+                            ProgressBar(score: scanObject.frontAnalysis!.vTaper)
+                        }
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Leanness")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                            Text("\(scanObject.frontAnalysis!.bodyFatPercentage)")
+                                .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
+                                .foregroundColor(.white)
+                            ProgressBar(score: scanObject.frontAnalysis!.bodyFatPercentage)
+                        }
+                    }
+                    HStack(spacing: 35) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Overall")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                            Text("\(scanObject.frontAnalysis!.overall)")
+                                .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
+                                .foregroundColor(.white)
+                            ProgressBar(score: scanObject.frontAnalysis!.overall)
+                        }
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Potential")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                            Text("\(scanObject.frontAnalysis!.potential)")
+                                .font(.system(size: 48, weight: .bold)) // Adjust size and weight here
+                                .foregroundColor(.white)
+                            ProgressBar(score: scanObject.frontAnalysis!.potential)
+                        }
+                    }
+                    Text("bodyarc")
+                                .font(.footnote) // Small font size
+                                .foregroundColor(.white.opacity(0.3)) // Faint white text
+                                .fontWeight(.bold)
+               
                 }
-                .offset(y: 250)
-                
-                // Image
-                if let image = frontImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .cornerRadius(20)
-                        .frame(width: 300, height: 300) // Adjust dimensions as needed
-                        .offset(y: -20)
-                } else {
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.3))
-                        .cornerRadius(20)
-                        .frame(width: 320, height: 270)
-                        .overlay(Text("Loading Image...").foregroundColor(.gray))
-                }
-                
+                .padding()
+        
+     
             }
-            .offset(y: 20)
+                
+    
 
             // Buttons
             HStack(spacing: 25) {
@@ -145,12 +145,15 @@ struct FirstRatingView: View {
                 }
                 .frame(width: 160, height: 60) // Explicit frame size for the button
             }
-            .offset(y: 265)
+  
 
-            Spacer()
+
+   
+
+
         }
-        .padding()
         .navigationBarBackButtonHidden(true)
+        .offset(y: -35)
         
            
     }
