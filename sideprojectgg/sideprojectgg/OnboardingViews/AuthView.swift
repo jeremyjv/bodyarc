@@ -42,7 +42,7 @@ struct AuthView: View {
                         Spacer() // Push text to center
                         
                         Text("Sign in with Google")
-                            .font(.system(size: 18))
+                            .font(.system(size: 24))
                             .foregroundColor(.black)
                             .fontWeight(.bold)
                         
@@ -69,13 +69,13 @@ struct AuthView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit) // Maintain aspect ratio
                             .frame(width: 35, height: 35)
-                            .foregroundColor(.white)
+                            .foregroundColor(.black)
                         
                         Spacer() // Push text to center
                         
                         Text("Sign in with Apple")
-                            .font(.system(size: 18))
-                            .foregroundColor(.white)
+                            .font(.system(size: 24))
+                            .foregroundColor(.black)
                             .fontWeight(.bold)
                         
                         Spacer() // Maintain centering
@@ -83,7 +83,7 @@ struct AuthView: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: 80, alignment: .leading) // Leading align
                     .padding(.horizontal, 20) // Adjust padding
-                    .background(Color.black)
+                    .background(Color.white)
                     .cornerRadius(45)
                     .padding()
                 }
