@@ -145,7 +145,7 @@ struct ScanEdgeView: View {
                     generator.impactOccurred()
                     showPaywall = true
                 }) {
-                    Text("🥇Get BodyArc Gold")
+                    Text("🥇Get Body Arc Gold")
                         .font(.system(size: 18, weight: .medium))
                         .foregroundColor(.white)
                         .padding()
@@ -205,7 +205,7 @@ struct ScanEdgeView: View {
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity, minHeight: 70) // Set minimum height
-                        .background(Color.black)
+                        .background(Color(red: 45/255, green: 45/255, blue: 45/255))
                         .cornerRadius(35)
                 }
                 .padding(.horizontal)
@@ -276,7 +276,7 @@ struct ScanEdgeView: View {
                                         Spacer() // Push everything to center
                                         Spacer()
                                         
-                                        Text("\(viewModel.user!.referralCode!)")
+                                        Text("\(viewModel.user!.referralCode!.uppercased())")
                                             .font(.title)
                                             .foregroundColor(.white)
                                             .bold()
