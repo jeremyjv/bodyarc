@@ -75,6 +75,7 @@ struct ProgressView: View {
                     Text("Progress")
                         .font(.largeTitle)
                         .foregroundColor(.white)
+                        .padding(.top, 20)  // Match RoutineView's top padding
                         .bold()
                         .padding(.horizontal)
                 }
