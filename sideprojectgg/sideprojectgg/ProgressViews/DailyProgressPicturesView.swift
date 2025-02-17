@@ -74,38 +74,45 @@ struct DailyProgressPicturesView: View {
             ZStack {
                 Color(red: 15/255, green: 15/255, blue: 15/255)
                     .edgesIgnoringSafeArea(.all)
-                
-                ScrollView {
-                    if loadingScreen {
-                        VStack {
-                            Text("Loading...")
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                        }
-                    } else if let photos = viewModel.progressPhotos, !photos.isEmpty {
-                        LazyVStack(spacing: 20) {
-                            ForEach(Array(zip(photos.indices, photos)), id: \.0) { index, photo in
-                                if index < viewModel.retrievedProgressImages.count,
-                                   let frontImage = viewModel.retrievedProgressImages[index].first {
-                                    ProgressPhotoCard(
-                                        photo: photo,
-                                        frontImage: frontImage!,
-                                        backImage: viewModel.retrievedProgressImages[index].count > 1 ? viewModel.retrievedProgressImages[index][1] : nil
-                                    )
-                                    .padding(.horizontal)
+                VStack(alignment: .leading) {
+                    Text("Daily Progress")
+                        .font(.largeTitle)
+                        .foregroundColor(.white)
+                        .bold()
+                        .padding()
+                    
+                    ScrollView {
+                        if loadingScreen {
+                            VStack {
+                                Text("Loading...")
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                            }
+                        } else if let photos = viewModel.progressPhotos, !photos.isEmpty {
+                            LazyVStack(spacing: 20) {
+                                ForEach(Array(zip(photos.indices, photos)), id: \.0) { index, photo in
+                                    if index < viewModel.retrievedProgressImages.count,
+                                       let frontImage = viewModel.retrievedProgressImages[index].first {
+                                        ProgressPhotoCard(
+                                            photo: photo,
+                                            frontImage: frontImage!,
+                                            backImage: viewModel.retrievedProgressImages[index].count > 1 ? viewModel.retrievedProgressImages[index][1] : nil
+                                        )
+                                        .padding(.horizontal)
+                                    }
                                 }
                             }
-                        }
-                    } else {
-                        VStack {
-                            Text("Upload your first Progress Pictures")
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(12)
-                                .padding()
+                        } else {
+                            VStack {
+                                Text("Upload your first Progress Pictures")
+                                    .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.gray.opacity(0.1))
+                                    .cornerRadius(12)
+                                    .padding()
+                            }
                         }
                     }
                 }
@@ -132,12 +139,27 @@ struct DailyProgressPicturesView: View {
                         .padding(.bottom, 30)
                     }
                 }
+                    
             }
             .onAppear {
                 if !hasLoadedData {
                     hasLoadedData = true
                     Task {
                         await loadData()
+                    }
+                }
+            }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        path.removeLast()
+                        generator.impactOccurred()
+                    }) {
+                        HStack {
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.gray) // Set the color to gray
+                        }
                     }
                 }
             }
