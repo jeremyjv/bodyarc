@@ -105,7 +105,7 @@ struct DailyProgressPicturesView: View {
                             }
                         } else {
                             VStack {
-                                Text("Upload your first Progress Pictures")
+                                Text("Upload your first progress pictures")
                                     .foregroundColor(.white)
                                     .frame(maxWidth: .infinity)
                                     .padding()

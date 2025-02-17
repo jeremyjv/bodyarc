@@ -69,14 +69,14 @@ struct ProgressView: View {
             Color(red: 15/255, green: 15/255, blue: 15/255)
                 .edgesIgnoringSafeArea(.all)
 
-            VStack(alignment: .leading, spacing: 0) { // Ensure spacing is zero to keep structure intact
+            VStack(alignment: .leading, spacing: 10) { // Ensure spacing is zero to keep structure intact
                 // Keep the title pinned to the top
                 VStack(alignment: .leading) {
                     Text("Progress")
                         .font(.largeTitle)
                         .foregroundColor(.white)
                         .bold()
-                        .padding()
+                        .padding(.horizontal)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Ensures background matches
@@ -105,14 +105,17 @@ struct ProgressView: View {
                     .cornerRadius(12)
                 }
                 .buttonStyle(PlainButtonStyle())
-                .padding()
+                .padding(.horizontal)
+                
+                Spacer()
+                    .frame(height: 20)
                 
                 
                 Text("Your Ratings")
                     .font(.largeTitle)
                     .foregroundColor(.white)
                     .bold()
-                    .padding()
+                    .padding(.horizontal)
                 // Scrollable content
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
@@ -193,10 +196,11 @@ struct ProgressView: View {
                                     }
                                 }
                             }
-                            .padding()
+                            .padding(.horizontal)
                         }
                     }
                 }
+                
     
             }
             .onAppear {

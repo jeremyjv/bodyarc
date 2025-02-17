@@ -113,7 +113,7 @@ struct FrontProgressScanView: View {
                                     .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
                                     
                                     Text(isTimerEnabled ? "5s Timer On" : "5s Timer Off")
-                                        .frame(maxWidth: .infinity)
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                                         .padding()
                                         .background(isTimerEnabled ? Color.green : Color.clear)
                                         .foregroundColor(.white)

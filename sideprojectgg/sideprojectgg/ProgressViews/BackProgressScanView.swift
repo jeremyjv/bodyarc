@@ -118,7 +118,7 @@ struct BackProgressScanView: View {
                                     .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
                                     
                                     Text(isTimerEnabled ? "5s Timer On" : "5s Timer Off")
-                                        .frame(maxWidth: .infinity)
+                                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                                         .padding()
                                         .background(isTimerEnabled ? Color.green : Color.clear)
                                         .foregroundColor(.white)
@@ -187,6 +187,14 @@ struct BackProgressScanView: View {
             generator.impactOccurred()
             viewModel.backImage = nil
             Task {
+                DispatchQueue.main.async {
+                    // Add the new images to the retrievedProgressImages array
+                    var newImages: [UIImage?] = [viewModel.frontImage]
+                    if let backImage = self.viewModel.backImage {
+                        newImages.append(backImage)
+                    }
+                    viewModel.retrievedProgressImages.insert(newImages, at: 0)
+                }
                 await viewModel.handleProgressLogic()
             }
         }) {
@@ -299,8 +307,17 @@ struct BackProgressScanView: View {
                 path.removeLast(path.count) // Clear the entire path
                 path.append("DailyProgressPicturesView")
                 generator.impactOccurred()
+                
                 //clear path -> call handle scan upload
                 Task {
+                    DispatchQueue.main.async {
+                        // Add the new images to the retrievedProgressImages array
+                        var newImages: [UIImage?] = [viewModel.frontImage]
+                        if let backImage = self.viewModel.backImage {
+                            newImages.append(backImage)
+                        }
+                        viewModel.retrievedProgressImages.insert(newImages, at: 0)
+                    }
                     await viewModel.handleProgressLogic()
                 }
                 
