@@ -78,6 +78,14 @@ struct ContentView: View {
                         InstaScanPaywallView(path: $path)
                     case "ProgressView":
                         ProgressView(retrievedScanImages: $viewModel.retrievedScanImages, scans: $viewModel.scans, path: $path)
+                        
+                    case "DailyProgressPicturesView":
+                        DailyProgressPicturesView(path: $path)
+                        
+                    case "FrontProgressScanView":
+                        FrontProgressScanView(path: $path)
+                    case "BackProgressScanView":
+                        BackProgressScanView(path: $path)
                     default:
                         ContentView()
                     }

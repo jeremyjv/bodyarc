@@ -17,6 +17,7 @@ import RevenueCat
 import AuthenticationServices
 import CryptoKit
 import JWTDecode
+import FirebaseCore
 
 
 @MainActor
@@ -62,6 +63,9 @@ class ContentViewModel: ObservableObject {
     
     @Published var subOffering: Offering?
     @Published var instaOffering: Offering?
+    
+    @Published var progressPhotos: [ProgressPhotos]? = nil
+    @Published var retrievedProgressImages: [[UIImage?]] = []  // Add this line
  
     
     init() {
@@ -422,6 +426,68 @@ class ContentViewModel: ObservableObject {
                 self.retrievedScanImages.remove(at: 0)
                 self.isScanProcessing = false // Reset processing state
             }
+        }
+    }
+    
+    func handleProgressLogic() async {
+        guard let frontImage = self.frontImage else {
+            print("Front image is missing")
+            return
+        }
+        
+        do {
+            // Convert and upload front image
+            let frontImageData = self.convertToJPEGData(image: frontImage)
+            let uuid1 = NSUUID().uuidString
+            self.frontImageURL = try await self.uploadFile(data: frontImageData!, path: "/progress_images/\(uuid1).png").absoluteString
+
+            var backImageURL: String? = nil
+            if let backImage = self.backImage {
+                let backImageData = self.convertToJPEGData(image: backImage)
+                let uuid2 = NSUUID().uuidString
+                backImageURL = try await self.uploadFile(data: backImageData!, path: "/progress_images/\(uuid2).png").absoluteString
+            }
+
+            guard let frontImageURL = self.frontImageURL else {
+                print("Front image URL is missing")
+                return
+            }
+
+            // Create the progress photo object
+            let newProgressPhoto = ProgressPhotos(
+                userUID: self.uid,
+                frontImage: frontImageURL,
+                backImage: backImageURL,
+                createdAt: Date()
+            )
+            
+            // Write progress photo to Firestore
+            let db = Firestore.firestore()
+            try db.collection("progress").addDocument(from: newProgressPhoto)
+            
+            // Update the arrays with the new photo and images
+            DispatchQueue.main.async {
+                if self.progressPhotos == nil {
+                    self.progressPhotos = []
+                }
+                self.progressPhotos?.insert(newProgressPhoto, at: 0)
+                
+                // Add the new images to the retrievedProgressImages array
+                var newImages: [UIImage?] = [frontImage]
+                if let backImage = self.backImage {
+                    newImages.append(backImage)
+                }
+                self.retrievedProgressImages.insert(newImages, at: 0)
+                
+                // Clear the temporary images
+                self.frontImage = nil
+                self.backImage = nil
+                self.frontImageURL = nil
+                self.backImageURL = nil
+            }
+            
+        } catch {
+            print("Error processing progress photos: \(error)")
         }
     }
     

@@ -72,7 +72,7 @@ struct ProgressView: View {
             VStack(alignment: .leading, spacing: 0) { // Ensure spacing is zero to keep structure intact
                 // Keep the title pinned to the top
                 VStack(alignment: .leading) {
-                    Text("Your Progress")
+                    Text("Progress")
                         .font(.largeTitle)
                         .foregroundColor(.white)
                         .bold()
@@ -80,7 +80,39 @@ struct ProgressView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(Color(red: 15/255, green: 15/255, blue: 15/255)) // Ensures background matches
-
+                
+                Button(action: {
+                    generator.impactOccurred()
+                    path.append("DailyProgressPicturesView")
+                }) {
+                    HStack {
+                        Spacer()
+                        VStack(alignment: .center, spacing: 8) {
+                            Text("Take daily progress pictures")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .bold()
+            
+                        }
+    
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.white)
+                    }
+                    .padding()
+                    .frame(maxWidth: .infinity, minHeight: 130)
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(12)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .padding()
+                
+                
+                Text("Your Ratings")
+                    .font(.largeTitle)
+                    .foregroundColor(.white)
+                    .bold()
+                    .padding()
                 // Scrollable content
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
@@ -108,7 +140,6 @@ struct ProgressView: View {
                             .padding()
                         } else if viewModel.scans!.isEmpty {
                             VStack {
-                                Spacer()
 
                                 Button(action: {
                                     generator.impactOccurred() // Haptic feedback
@@ -128,7 +159,7 @@ struct ProgressView: View {
                                             .foregroundColor(.white)
                                     }
                                     .padding()
-                                    .frame(height: 100)
+                                    .frame(height: 130)
                                     .background(Color.gray.opacity(0.1))
                                     .cornerRadius(12)
                                     .shadow(color: Color.black.opacity(0.2), radius: 4, x: 0, y: 2)
@@ -166,6 +197,7 @@ struct ProgressView: View {
                         }
                     }
                 }
+    
             }
             .onAppear {
                 if !hasLoadedData {
@@ -246,6 +278,8 @@ struct ProgressCardView: View {
         .buttonStyle(PlainButtonStyle())
     }
 }
+
+
 
 struct LoadingCardView: View {
     let frontImage: UIImage?

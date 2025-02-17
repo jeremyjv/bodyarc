@@ -45,6 +45,15 @@ struct IntakeForm: Codable {
 }
 
 
+struct ProgressPhotos: Codable, Hashable {
+    var userUID: String?
+    var frontImage: String?
+    var backImage: String?
+    var createdAt: Date?
+
+
+}
+
 
 //need to eventually serialize to pass to firebase photo.pngData()!
 struct ScanObject: Codable, Hashable {
