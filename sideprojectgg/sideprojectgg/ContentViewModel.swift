@@ -436,6 +436,15 @@ class ContentViewModel: ObservableObject {
         }
         
         do {
+            
+            DispatchQueue.main.async {
+                // Add the new images to the retrievedProgressImages array
+                var newImages: [UIImage?] = [frontImage]
+                if let backImage = self.backImage {
+                    newImages.append(backImage)
+                }
+                self.retrievedProgressImages.insert(newImages, at: 0)
+            }
             // Convert and upload front image
             let frontImageData = self.convertToJPEGData(image: frontImage)
             let uuid1 = NSUUID().uuidString
@@ -472,12 +481,7 @@ class ContentViewModel: ObservableObject {
                 }
                 self.progressPhotos?.insert(newProgressPhoto, at: 0)
                 
-                // Add the new images to the retrievedProgressImages array
-                var newImages: [UIImage?] = [frontImage]
-                if let backImage = self.backImage {
-                    newImages.append(backImage)
-                }
-                self.retrievedProgressImages.insert(newImages, at: 0)
+                
                 
                 // Clear the temporary images
                 self.frontImage = nil
