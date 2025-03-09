@@ -54,7 +54,7 @@ struct ReferralView: View {
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(Color.gray, lineWidth: 1) // Add border
                             )
-                            .onChange(of: referralInput) { newValue, _ in
+                            .onChange(of: referralInput) { newValue in
                                 if newValue.count > 6 {
                                     referralInput = String(newValue.prefix(6))
                                 }
@@ -93,11 +93,12 @@ struct ReferralView: View {
                     }) {
                         HStack {
                             Image(systemName: "chevron.left")
-                                .foregroundColor(.gray) // Set the color to gray
+                                .foregroundColor(.gray)
                         }
                     }
                 }
             }
+
         }
     }
 }

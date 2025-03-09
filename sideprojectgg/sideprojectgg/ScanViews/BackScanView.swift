@@ -151,7 +151,7 @@ struct BackScanView: View {
                     handleCapturedImage(newImage)
                 }
             }
-            .onChange(of: photosPickerItem) { _, _ in
+            .onChange(of: photosPickerItem) { newValue in
                 handlePhotoPicker()
             }
             .onDisappear {

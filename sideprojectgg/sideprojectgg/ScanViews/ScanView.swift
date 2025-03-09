@@ -150,7 +150,7 @@ struct ScanView: View {
                 
             }
         }
-        .onChange(of: viewModel.uid) { _, _ in
+        .onChange(of: viewModel.uid) { newUID in
             resetStates()
             Task {
                 print("fetching new user")

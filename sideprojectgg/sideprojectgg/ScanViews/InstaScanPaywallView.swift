@@ -199,7 +199,7 @@ struct InstaScanPaywallView: View {
                 }
             }
         }
-        .onChange(of: isProcessing) { newValue, _ in
+        .onChange(of: isProcessing) { newValue in
             if newValue {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                     showDotsAnimation = true
